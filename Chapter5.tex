@@ -1,0 +1,23 @@
+\ifdefined\included
+\else
+\documentclass[a4paper,11pt,twoside]{StyleThese}
+\include{formatAndDefs}
+\sloppy
+\begin{document}
+\setcounter{chapter}{4} %% Numéro du chapitre précédent ;)
+\dominitoc
+\faketableofcontents
+\fi
+
+\chapter{A robot in a storage room}
+\label{chapter:chap5}
+\chaptermark{Integrating Planning in an Architecture}
+\minitoc
+
+
+\ifdefined\included
+\else
+\bibliographystyle{acm}
+\bibliography{These}
+\end{document}
+\fi

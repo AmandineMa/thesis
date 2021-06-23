@@ -1,0 +1,2025 @@
+###### HOW-TO ######
+
+To add a new entry in your bibliography chose the proper template below, copy-
+paste it in the end of this file, replace the "_" by an "at-symbol" (this
+symbol cannot be typed here otherwise the bibliography processing program
+would think there's an entry inside this how-to), and fill its fields. Check
+an proper entry example in the end of this file.
+
+You can use the month macros (jan, feb, mar, apr, may, jun, jul, aug, sep,
+oct, nov, dec) WITHOUT QUOTES to let the bib-style handle the language of the
+month (French or English), like in the example in the end of the file.
+
+Optional fields in the templates are commented out with a '%'. Note that not
+all external programs that process bibliography information in .bib files
+support comments inside the reference entry (notably bibtex doesn't), so you
+may need to remove the fields you don't want/need in your entry instead of
+leaving it commented out. Moreover, anything not starting with a "at-symbol"
+is normally not processed by the bibliography processing program (like it was
+just comments).
+
+
+
+###### TEMPLATES ######
+
+Source: https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management
+
+_article{Xarticle,
+    author    = "",
+    title     = "",
+    journal   = "",
+    %volume   = "",
+    %number   = "",
+    %pages    = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+_book{Xbook,
+    author    = "",
+    title     = "",
+    publisher = "",
+    %volume   = "",
+    %number   = "",
+    %series   = "",
+    %address  = "",
+    %edition  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+_booklet{Xbooklet,
+    %author   = "",
+    title     = "",
+    %howpublished   = "",
+    %address  = "",
+    %year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+_conference{Xconference,
+    author    = "",
+    title     = "",
+    booktitle = "",
+    %editor   = "",
+    %volume   = "",
+    %number   = "",
+    %series   = "",
+    %pages    = "",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %publisher= "",
+    %note     = "",
+}
+
+_inbook{Xinbook,
+	author	= "",
+	editor	= "",
+	title	= "",
+	chapter	= "",
+	pages	= "",
+	publisher= "",
+	%volume	= "",
+	%number	= "",
+	%series	= "",
+	%type	= "",
+	%address= "",
+	%edition= "",
+	year	= "",
+	%month	= "",
+	%note	= "",
+}
+
+_incollection{Xincollection,
+	author	= "",
+	title	= "",
+	booktitle= "",
+	publisher= "",
+	%editor	= "",
+	%volume	= "",
+	%number	= "",
+	%series	= "",
+	%type	= "",
+	%chapter= "",
+	%pages	= "",
+	%address= "",
+	%edition= "",
+	year	= "",
+	%month	= "",
+	%note	= "",
+}
+
+_inproceedings{Xinproceedings,
+	author		= "",
+	title		= "",
+	booktitle	= "",
+	%editor		= "",
+	%volume		= "",
+	%number		= "",
+	%series		= "",
+	%pages		= "",
+	%address	= "",
+	%organization	= "",
+	%publisher	= "",
+	year		= "",
+	%month		= "",
+	%note		= "",
+}
+
+_manual{Xmanual,
+	title		= "",
+	%author		= "",
+	%organization	= "",
+	%address	= "",
+	%edition	= "",
+	year		= "",
+	%month		= "",
+	%note		= "",
+}
+
+_mastersthesis{Xthesis,
+    author    = "",
+    title     = "",
+    school    = "",
+    %type     = "diploma thesis",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+_misc{Xmisc,
+    %author    = "",
+    %title     = "",
+    %howpublished = "",
+    %year     = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+_phdthesis{Xphdthesis,
+	author		= "",
+	title		= "",
+	school		= "",
+	%address	= "",
+	year		= "",
+	%month		= "",
+	%keywords	= "",
+	%note		= "",
+}
+
+_proceedings{Xproceedings,
+	title		= "",
+	%editor		= "",
+	%volume		= "",
+	%number		= "",
+	%series		= "",
+	%address	= "",
+	%organization	= "",
+	%publisher	= "",
+	year		= "",
+	%month		= "",
+	%note		= "",
+}
+
+_techreport{Xtreport,
+    author    = "",
+    title     = "",
+    institution = "",
+    %type     = "", 
+    %number   = "",
+    %address  = "",
+    year      = "XXXX",
+    %month    = "",
+    %note     = "",
+}
+
+_unpublished{Xunpublished,
+	author	= "",
+	title	= "",
+	%year	= "",
+	%month	= "",
+	note	= "",
+}
+
+
+
+Introduction
+
+
+#########################################################
+#########################################################
+Chapter 1
+#########################################################
+#########################################################
+
+@book{argyle_1973_social,
+	title = {Social {Interaction}},
+	isbn = {978-0-202-36899-3},
+	language = {en},
+	publisher = {Transaction Publishers},
+	author = {Argyle, Michael},
+	year = {1973},
+}
+
+
+@article{bauer_2008_collab,
+	title={Human--robot collaboration: a survey},
+	author={Bauer, Andrea and Wollherr, Dirk and Buss, Martin},
+	journal={International Journal of Humanoid Robotics},
+	volume={5},
+	number={01},
+	pages={47--66},
+	year={2008},
+	publisher={World Scientific}
+}
+
+@article{bratman_1992_coop,
+	title={Shared cooperative activity},
+	author={Bratman, Michael E},
+	journal={The philosophical review},
+	volume={101},
+	number={2},
+	pages={327--341},
+	year={1992},
+	publisher={JSTOR}
+}
+
+@article{clark_1981_telephone,
+	title={Telephone goodbyes},
+	author={Clark, Herbert H and French, J Wade},
+	journal={Language in Society},
+	pages={1--19},
+	year={1981},
+	publisher={JSTOR}
+}
+
+@article{dautenhahn_2002_embodied,
+	title={From embodied to socially embedded agents--implications for interaction-aware robots},
+	author={Dautenhahn, Kerstin and Ogden, Bernard and Quick, Tom},
+	journal={Cognitive Systems Research},
+	volume={3},
+	number={3},
+	pages={397--428},
+	year={2002},
+	publisher={Elsevier}
+}
+
+@book{enriquez_2017_vocabulaire,
+	title={Vocabulaire de psychosociologie},
+	author={ENRIQUEZ, Eug{\`e}ne and Andr{\'e}, LEVY and BARUS-MICHEL, Jacqueline},
+	year={2017},
+	publisher={{\'E}r{\`e}s}
+}
+
+@inproceedings{gaschler_2012_modelling,
+	title={Modelling state of interaction from head poses for social human-robot interaction},
+	author={Gaschler, Andre and Huth, Kerstin and Giuliani, Manuel and Kessler, Ingmar and Ruiter, Jan de and Knoll, Alois},
+	booktitle={Proceedings of the Gaze in Human-Robot Interaction Workshop held at the 7th ACM/IEEE International Conference on Human-Robot Interaction (HRI 2012)},
+	year={2012}
+}
+
+@inproceedings{gockley_2005_designing,
+	title={Designing robots for long-term social interaction},
+	author={Gockley, Rachel and Bruce, Allison and Forlizzi, Jodi and Michalowski, Marek and Mundell, Anne and Rosenthal, Stephanie and Sellner, Brennan and Simmons, Reid and Snipes, Kevin and Schultz, Alan C and others},
+	booktitle={2005 IEEE/RSJ International Conference on Intelligent Robots and Systems},
+	pages={1338--1343},
+	year={2005},
+	organization={IEEE}
+}
+
+@book{goffman_1967_interaction,
+	title={Interaction ritual: Essays on face-to-face interaction},
+	author={Goffman, Erving},
+	year={1967},
+	publisher={Aldine}
+}
+
+@article{goffman_1983_interaction,
+	title={The interaction order: American Sociological Association, 1982 presidential address},
+	author={Goffman, Erving},
+	journal={American sociological review},
+	volume={48},
+	number={1},
+	pages={1--17},
+	year={1983},
+	publisher={JSTOR}
+}
+
+@book{wooffitt_2008_conversation,
+	title={Conversation analysis},
+	author={Wooffitt, Robin and Hutchby, I},
+	year={2008},
+	publisher={Polity}
+}
+
+@inproceedings{iocchi_2015_personalized,
+	title={Personalized short-term multi-modal interaction for social robots assisting users in shopping malls},
+	author={Iocchi, Luca and L{\'a}zaro, Maria Teresa and Jeanpierre, Laurent and Mouaddib, Abdel-Illah},
+	booktitle={International Conference on Social Robotics},
+	pages={264--274},
+	year={2015},
+	organization={Springer}
+}
+
+@inproceedings{kahn_2008_design,
+	title={Design patterns for sociality in human-robot interaction},
+	author={Kahn, Peter H and Freier, Nathan G and Kanda, Takayuki and Ishiguro, Hiroshi and Ruckert, Jolina H and Severson, Rachel L and Kane, Shaun K},
+	booktitle={Proceedings of the 3rd ACM/IEEE international conference on Human robot interaction},
+	pages={97--104},
+	year={2008}
+}
+
+@inproceedings{kahn_2010_validating,
+	title={Validating interaction patterns in HRI},
+	author={Kahn, Peter H and Gill, Brian T and Reichert, Aimee L and Kanda, Takayuki and Ishiguro, Hiroshi and Ruckert, Jolina H},
+	booktitle={2010 5th ACM/IEEE International Conference on Human-Robot Interaction (HRI)},
+	pages={183--184},
+	year={2010},
+	organization={IEEE}
+}
+
+@article{kasap_2012_building,
+	title={Building long-term relationships with virtual and robotic characters: the role of remembering},
+	author={Kasap, Zerrin and Magnenat-Thalmann, Nadia},
+	journal={The Visual Computer},
+	volume={28},
+	number={1},
+	pages={87--97},
+	year={2012},
+	publisher={Springer}
+}
+
+@book{kendon_1990_conducting,
+	title={Conducting interaction: Patterns of behavior in focused encounters},
+	author={Kendon, Adam},
+	volume={7},
+	year={1990},
+	publisher={CUP Archive}
+}
+
+@inproceedings{kidd_2008_robots,
+	title={Robots at home: Understanding long-term human-robot interaction},
+	author={Kidd, Cory D and Breazeal, Cynthia},
+	booktitle={2008 IEEE/RSJ International Conference on Intelligent Robots and Systems},
+	pages={3230--3235},
+	year={2008},
+	organization={IEEE}
+}
+
+@article{knapp_1973_rhetoric,
+	title={The rhetoric of goodbye: Verbal and nonverbal correlates of human leave-taking},
+	author={Knapp, Mark L and Hart, Roderick P and Friedrich, Gustav W and Shulman, Gary M},
+	journal={Communications Monographs},
+	volume={40},
+	number={3},
+	pages={182--198},
+	year={1973},
+	publisher={Taylor \&amp; Francis}
+}
+
+@phdthesis{kuo_2012_designing,
+	title={Designing Human-Robot Interaction for Service Applications},
+	author={Kuo, I-Han},
+	year={2012},
+	school={ResearchSpace@ Auckland}
+}
+
+@inproceedings{lee_2012_personalization,
+	title={Personalization in HRI: A longitudinal field experiment},
+	author={Lee, Min Kyung and Forlizzi, Jodi and Kiesler, Sara and Rybski, Paul and Antanitis, John and Savetsila, Sarun},
+	booktitle={2012 7th ACM/IEEE International Conference on Human-Robot Interaction (HRI)},
+	pages={319--326},
+	year={2012},
+	organization={IEEE}
+}
+
+@article{leite_2013_social,
+	title={Social robots for long-term interaction: a survey},
+	author={Leite, Iolanda and Martinho, Carlos and Paiva, Ana},
+	journal={International Journal of Social Robotics},
+	volume={5},
+	number={2},
+	pages={291--308},
+	year={2013},
+	publisher={Springer}
+}
+
+@book{newell_1994_unified,
+	title={Unified theories of cognition},
+	author={Newell, Allen},
+	year={1994},
+	publisher={Harvard University Press}
+}
+
+@inproceedings{ogden_2001_interactional,
+	title={Interactional structure applied to the identification and generation of visual interactive behavior: Robots that (usually) follow the rules},
+	author={Ogden, Bernard and Dautenhahn, Kerstin and Stribling, Penny},
+	booktitle={International Gesture Workshop},
+	pages={254--268},
+	year={2001},
+	organization={Springer}
+}
+
+@inproceedings{peltason_2010_pamini,
+	title={Pamini: A framework for assembling mixed-initiative human-robot interaction from generic interaction patterns},
+	author={Peltason, Julia and Wrede, Britta},
+	booktitle={Proceedings of the SIGDIAL 2010 Conference},
+	pages={229--232},
+	year={2010}
+}
+
+@inbook{robinson_overall_2012,
+	chapter= {Overall Structural Organization},
+	title={The handbook of conversation analysis},
+	author={Robinson, Jeffrey D.},
+	editor={Sidnell, Jack and Stivers, Tanya},
+	volume={121},
+	year={2012},
+	publisher={John Wiley \&amp; Sons}
+}
+
+@article{rummel_1976_understanding,
+	title={Understanding conflict and war: vol. 2: the conflict helix},
+	author={Rummel, Rudolph J},
+	journal={Bev-erly Hills: Sage},
+	year={1976}
+}
+
+
+@book{sacks_lectures_1995,
+	address = {Oxford},
+	edition = {Volumes I and II edition},
+	title = {Lectures on Conversation},
+	language = {English},
+	publisher = {Wiley-Blackwell},
+	author = {Sacks, Harvey},
+	editor = {Jefferson, Gail and Schegloff, Emanuel A.},
+	month = {January},
+	year = {1995}
+}
+
+@inproceedings{sanelli_2017_short,
+	title={Short-term human-robot interaction through conditional planning and execution},
+	author={Sanelli, Valerio and Cashmore, Michael and Magazzeni, Daniele and Iocchi, Luca},
+	booktitle={Proceedings of the International Conference on Automated Planning and Scheduling},
+	volume={27},
+	number={1},
+	year={2017}
+}
+
+@inproceedings{sauppe_2014_design,
+	title={Design patterns for exploring and prototyping human-robot interactions},
+	author={Saupp{\'e}, Allison and Mutlu, Bilge},
+	booktitle={Proceedings of the SIGCHI Conference on Human Factors in Computing Systems},
+	pages={1439--1448},
+	year={2014}
+}
+
+@article{schegloff_1986_routine,
+	title={The routine as achievement},
+	author={Schegloff, Emanuel A},
+	journal={Human studies},
+	volume={9},
+	number={2-3},
+	pages={111--151},
+	year={1986},
+	publisher={Springer}
+}
+
+@article{schegloff_2011_word,
+	title={Word repeats as unit ends},
+	author={Schegloff, Emanuel A},
+	journal={Discourse Studies},
+	volume={13},
+	number={3},
+	pages={367--380},
+	year={2011},
+	publisher={SAGE Publications Sage UK: London, England}
+}
+
+@article{schegloff_1977_preference,
+	title={The preference for self-correction in the organization of repair in conversation},
+	author={Schegloff, Emanuel A and Jefferson, Gail and Sacks, Harvey},
+	journal={Language},
+	volume={53},
+	number={2},
+	pages={361--382},
+	year={1977},
+	publisher={Linguistic Society of America}
+}
+
+@article{schegloff_1973_opening,
+	title={Opening up closings},
+	author={Schegloff, Emanuel A and Sacks, Harvey},
+	journal={Semiotica},
+	volume={8},
+	number={4},
+	pages={289--327},
+	year={1973},
+	publisher={Walter de Gruyter, Berlin/New York}
+}
+
+@article{zheng_2013_designing,
+	title={Designing and implementing a human--robot team for social interactions},
+	author={Zheng, Kuanhao and Glas, Dylan F and Kanda, Takayuki and Ishiguro, Hiroshi and Hagita, Norihiro},
+	journal={IEEE Transactions on Systems, Man, and Cybernetics: Systems},
+	volume={43},
+	number={4},
+	pages={843--859},
+	year={2013},
+	publisher={IEEE}
+}
+
+@article{chong_2007_integrated,
+	title={Integrated cognitive architectures: a survey},
+	author={Chong, Hui-Qing and Tan, Ah-Hwee and Ng, Gee-Wah},
+	journal={Artificial Intelligence Review},
+	volume={28},
+	number={2},
+	pages={103--130},
+	year={2007},
+	publisher={Springer}
+}
+
+@book{bratman_1987_intention,
+	title={Intention, plans, and practical reason},
+	author={Bratman, Michael and others},
+	volume={10},
+	year={1987},
+	publisher={Harvard University Press Cambridge, MA}
+}
+
+@article{bratman_1988_plans,
+	title={Plans and resource-bounded practical reasoning},
+	author={Bratman, Michael E and Israel, David J and Pollack, Martha E},
+	journal={Computational intelligence},
+	volume={4},
+	number={3},
+	pages={349--355},
+	year={1988},
+	publisher={Wiley Online Library}
+}
+
+@inproceedings{rao_1995_bdi,
+	title={BDI agents: From theory to practice.},
+	author={Rao, Anand S and Georgeff, Michael P and others},
+	booktitle={ICMAS},
+	volume={95},
+	pages={312--319},
+	year={1995}
+}
+
+@inproceedings{lamarre_1994_knowledge,
+	title={Knowledge, certainty, belief, and conditionalisation (abbreviated version)},
+	author={Lamarre, Philippe and Shoham, Yoav},
+	booktitle={Principles of knowledge representation and reasoning},
+	pages={415--424},
+	year={1994},
+	organization={Elsevier}
+}
+
+@inproceedings{georgeff_1989_decision,
+	title={Decision-making in an embedded reasoning system},
+	author={Georgeff, Michael and Ingrand, Felix},
+	booktitle={International Joint Conference on Artificial Intelligence},
+	year={1989}
+}
+
+@inproceedings{georgeff_1991_modeling,
+	title={Modeling rational agents within a BDI-architecture},
+	author={Georgeff, M and Rao, A},
+	booktitle={Proc. 2nd Int. Conf. on Knowledge Representation and Reasoning (KR’91). Morgan Kaufmann},
+	pages={473--484},
+	year={1991},
+	organization={of}
+}
+
+@article{cohen_1990_intention,
+	title={Intention is choice with commitment},
+	author={Cohen, Philip R and Levesque, Hector J},
+	journal={Artificial intelligence},
+	volume={42},
+	number={2-3},
+	pages={213--261},
+	year={1990},
+	publisher={Elsevier}
+}
+
+@article{sebanz_2006_joint,
+	title={Joint action: bodies and minds moving together},
+	author={Sebanz, Natalie and Bekkering, Harold and Knoblich, G{\"u}nther},
+	journal={Trends in cognitive sciences},
+	volume={10},
+	number={2},
+	pages={70--76},
+	year={2006},
+	publisher={Elsevier}
+}
+
+@article{carpenter_2009_just,
+	title={Just how joint is joint action in infancy?},
+	author={Carpenter, Malinda},
+	journal={Topics in Cognitive Science},
+	volume={1},
+	number={2},
+	pages={380--392},
+	year={2009},
+	publisher={Wiley Online Library}
+}
+
+@article{cohen_1991_teamwork,
+	title={Teamwork},
+	author={Cohen, Philip R and Levesque, Hector J},
+	journal={Nous},
+	volume={25},
+	number={4},
+	pages={487--512},
+	year={1991},
+	publisher={JSTOR}
+}
+
+@article{fiebich_2013_joint,
+	title={Joint attention in joint action},
+	author={Fiebich, Anika and Gallagher, Shaun},
+	journal={Philosophical Psychology},
+	volume={26},
+	number={4},
+	pages={571--587},
+	year={2013},
+	publisher={Taylor \&amp; Francis}
+}
+
+@article{tomasello_2005_understanding,
+	title={Understanding and sharing intentions: The origins of cultural cognition},
+	author={Tomasello, Michael and Carpenter, Malinda and Call, Josep and Behne, Tanya and Moll, Henrike},
+	journal={Behavioral and brain sciences},
+	volume={28},
+	number={5},
+	pages={675--691},
+	year={2005},
+	publisher={Cambridge University Press}
+}
+
+@article{becchio_2010_toward,
+	title={Toward you: The social side of actions},
+	author={Becchio, Cristina and Sartori, Luisa and Castiello, Umberto},
+	journal={Current Directions in Psychological Science},
+	volume={19},
+	number={3},
+	pages={183--188},
+	year={2010},
+	publisher={Sage Publications Sage CA: Los Angeles, CA}
+}
+
+@article{kobayashi_2018_language,
+	title={Language use in joint action: The means of referring expressions},
+	author={Kobayashi, Harumi and Yasuda, Tetsuya and Igarashi, Hiroshi and Suzuki, Satoshi},
+	journal={International Journal of Social Robotics},
+	pages={1--9},
+	year={2018},
+	publisher={Springer}
+}
+
+@article{chalmeau_1995_cooperation,
+	title={La coop{\'e}ration chez les primates},
+	author={Chalmeau, Rapha{\"e}l and Gallo, Alain},
+	journal={L'Ann{\'e}e psychologique},
+	volume={95},
+	number={1},
+	pages={119--130},
+	year={1995},
+	publisher={Pers{\'e}e-Portail des revues scientifiques en SHS}
+}
+
+@article{amici_2015_coordination,
+	title={Coordination, collaboration and cooperation: Interdisciplinary perspectives},
+	author={Amici, Federica and Bietti, Lucas M},
+	journal={Interaction Studies},
+	volume={16},
+	number={3},
+	pages={vii--xii},
+	year={2015},
+	publisher={John Benjamins}
+}
+
+@incollection{knoblich_2011_joint,
+	title = {Chapter three - Psychological Research on Joint Action: Theory and Data},
+	editor = {Brian H. Ross},
+	series = {Psychology of Learning and Motivation},
+	publisher = {Academic Press},
+	volume = {54},
+	pages = {59-101},
+	year = {2011},
+	booktitle = {Advances in Research and Theory},
+	author = {Günther Knoblich and Stephen Butterfill and Natalie Sebanz}                                                 
+}
+
+@article{curioni_2019_joint,
+	title={Joint action in humans: A model for human-robot interactions},
+	author={Curioni, Arianna and Knoblich, Gunther and Sebanz, Natalie and Goswami, A and Vadakkepat, P},
+	journal={Humanoid Robotics: A Reference, eds Goswami A, Vadakkepat P (Springer, Dordrecht, The Netherlands)},
+	pages={2149--2167},
+	year={2019}
+}
+
+@article{vesper_2011_making,
+	title={Making oneself predictable: Reduced temporal variability facilitates joint action coordination},
+	author={Vesper, Cordula and Van Der Wel, Robrecht PRD and Knoblich, G{\"u}nther and Sebanz, Natalie},
+	journal={Experimental brain research},
+	volume={211},
+	number={3-4},
+	pages={517--530},
+	year={2011},
+	publisher={Springer}
+}
+
+@article{brass_2001_movement,
+	title={Movement observation affects movement execution in a simple response task},
+	author={Brass, Marcel and Bekkering, Harold and Prinz, Wolfgang},
+	journal={Acta psychologica},
+	volume={106},
+	number={1-2},
+	pages={3--22},
+	year={2001},
+	publisher={Elsevier}
+}
+
+@article{ramenzoni_2008_short,
+	title={Short article: Carrying the height of the world on your ankles: Encumbering observers reduces estimates of how high an actor can jump},
+	author={Ramenzoni, Ver{\'o}nica C and Riley, Michael A and Shockley, Kevin and Davis, Tehran},
+	journal={Quarterly Journal of Experimental Psychology},
+	volume={61},
+	number={10},
+	pages={1487--1495},
+	year={2008},
+	publisher={SAGE Publications Sage UK: London, England}
+}
+
+@incollection{pacherie_2012_agency,
+	TITLE = {{The Phenomenology of Joint Action: Self-Agency vs. Joint-Agency}},
+	AUTHOR = {Pacherie, Elisabeth},
+	BOOKTITLE = {{Joint Attention: New Developments}},
+	EDITOR = {Axel Seemann},
+	PUBLISHER = {{MIT Press}},
+	PAGES = {343-389},
+	YEAR = {2012}
+}
+
+@book{bratman_2013_shared,
+	title={Shared agency: A planning theory of acting together},
+	author={Bratman, Michael E},
+	year={2013},
+	publisher={Oxford University Press}
+}
+
+@article{vesper_2010_minimal,
+	title={A minimal architecture for joint action},
+	author={Vesper, Cordula and Butterfill, Stephen and Knoblich, G{\"u}nther and Sebanz, Natalie},
+	journal={Neural Networks},
+	volume={23},
+	number={8-9},
+	pages={998--1003},
+	year={2010},
+	publisher={Elsevier}
+}
+
+@book{clark_1996_using,
+	title={Using language},
+	author={Clark, Herbert H},
+	year={1996},
+	publisher={Cambridge university press}
+}
+
+
+#########################################################
+#########################################################
+Chapter 2
+#########################################################
+#########################################################
+
+@inproceedings{sidner_2003_engagement,
+	title={Engagement rules for human-robot collaborative interactions},
+	author={Sidner, Candace L and Lee, Christopher},
+	booktitle={IEEE International Conference on Systems, Man and Cybernetics.},
+	volume={4},
+	pages={3957--3962},
+	year={2003},
+	organization={IEEE}
+}
+
+@article{bauer2008,
+	author = {Bauer, Andrea And Wollherr, Dirk And Buss, Martin},
+	title = {Human–robot Collaboration: A Survey},
+	journal = {International Journal of Humanoid Robotics},
+	volume = {vol. 5},
+	number = {01},
+	pages = {pp. 47-66},
+	year = {2008},
+	doi = {10.1142/S0219843608001303},
+	eprint = { 
+	https://doi.org/10.1142/S0219843608001303
+	
+	}
+}
+
+@article{tabrez_2020,
+	title={A Survey of Mental Modeling Techniques in Human–Robot Teaming},
+	ISSN={2662-4087},
+	DOI={10.1007/s43154-020-00019-0},
+	journal={Current Robotics Reports},
+	author={Tabrez, Aaquib and Luebbers, Matthew B. and Hayes, Bradley},
+	year={2020},
+	month={Aug} }
+
+
+@article{hiatt_2017_modeling,
+	author    = {Laura M. Hiatt and
+	Cody Narber and
+	Esube Bekele and
+	Sangeet S. Khemlani and
+	J. Gregory Trafton},
+	title     = {Human modeling for human-robot collaboration},
+	journal   = {International Journal of Robotics Research},
+	volume    = {vol. 36},
+	number    = {5-7},
+	pages     = {pp. 580-596},
+	year      = {2017},
+	doi       = {10.1177/0278364917690592}
+}
+
+
+@inproceedings{lallement_2014_hatp,
+	TITLE = {{HATP: An HTN Planner for Robotics}},
+	AUTHOR = {Lallement, Rapha{\"e}l and De Silva, Lavindra and Alami, Rachid},
+	BOOKTITLE = {{2nd ICAPS Workshop on Planning and Robotics}},
+	ADDRESS = {Portsmouth, United States},
+	YEAR = {2014},
+	MONTH = Jun
+}
+
+@inproceedings{milliez-2014,
+	TITLE = {{A framework for endowing an interactive robot with reasoning capabilities about perspective-taking and belief management}},
+	AUTHOR = {Milliez, Gr{\'e}goire and Warnier, Matthieu and Clodic, Aur{\'e}lie and Alami, Rachid},
+	BOOKTITLE = {{The 23rd IEEE International Symposium on Robot and Human Interactive Communication (RO-MAN)}},
+	ADDRESS = {Edinburgh, United Kingdom},
+	PAGES = {pp. 1103-1109},
+	YEAR = {2014},
+	MONTH = Aug,
+	DOI = {10.1109/ROMAN.2014.6926399}
+}
+
+@article{ingrand-2017,
+	TITLE = {{Deliberation for autonomous robots: A survey}},
+	AUTHOR = {Ingrand, F{\'e}lix and Ghallab, Malik},
+	JOURNAL = {{Artificial Intelligence}},
+	PUBLISHER = {{Elsevier}},
+	VOLUME = {vol. 247},
+	PAGES = {pp. 10-44},
+	YEAR = {2017},
+	MONTH = Jun,
+	DOI = {10.1016/j.artint.2014.11.003}
+}
+
+@Article{michael_2017_commitment,
+	author={Michael, John
+	and Salice, Alessandro},
+	title={The Sense of Commitment in Human--Robot Interaction},
+	journal={International Journal of Social Robotics},
+	year={2017},
+	month={Nov},
+	day={01},
+	volume={vol. 9},
+	number={5},
+	pages={pp. 755-763},
+	issn={1875-4805},
+	doi={10.1007/s12369-016-0376-5}
+}
+
+@manual{ghallab_98_pddl,
+	author = {Ghallab, Malik and Knoblock, Craig and Wilkins, David and Barrett, Anthony and Christianson, Dave and Friedman, Marc and et al.},
+	year = {1998},
+	month = {08},
+	pages = {},
+	title = {PDDL - The Planning Domain Definition Language}
+}
+
+
+
+
+@Article{bethel_2010_review,
+	author={Bethel, Cindy L.
+	and Murphy, Robin R.},
+	title={Review of Human Studies Methods in HRI and Recommendations},
+	journal={International Journal of Social Robotics},
+	year={2010},
+	month={Dec},
+	day={01},
+	volume={vol. 2},
+	number={4},
+	pages={pp. 347-359},
+	issn={1875-4805},
+	doi={10.1007/s12369-010-0064-9}
+}
+
+@ARTICLE{fan2017,  author={J. {Fan} and D. {Bian} and Z. {Zheng} and L. {Beuscher} and P. A. {Newhouse} and L. C. {Mion} and N. {Sarkar}},  journal={IEEE Transactions on Neural Systems and Rehabilitation Engineering},   title={A Robotic Coach Architecture for Elder Care (ROCARE) Based on Multi-User Engagement Models},   year={2017},  volume={vol. 25},  number={8},  pages={pp. 1153-1163},}
+
+
+@inproceedings {kulic_2003_estimating,
+	title = {Estimating Intent for Human-robot Interaction},
+	booktitle = {IEEE International Conference on Advanced Robotics},
+	year = {2003},
+	pages = {pp. 810-815},
+	author = {Kuli{\'c}, Dana and Croft, Elizabeth A.}
+}
+
+@ARTICLE{kulic2007,  
+	author={D. {Kulic} and E. A. {Croft}},  
+	journal={IEEE Transactions on Robotics},  
+	title={Affective State Estimation for Human–Robot Interaction},   
+	year={2007},  
+	volume={vol. 23},  
+	number={5},  
+	pages={pp. 991-1000}
+}
+
+@incollection{bekele_2014,
+	author= {Bekele, Esubalew and Sarkar, Nilanjan},
+	editor={Fairclough, Stephen H.
+	and Gilleade, Kiel},
+	title={Psychophysiological Feedback for Adaptive Human--Robot Interaction (HRI)},
+	bookTitle={Advances in Physiological Computing},
+	year={2014},
+	publisher={Springer London},
+	pages={pp. 141-167},
+	isbn={978-1-4471-6392-3},
+	doi={10.1007/978-1-4471-6392-3\_7}
+}
+
+
+@Article{anzalone_2015_evaluating,
+	author={Anzalone, Salvatore M.
+	and Boucenna, Sofiane
+	and Ivaldi, Serena
+	and Chetouani, Mohamed},
+	title={Evaluating the Engagement with Social Robots},
+	journal={International Journal of Social Robotics},
+	year={2015},
+	month={Aug},
+	day={01},
+	volume={vol. 7},
+	number={4},
+	pages={pp. 465-478},
+	issn={1875-4805},
+	doi={10.1007/s12369-015-0298-7}
+}
+
+
+
+@techreport{belhassein_2017_human,
+	title={Human-human guidance study},
+	author={Belhassein, Kathleen and Clodic, Aur{\'e}lie and Cochet, H{\'e}lene and Niemel{\"a}, Marketta and Heikkil{\"a}, P{\"a}ivi and Lammi, Hanna and Tammela, Antti},
+	year={2017}
+}
+
+@INPROCEEDINGS{sallami2019,
+	author={Y. {Sallami} and S. {Lemaignan} and A. {Clodic} and R. {Alami}},
+	booktitle={2019 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+	title={Simulation-based physics reasoning for consistent scene estimation in an HRI context},
+	year={2019},
+	volume={},
+	number={},
+	pages={pp. 7834-7841},
+	doi={10.1109/IROS40897.2019.8968106},
+	ISSN={2153-0858},
+	month={Nov},}
+
+@inproceedings{sarthou-etal-2019-semantic,
+	title = "Semantic Spatial Representation: a unique representation of an environment based on an ontology for robotic applications",
+	author = "Sarthou, Guillaume  and
+	Clodic, Aur{\'e}lie  and
+	Alami, Rachid",
+	booktitle = "Proceedings of the Combined Workshop on Spatial Language Understanding ({S}p{LU}) and Grounded Communication for Robotics ({R}obo{NLP})",
+	month = jun,
+	year = "2019",
+	address = "Minneapolis, United States",
+	doi = "10.18653/v1/W19-1606",
+	pages = "pp.50-60",
+}
+
+@incollection{khamb2019,
+	author="Khambhaita, Harmish
+	and Alami, Rachid",
+	editor="Amato, Nancy M.
+	and Hager, Greg
+	and Thomas, Shawna
+	and Torres-Torriti, Miguel",
+	title="Viewing Robot Navigation in Human Environment as a Cooperative Activity",
+	booktitle="Robotics Research",
+	year="2020",
+	publisher="Springer International Publishing",
+	pages="pp. 285-300",
+	isbn="978-3-030-28619-4"
+}
+
+@INPROCEEDINGS{waldhart2019,
+	author={J. {Waldhart} and A. {Clodic} and R. {Alami}},
+	booktitle={28th IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)},
+	title={Reasoning on Shared Visual Perspective to Improve Route Directions},
+	year={2019},
+	volume={},
+	number={},
+	address = {New Delhi, India},
+	keywords={mobile robots;path planning;robot vision;direction provider;SVP planner;Shared Visual Perspective;route direction},
+	doi={10.1109/RO-MAN46459.2019.8956322},
+	ISSN={1944-9445},
+	month={Oct},}
+
+
+@INPROCEEDINGS{shuyin2004,  author={ {Shuyin Li} and M. {Kleinehagenbrock} and J. {Fritsch} and B. {Wrede} and G. {Sagerer}},  booktitle={2004 IEEE International Conference on Systems, Man and Cybernetics},  title={"BIRON, let me show you something": evaluating the interaction with a robot companion},   year={2004},  volume={vol. 3},  number={},  pages={pp. 2827-2834},}
+
+@inproceedings{steinfeld_2006_common,
+	author = {Steinfeld, Aaron and Fong, Terrence and Kaber, David and Lewis, Michael and Scholtz, Jean and Schultz, Alan and Goodrich, Michael},
+	title = {Common Metrics for Human-robot Interaction},
+	booktitle = {Proceedings of the 1st ACM SIGCHI/SIGART Conference on Human-robot Interaction},
+	year = {2006},
+	isbn = {1-59593-294-1},
+	address = {Salt Lake City, United States},
+	pages = {pp. 33-40},
+	numpages = {8},
+	doi = {10.1145/1121241.1121249},
+	acmid = {1121249},
+	keywords = {human-robot interaction, metrics, unmanned ground vehicles},
+} 
+
+@inproceedings{foster2019mummer,
+	title={MuMMER: Socially Intelligent Human-Robot Interaction in Public Spaces},
+	author={Mary Ellen Foster and Bart Craenen and Amol Deshmukh and Oliver Lemon and Emanuele Bastianelli and Christian Dondrup and et al.},
+	booktitle = {AAAI 2019 Fall Symposium Series},
+	address = {Arlington, United States},
+	month={November},
+	year={2019},
+	eprint={1909.06749},
+	archivePrefix={arXiv},
+	primaryClass={cs.RO}
+}
+
+@inproceedings{olsen_2003_metrics,
+	title={Metrics for Evaluating Human-Robot Interaction},
+	author={Dan R. Olsen and Michael A. Goodrich},
+	booktitle={PERMIS},
+	address={Gaithersburg, United States},
+	year={2003}
+}
+
+@ARTICLE{hoffman2019,
+	author={G. {Hoffman}},
+	journal={IEEE Transactions on Human-Machine Systems},
+	title={Evaluating Fluency in Human–Robot Collaboration},
+	year={2019},
+	volume={49},
+	number={3},
+	pages={pp. 209-218},
+	month={June},}
+
+
+@INPROCEEDINGS{itoh2006,
+	author={K. {Itoh} and H. {Miwa} and Y. {Nukariya} and M. {Zecca} and H. {Takanobu} and S. {Roccella} and et al.},
+	booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+	address={Beijing, China},
+	title={Development of a Bioinstrumentation System in the Interaction between a Human and a Robot},
+	year={2006},
+	volume={},
+	number={},
+	pages={pp. 2620-2625},
+	doi={10.1109/IROS.2006.281941},
+	ISSN={},
+	month={Oct},}
+
+@inproceedings{tanevska:hal-01615491,
+	TITLE = {{Towards an Affective Cognitive Architecture for Human-Robot Interaction for the iCub Robot}},
+	AUTHOR = {Tanevska, A. and Rea, F.and  Sandini, G. and Sciutti, A.},
+	BOOKTITLE = {{1st Workshop on ``Behavior, Emotion and Representation: Building Blocks of Interaction''}},
+	ADDRESS = {Bielefeld, Germany},
+	YEAR = {2017},
+	MONTH = Oct,
+	KEYWORDS = {Cognitive interaction ; human-robot interaction ; cognitive architecture ; humanoid robots ; affective computing},
+	HAL_ID = {hal-01615491},
+	HAL_VERSION = {v1},
+}
+
+
+@INPROCEEDINGS{movellan2007rubi, author={J. R. {Movellan} and F. {Tanaka} and I. R. {Fasel} and C. {Taylor} and P. {Ruvolo} and M. {Eckhardt}}, booktitle={2nd ACM/IEEE International Conference on Human-Robot Interaction (HRI)}, title={The RUBI project: A progress report}, year={2007}, volume={}, number={}, pages={pp. 333-339},}
+
+@inproceedings{devin_2016_implemented,
+	author = {Devin, Sandra and Alami, Rachid},
+	title = {An Implemented Theory of Mind to Improve Human-Robot Shared Plans Execution},
+	year = {2016},
+	isbn = {9781467383707},
+	booktitle = {The Eleventh ACM/IEEE International Conference on Human Robot Interaction (HRI)},
+	pages = {pp. 319-326},
+	numpages = {8},
+	keywords = {joint action, hri, theory of mind, shared plan},
+	address = {Christchurch, New Zealand},
+}
+
+
+@inproceedings{bensch17,
+	author={S. Bensch. and A. Jevtić. and T. Hellström.},
+	title={On Interaction Quality in Human-Robot Interaction},
+	booktitle={Proceedings of the 9th International Conference on Agents and Artificial Intelligence (ICAART)},
+	year={2017},
+	pages={pp. 182-189},
+	doi={10.5220/0006191601820189},
+	isbn={978-989-758-219-6},
+}
+
+
+@article{grosz_1996_collab,
+	title = "Collaborative plans for complex group action",
+	journal = "Artificial Intelligence",
+	volume = "vol. 86",
+	number = "2",
+	pages = "pp. 269-357",
+	year = "1996",
+	issn = "0004-3702",
+	doi = "https://doi.org/10.1016/0004-3702(95)00103-4",
+	author = "Barbara J. Grosz and Sarit Kraus",
+}
+
+@book{kreyszig11,
+	added-at = {2013-10-26T22:02:25.000+0200},
+	address = {Hoboken, NJ},
+	author = {Kreyszig, Erwin and Kreyszig, Herbert and Norminton, E. J.},
+	edition = {10th},
+	interhash = {a1e83de970337b5df32d1c35012c6ed4},
+	intrahash = {0a73312b197dea61885c5f118343ad72},
+	isbn = {0470458364},
+	keywords = {cramer engineering kreyszig linear.algebra math matrix textbook},
+	publisher = {Wiley},
+	timestamp = {2016-04-08T13:41:19.000+0200},
+	title = {Advanced Engineering Mathematics},
+	year = 2011
+}
+
+@conference {ros,
+	title = {ROS: an open-source Robot Operating System},
+	booktitle = {ICRA Workshop on Open Source Software},
+	year = {2009},
+	attachments = {http://www.willowgarage.com/sites/default/files/icraoss09-ROS.pdf},
+	author = {Morgan Quigley and Ken Conley and Brian P. Gerkey and Josh Faust and Tully Foote and Jeremy Leibs and Rob Wheeler and Andrew Y. Ng}
+}
+
+@book{bordini_2007_jason,
+	author = {Bordini, Rafael H. and H\"{u}bner, Jomi Fred and Wooldridge, Michael},
+	title = {Programming Multi-Agent Systems in AgentSpeak Using Jason (Wiley Series in Agent Technology)},
+	year = {2007},
+	isbn = {0470029005},
+	publisher = {John Wiley \& Sons, Inc.},
+}
+
+@article{kruse2013,
+	TITLE = {{Human-Aware Robot Navigation: A Survey}},
+	AUTHOR = {Kruse, Thibault and Pandey, Amit Kumar and Alami, Rachid and Kirsch, Alexandra},
+	JOURNAL = {{Robotics and Autonomous Systems}},
+	HAL_LOCAL_REFERENCE = {Rapport LAAS n{\textdegree} 13805},
+	PUBLISHER = {{Elsevier}},
+	VOLUME = {vol. 61},
+	NUMBER = {12},
+	PAGES = {pp. 1726-1743},
+	YEAR = {2013},
+	MONTH = Dec,
+}
+
+
+@article{thomaz_2016_computational,
+	author    = {Andrea Thomaz and
+	Guy Hoffman and
+	Maya {\c{C}}akmak},
+	title     = {Computational Human-Robot Interaction},
+	journal   = {Foundations and Trends in Robotics},
+	volume    = {vol. 4},
+	number    = {2-3},
+	pages     = {pp. 105-223},
+	year      = {2016},
+	doi       = {10.1561/2300000049},
+}
+
+
+@article{lemaignan-ai-2017,
+	TITLE = {{Artificial Cognition for Social Human-Robot Interaction: An Implementation}},
+	AUTHOR = {Lemaignan, S{\'e}verin and Warnier, Matthieu and Sisbot, Emrah Akin and Clodic, Aur{\'e}lie and Alami, Rachid},
+	JOURNAL = {{Artificial Intelligence}},
+	HAL_LOCAL_REFERENCE = {Rapport LAAS n{\textdegree} 17639},
+	PUBLISHER = {{Elsevier}},
+	VOLUME = {vol. 247},
+	PAGES = {pp. 45-69},
+	YEAR = {2017},
+	MONTH = Jun,
+}
+
+@article{cakmak_2017,
+	author    = {Jimmy Baraglia and
+	Maya Cakmak and
+	Yukie Nagai and
+	Rajesh P. N. Rao and
+	Minoru Asada},
+	title     = {Efficient human-robot collaboration: When should a robot take initiative?},
+	journal   = {International Journal of Robotics Research},
+	volume    = {vol. 36},
+	number    = {5-7},
+	pages     = {pp. 563-579},
+	year      = {2017},
+}
+
+
+@ARTICLE{hoffman_2007_fluency,  
+	author={G. {Hoffman} and C. {Breazeal}},  journal={IEEE Transactions on Robotics},  title={Cost-Based Anticipatory Action Selection for Human–Robot Fluency},   year={2007},  volume={vol. 23},  number={5},  pages={pp. 952-961},}
+
+@article{dehais2011,
+	TITLE = {{Physiological and subjective evaluation of a human--robot object hand-over task}},
+	AUTHOR = {Dehais, Fr{\'e}d{\'e}ric and Sisbot, Emrah Akin and Alami, Rachid and Causse, Micka{\"e}l},
+	JOURNAL = {{Applied Ergonomics}},
+	PUBLISHER = {{Elsevier}},
+	VOLUME = {vol. 42},
+	NUMBER = {6},
+	PAGES = {pp. 785-791},
+	YEAR = {2011},
+	MONTH = Nov,
+	DOI = {10.1016/j.apergo.2010.12.005},
+}
+
+
+@book{ghallab_2016_automated,
+	author    = {Malik Ghallab and
+	Dana S. Nau and
+	Paolo Traverso},
+	title     = {Automated Planning and Acting},
+	publisher = {Cambridge University Press},
+	year      = {2016},
+	isbn      = {978-1-107-03727-4},
+}
+
+@INPROCEEDINGS{lemaignan2016,  author={S. {Lemaignan} and F. {Garcia} and A. {Jacq} and P. {Dillenbourg}},  booktitle={11th ACM/IEEE International Conference on Human-Robot Interaction (HRI)},  title={From real-time attention assessment to “with-me-ness” in human-robot interaction},   year={2016},  volume={},  number={},  pages={pp. 157-164},}
+
+@inproceedings{lallement2014hatp,
+	TITLE = {{HATP: An HTN Planner for Robotics}},
+	AUTHOR = {Lallement, Rapha{\"e}l and De Silva, Lavindra and Alami, Rachid},
+	BOOKTITLE = {{2nd ICAPS Workshop on Planning and Robotics}},
+	ADDRESS = {Portsmouth, United States},
+	HAL_LOCAL_REFERENCE = {Rapport LAAS n{\textdegree} 14319},
+	YEAR = {2014},
+	MONTH = Jun,
+	KEYWORDS = {robotique ; planification symbolique ; HATP},
+	PDF = {https://hal.archives-ouvertes.fr/hal-01055493/file/planrob-2014.pdf},
+	HAL_ID = {hal-01055493},
+	HAL_VERSION = {v1},
+}
+
+@inproceedings{foster2016,
+	TITLE = {{The MuMMER Project: Engaging Human-Robot Interaction in Real-World Public Spaces}},
+	AUTHOR = {Foster, Mary Ellen and Alami, Rachid and Gestranius, Olli and Lemon, Oliver and Niemel{\"a}, Marketta and Odobez, Jean-Marc and Pandey, Amit Kumar},
+	BOOKTITLE = {{8th International Conference on Social Robotics}},
+	SERIES = {Lecture Notes in Computer Science},
+	PAGES = {pp. 753-763},
+	YEAR = {2016},
+	MONTH = Oct,
+	ADDRESS = {Kansas City, United States},
+	KEYWORDS = {Humanoid Robot ; Social Signal ; Robot Platform ; Success Metrics ; Navigation Planning ; Human robot interaction},
+	PDF = {https://hal.laas.fr/hal-01955015/file/2016-icsr-foster-mummer.pdf},
+	HAL_ID = {hal-01955015},
+	HAL_VERSION = {v1},
+}
+
+@incollection{alili2009task,
+	title={A task planner for an autonomous social robot},
+	author={Alili, Samir and Alami, Rachid and Montreuil, Vincent},
+	booktitle={Distributed Autonomous Robotic Systems 8},
+	pages={pp. 335-344},
+	year={2009},
+	publisher={Springer, Berlin, Heidelberg}
+}
+
+@incollection{clodic2018,
+	TITLE = {{On the Pertinence of Social Practices for Social Robotics}},
+	AUTHOR = {Clodic, Aur{\'e}lie and V{\'a}zquez-Salceda, Javier and Dignum, Frank and Mascarenhas, Samuel and Dignum, Virginia and Augello, Agnese and Gentile, Manuel and Alami, Rachid},
+	BOOKTITLE = {{Envisioning Robots in Society -- Power, Politics, and Public Space}},
+	HAL_LOCAL_REFERENCE = {Rapport LAAS n{\textdegree} 18438},
+	EDITOR = {IOS Press},
+	PAGES = {pp. 36-74},
+	YEAR = {2018},
+	DOI = {10.3233/978-1-61499-931-7-63},
+	KEYWORDS = {Social practices ; social interaction ; social robotics ; human-robot interaction},
+	PDF = {https://hal.laas.fr/hal-01943774/file/05_Clodic_author_version.pdf},
+	HAL_ID = {hal-01943774},
+	HAL_VERSION = {v1},
+}
+
+@INPROCEEDINGS{milliez2014,  author={G. {Milliez} and M. {Warnier} and A. {Clodic} and R. {Alami}},  booktitle={The 23rd IEEE International Symposium on Robot and Human Interactive Communication},  title={A framework for endowing an interactive robot with reasoning capabilities about perspective-taking and belief management},   year={2014},  volume={},  number={},  pages={pp. 1103-1109},}
+
+
+@ARTICLE{michael2016,
+	AUTHOR={Michael, John and Sebanz, Natalie and Knoblich, Günther},   
+	TITLE={The Sense of Commitment: A Minimal Approach},      
+	JOURNAL={Frontiers in Psychology},      
+	VOLUME={vol. 6},      
+	PAGES={1968},     
+	YEAR={2016},     
+	DOI={10.3389/fpsyg.2015.01968},      
+	ISSN={1664-1078},   
+}
+
+
+@INPROCEEDINGS{mayima2020,  author={A. {Mayima} and A. {Clodic} and R. {Alami}},  booktitle={2020 29th IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)},   title={Toward a Robot Computing an Online Estimation of the Quality of its Interaction with its Human Partner},   year={2020},  volume={},  number={},  pages={291-298},  doi={10.1109/RO-MAN47096.2020.9223464}}
+
+@incollection{khambhaita_viewing_2017,
+	title={Viewing robot navigation in human environment as a cooperative activity},
+	author={Khambhaita, Harmish and Alami, Rachid},
+	booktitle={Robotics Research},
+	pages={285-300},
+	year={2020},
+	publisher={Springer}
+}
+
+@inproceedings{waldhart2019reasoning,
+	title={Reasoning on Shared Visual Perspective to Improve Route Directions},
+	author={Waldhart, Jules and Clodic, Aur{\'e}lie and Alami, Rachid},
+	booktitle={IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)},
+	pages={1-8},
+	year={2019},
+	organization={IEEE}
+}
+
+@inproceedings{sarthou-splu19,
+	TITLE = {{Semantic Spatial Representation: a unique representation of an environment based on an ontology for robotic applications}},
+	AUTHOR = {Sarthou, Guillaume and Alami, Rachid and Clodic, Aur{\'e}lie},
+	BOOKTITLE = {{SpLU-RoboNLP}},
+	PAGES = {50-60},
+	YEAR = {2019}
+}
+
+
+@inproceedings{singamaneni2020,
+	TITLE = {{HATEB-2: Reactive Planning and Decision making in Human-Robot Co-navigation}},
+	AUTHOR = {Singamaneni, Phani-Teja and Alami, Rachid},
+	BOOKTITLE = {{International Conference on Robot \& Human Interactive Communication, 2020}},
+	ADDRESS = {Online, Italy},
+	YEAR = {2020},
+	MONTH = Aug,
+	DOI = {10.1109/RO-MAN47096.2020.9223463},
+	PDF = {https://hal.laas.fr/hal-02922029/file/Ro_Man_2020.pdf},
+}
+
+
+
+
+@ARTICLE{sanchez,  
+	author={Sanchez-Matilla, Ricardo and Chatzilygeroudis, Konstantinos and Modas, Apostolos and Duarte, Nuno Ferreira and Xompero, Alessio and Frossard, Pascal and Billard, Aude and Cavallaro, Andrea},  
+	journal={IEEE Robotics and Automation Letters},   
+	title={Benchmark for Human-to-Robot Handovers of Unseen Containers With Unknown Filling},   
+	year={2020},  
+	volume={5},  
+	number={2},  
+	pages={1642-1649},  
+	doi={10.1109/LRA.2020.2969200}}
+
+
+
+
+
+#########################################################
+#########################################################
+Chapter 3
+#########################################################
+#########################################################
+
+@article{chen_2017_robots,
+	title={Robots serve humans in public places—KeJia robot as a shopping assistant},
+	author={Chen, Yingfeng and Wu, Feng and Shuai, Wei and Chen, Xiaoping},
+	journal={International Journal of Advanced Robotic Systems},
+	volume={14},
+	number={3},
+	pages={1--20},
+	year={2017},
+	publisher={SAGE Publications Sage UK: London, England}
+}
+
+@INPROCEEDINGS{thrun_99,  
+	author={S. {Thrun} and M. {Bennewitz} and W. {Burgard} and A. B. {Cremers} and F. {Dellaert} and D. {Fox} and D. {Hahnel} and C. {Rosenberg} and N. {Roy} and J. {Schulte} and D. {Schulz}},
+	booktitle={Proceedings 1999 IEEE International Conference on Robotics and Automation (Cat. No.99CH36288C)},  
+	title={MINERVA: a second-generation museum tour-guide robot},
+	year={1999},
+	volume={3},
+	pages={1999-2005}
+}
+
+@inbook{kopp_2007,
+	author = {Kopp, Stefan and Tepper, Paul A. and Ferriman, Kimberley and Striegnitz, Kristina and Cassell, Justine},
+	publisher = {John Wiley \& Sons, Ltd},
+	isbn = {9780470512470},
+	title = {Trading Spaces: How Humans and Humanoids Use Speech and Gesture to Give Directions},
+	booktitle = {Conversational Informatics},
+	chapter = {8},
+	pages = {133-160},
+	doi = {10.1002/9780470512470.ch8},
+	year = {2007}
+}
+
+@inproceedings{morales_2011,
+	author = {Morales, Y. and Satake, Satoru and Kanda, Takayuki and Hagita, Norihiro},
+	year = {2011},
+	pages = {441-448},
+	title = {Modeling environments from a route perspective},
+	booktitle = {ACM/IEEE International Conference on Human-Robot Interaction (HRI)},
+	doi = {10.1145/1957656.1957815}
+}
+
+@inproceedings{bohus_directions_2014,
+	title = {Directions {Robot}: {In}-the-{Wild} {Experiences} and {Lessons} {Learned}},
+	booktitle = {Proceedings of the 13th {International} {Conference} on {Autonomous} {Agents} and {Multiagent} {Systems} ({AAMAS})},
+	author = {Bohus, Dan and Saw, Chit W and Horvitz, Eric},
+	year = {2014},
+	pages = {8}
+}
+
+@incollection{tapus_personalized_2015,
+	address = {Cham},
+	title = {Personalized {Short}-{Term} {Multi}-modal {Interaction} for {Social} {Robots} {Assisting} {Users} in {Shopping} {Malls}},
+	volume = {9388},
+	isbn = {978-3-319-25553-8 978-3-319-25554-5},
+	booktitle = {Social {Robotics}},
+	publisher = {Springer International Publishing},
+	author = {Iocchi, Luca and Lázaro, Maria Teresa and Jeanpierre, Laurent and Mouaddib, Abdel-Illah},
+	editor = {Tapus, Adriana and André, Elisabeth and Martin, Jean-Claude and Ferland, François and Ammi, Mehdi},
+	year = {2015},
+	doi = {10.1007/978-3-319-25554-5_27},
+	pages = {264-274}
+}
+
+@inproceedings{gross_2009_toomas,
+	title={TOOMAS: interactive shopping guide robots in everyday use-final implementation and experiences from long-term field trials},
+	author={Gross, H-M and Boehme, H and Schroeter, Ch and M{\"u}ller, Steffen and K{\"o}nig, Alexander and Einhorn, Erik and Martin, Ch and Merten, Matthias and Bley, Andreas},
+	booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+	pages={2005--2012},
+	year={2009},
+	organization={IEEE}
+}
+
+@inproceedings{kanda_2009_affective,
+	title={An affective guide robot in a shopping mall},
+	author={Kanda, Takayuki and Shiomi, Masahiro and Miyashita, Zenta and Ishiguro, Hiroshi and Hagita, Norihiro},
+	booktitle={ACM/IEEE international Conference on Human-Robot interaction (HRI)},
+	pages={173--180},
+	year={2009}
+}
+
+@article{kanda_2010_communication,
+	title={A communication robot in a shopping mall},
+	author={Kanda, Takayuki and Shiomi, Masahiro and Miyashita, Zenta and Ishiguro, Hiroshi and Hagita, Norihiro},
+	journal={IEEE Transactions on Robotics},
+	volume={26},
+	number={5},
+	pages={897--913},
+	year={2010},
+	publisher={IEEE}
+}
+
+@InProceedings{Heikkilae_2018_where,
+	title = {Where Can I Find a Pharmacy? -Human-Driven Design of a Service Robot's Guidance Behaviour},
+	author = {Heikkil{\"a}, P{\"a}ivi and Lammi, Hanna and Belhassein, Kathleen},
+	booktitle = {Workshop on Public Space Human-Robot Interaction (PubRob) as part of the International Conference on Human-Computer Interaction with Mobile Devices and Services (MobileHCI)},
+	year = {2018},
+	pages = {1-2}
+}
+
+@inproceedings{heikkilae_2019_should,
+	title={Should a robot guide like a human? A qualitative four-phase study of a shopping mall robot},
+	author={Heikkil{\"a}, P{\"a}ivi and Lammi, Hanna and Niemel{\"a}, Marketta and Belhassein, Kathleen and Sarthou, Guillaume and Tammela, Antti and Clodic, Aur{\'e}lie and Alami, Rachid},
+	booktitle={International Conference on Social Robotics (ICSR)},
+	pages={548-557},
+	year={2019},
+	organization={Springer}
+}
+
+@InProceedings{heikkilae_2018,
+	TITLE = {Where Can I Find a Pharmacy? -Human-Driven Design of a Service Robot's Guidance Behaviour},
+	AUTHOR = {Heikkil{\"a}, P{\"a}ivi and Lammi, Hanna and Belhassein, Kathleen},
+	BOOKTITLE = {{Workshop on Public Space Human-Robot Interaction (PubRob) as part of the International Conference on Human-Computer Interaction with Mobile Devices and Services (MobileHCI)}},
+	YEAR = {2018},
+	pages = {1-2}
+}
+
+@inproceedings{foster_2019_mummer,
+	title = {MuMMER: Socially Intelligent Human-Robot Interaction in Public Spaces},
+	author = {Foster, Mary Ellen and Craenen, Bart and Deshmukh, Amol and Lemon, Oliver and Bastianelli, Emanuele and Dondrup, Christian and Papaioannou, Ioannis and Vanzo, Andrea and Odobez, Jean-Marc and Can{\'e}vet, Olivier and Cao, Yuanzhouhan and He, Weipeng and Mart{\'i}nez-Gonz{\'a}lez, Angel and Motlicek, Petr and Siegfried, R{\'e}my and Alami, Rachid and Belhassein, Kathleen and Buisan, Guilhem and Clodic, Aur{\'e}lie and Mayima, Amandine and Sallami, Yoan and Sarthou, Guillaume and Singamaneni, Phani-Teja and Waldhart, Jules and Mazel, Alexandre and Caniot, Maxime and Niemel{\"a}, Marketta and Heikkil{\"a}, P{\"a}ivi and Lammi, Hanna and Tammela, Antti},
+	booktitle = {Artificial Intelligence for Human-Robot Interaction Symposium (AI-HRI)},
+	address = {Arlington, VA, United States},
+	organization = {AAAI Fall Symposium Series 2019},
+	year = {2019}
+}
+
+@article{wooldridge_1999_intelligent,
+	title={Intelligent agents},
+	author={Wooldridge, Michael},
+	journal={Multiagent systems},
+	volume={6},
+	year={1999},
+	publisher={MIT Press Cambridge}
+}
+
+@inproceedings{matsumoto_2012_you,
+	title={Do you remember that shop? computational model of spatial memory for shopping companion robots},
+	author={Matsumoto, Takahiro and Satake, Satoru and Kanda, Takayuki and Imai, Michita and Hagita, Norihiro},
+	booktitle={Proceedings of the seventh annual ACM/IEEE international conference on Human-Robot Interaction},
+	pages={447--454},
+	year={2012}
+}
+
+@inproceedings{waldhart_2019_reasoning,
+	title={Reasoning on Shared Visual Perspective to Improve Route Directions},
+	author={Waldhart, Jules and Clodic, Aur{\'e}lie and Alami, Rachid},
+	booktitle={IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)},
+	pages={1--8},
+	year={2019},
+	organization={IEEE}
+}
+
+@inproceedings{mcneill_2005_gesture,
+	title={Gesture, gaze, and ground},
+	author={McNeill, David},
+	booktitle={International workshop on machine learning for multimodal interaction},
+	pages={1--14},
+	year={2005},
+	organization={Springer}
+}
+
+@inproceedings{singamaneni_2020_hateb,
+	title={HATEB-2: Reactive Planning and Decision making in Human-Robot Co-navigation},
+	author={Singamaneni, Phani-Teja and Alami, Rachid},
+	booktitle={EEE International Symposium on Robot and Human Interactive Communication (RO-MAN)},
+	year={2020},
+	pages={179--186},
+	organization={IEEE}
+}
+
+@article{caniot_2020_adapted,
+	title={Adapted Pepper},
+	author={Caniot, Maxime and Bonnet, Vincent and Busy, Maxime and Labaye, Thierry and Besombes, Michel and Courtois, Sebastien and Lagrue, Edouard},
+	journal={arXiv preprint arXiv:2009.03648},
+	year={2020},
+	institution={SoftBank Robotics Europe}
+}
+
+@inproceedings{foster_2016_mummer,
+	title={The MuMMER project: Engaging human-robot interaction in real-world public spaces},
+	author={Foster, Mary Ellen and Alami, Rachid and Gestranius, Olli and Lemon, Oliver and Niemel{\"a}, Marketta and Odobez, Jean-Marc and Pandey, Amit Kumar},
+	booktitle={International Conference on Social Robotics (ICSR)},
+	pages={753--763},
+	year={2016},
+	organization={Springer}
+}
+
+@article{papaioannou_2018_human,
+	title={Human-robot interaction requires more than slot filling-multi-threaded dialogue for collaborative tasks and social conversation},
+	author={Papaioannou, Ioannis and Dondrup, Christian and Lemon, Oliver},
+	journal={AI-MHRI},
+	year={2018}
+}
+
+@incollection{burgard_1999_museum,
+	title={The museum tour-guide robot RHINO},
+	author={Burgard, Wolfram and Cremers, Armin B and Fox, Dieter and H{\"a}hnel, Dirk and Lakemeyer, Gerhard and Schulz, Dirk and Steiner, Walter and Thrun, Sebastian},
+	booktitle={Autonome Mobile Systeme 1998},
+	pages={245--254},
+	year={1999},
+	publisher={Springer}
+}
+
+@article{siegwart_2003_robox,
+	title={Robox at Expo. 02: A large-scale installation of personal robots},
+	author={Siegwart, Roland and Arras, Kai O and Bouabdallah, Samir and Burnier, Daniel and Froidevaux, Gilles and Greppin, Xavier and Jensen, Bj{\"o}rn and Lorotte, Antoine and Mayor, Laetitia and Meisser, Mathieu and others},
+	journal={Robotics and Autonomous Systems},
+	volume={42},
+	number={3-4},
+	pages={203--222},
+	year={2003},
+	publisher={Elsevier}
+}
+
+@inproceedings{clodic_2006_rackham,
+	title={Rackham: An interactive robot-guide},
+	author={Clodic, Aur{\'e}lie and Fleury, Sara and Alami, Rachid and Chatila, Raja and Bailly, G{\'e}rard and Brethes, Ludovic and Cottret, Maxime and Danes, Patrick and Dollat, Xavier and Elisei, Fr{\'e}d{\'e}ric and others},
+	booktitle={IEEE International Symposium on Robot and Human Interactive Communication (ROMAN)},
+	pages={502--509},
+	year={2006},
+	organization={IEEE}
+}
+
+@inproceedings{bauer_2009_autonomous,
+	title={The autonomous city explorer project},
+	author={Bauer, Andrea and Klasing, Klaas and Xu, Tingting and Sosnowski, Stefan and Lidoris, Georgios and Muhlbauer, Quirin and Zhang, Tinguang and Rohrmuller, Florian and Wollherr, Dirk and Kuhnlenz, Kolja and others},
+	booktitle={IEEE International Conference on Robotics and Automation (ICRA)},
+	pages={1595--1596},
+	year={2009},
+	organization={IEEE}
+}
+
+@inproceedings{triebel_2016_spencer,
+	title={Spencer: A socially aware service robot for passenger guidance and help in busy airports},
+	author={Triebel, Rudolph and Arras, Kai and Alami, Rachid and Beyer, Lucas and Breuers, Stefan and Chatila, Raja and Chetouani, Mohamed and Cremers, Daniel and Evers, Vanessa and Fiore, Michelangelo and others},
+	booktitle={Field and service robotics},
+	pages={607--622},
+	year={2016},
+	organization={Springer}
+}
+
+@misc{cassell_2007_trading,
+	title={Trading spaces: How humans and humanoids use speech and gesture to give directions},
+	author={Cassell, Justine and Kopp, Stefan and Tepper, Paul and Ferriman, Kim and Striegnitz, Kristina},
+	year={2007},
+	publisher={Engineering Approaches to Conversational Informatics. Wiley}
+}
+
+@inproceedings{okuno_2009_providing,
+	title={Providing route directions: design of robot's utterance, gesture, and timing},
+	author={Okuno, Yusuke and Kanda, Takayuki and Imai, Michita and Ishiguro, Hiroshi and Hagita, Norihiro},
+	booktitle={ACM/IEEE International Conference on Human-Robot Interaction (HRI)},
+	pages={53--60},
+	year={2009},
+	organization={IEEE}
+}
+
+@article{satake_2015_should,
+	title={What should we know to develop an information robot?},
+	author={Satake, Satoru and Nakatani, Keita and Hayashi, Kotaro and Kanda, Takyuki and Imai, Michita},
+	journal={PeerJ Computer Science},
+	volume={1},
+	pages={8},
+	year={2015},
+	publisher={PeerJ Inc.}
+}
+
+@inproceedings{satake_2015_field,
+	title={Field trial of an information-providing robot in a shopping mall},
+	author={Satake, Satoru and Hayashi, Kotaro and Nakatani, Keita and Kanda, Takayuki},
+	booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+	pages={1832--1839},
+	year={2015},
+	organization={IEEE}
+}
+
+@inproceedings{lemaignan_2018_underworlds,
+	title={Underworlds: cascading situation assessment for robots},
+	author={Lemaignan, S{\'e}verin and Sallami, Yoan and Wallhridge, Christopher and Clodic, Aur{\'e}lic and Belpaeme, Tony and Alami, Rachid},
+	booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+	pages={7750--7757},
+	year={2018},
+	organization={IEEE}
+}
+
+@inproceedings{sarthou_2019_semantic,
+	title={Semantic Spatial Representation: a unique representation of an environment based on an ontology for robotic applications},
+	author={Sarthou, Guillaume and Alami, Rachid and Clodic, Aur{\'e}lie},
+	booktitle={Combined Workshop on Spatial Language Understanding (SpLU) and Grounded Communication for Robotics (RoboNLP)},
+	year={2019}
+}
+
+@inproceedings{sarthou_2019_ontologenius,
+	title={Ontologenius: A long-term semantic memory for robotic agents},
+	author={Sarthou, Guillaume and Clodic, Aur{\'e}lie and Alami, Rachid},
+	booktitle={28th IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)},
+	pages={1--8},
+	year={2019},
+	organization={IEEE}
+}
+
+@article{allen_2003,
+	author = { Gary L.   Allen },
+	title = {Gestures Accompanying Verbal Route Directions: Do They Point to a New Avenue for Examining Spatial Representations?},
+	journal = {Spatial Cognition \& Computation},
+	volume = {3},
+	number = {4},
+	pages = {259-268},
+	year  = {2003},
+	publisher = {Taylor & Francis},
+	doi = {10.1207/s15427633scc0304\_1}
+}
+
+@inproceedings{kanda_2009,
+	author = {Kanda, Takayuki and Shiomi, Masahiro and Miyashita, Zenta and Ishiguro, Hiroshi and Hagita, Norihiro},
+	year = {2009},
+	pages = {173-180},
+	title = {An affective guide robot in a shopping mall},
+	booktitle={ACM/IEEE international conference on Human robot interaction (HRI)},
+	doi = {10.1145/1514095.1514127}
+}
+
+@article{byrne_1997,
+	author = {Byrne, Michael D. and Bovair, Susan},
+	title = {A Working Memory Model of a Common Procedural Error},
+	journal = {Cognitive Science},
+	volume = {21},
+	number = {1},
+	pages = {31-61},
+	doi = {10.1207/s15516709cog2101\_2},
+	year = {1997}
+}
+
+@techreport{caniot_adapted_2020,
+	title={Adapted Pepper},
+	author={Caniot, Maxime and Bonnet, Vincent and Busy, Maxime and Labaye, Thierry and Besombes, Michel and Courtois, Sebastien and Lagrue, Edouard},
+	year={2020},
+	institution={SoftBank Robotics Europe}
+}
+
+#########################################################
+#########################################################
+Chapter 4
+#########################################################
+#########################################################
+
+@inproceedings{sarthou_2021_director,
+	title={The Director Task: a Psychology-Inspired Task to Assess Cognitive and Interactive Robot Architectures},
+	author={Sarthou, Guillaume and Amandine, Mayima and Guilhem, Buisan and Kathleen, Belhassein and Clodic, Aur{\'e}lie},
+	booktitle={IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)},
+	pages={1--8},
+	year={2021},
+	organization={IEEE}
+}
+
+@article{lemaignan_2017_artificial,
+	title={Artificial cognition for social human--robot interaction: An implementation},
+	author={Lemaignan, S{\'e}verin and Warnier, Mathieu and Sisbot, E Akin and Clodic, Aur{\'e}lie and Alami, Rachid},
+	journal={Artificial Intelligence},
+	volume={247},
+	pages={45--69},
+	year={2017},
+	publisher={Elsevier}
+}
+
+@inproceedings{hawes_2007_balt,
+	title={BALT \& CAST: Middleware for cognitive robotics},
+	author={Hawes, Nick and Zillich, Michael and Wyatt, Jeremy},
+	booktitle={IEEE International Symposium on Robot and Human Interactive Communication (RO-MAN)},
+	pages={998--1003},
+	year={2007},
+	organization={IEEE}
+}
+
+@inproceedings{buisan_2021_human,
+	title={A Human-Aware Task Planner Explicitly Reasoning About Human and Robot Decision, Action and Reaction},
+	author={Buisan, Guilhem and Alami, Rachid},
+	booktitle={Companion of the ACM/IEEE International Conference on Human-Robot Interaction},
+	pages={544--548},
+	year={2021}
+}
+
+@article{baron_1985_does,
+	title={Does the autistic child have a “theory of mind”?},
+	author={Baron-Cohen, Simon and Leslie, Alan M and Frith, Uta},
+	journal={Cognition},
+	volume={21},
+	number={1},
+	pages={37--46},
+	year={1985},
+	publisher={Elsevier}
+}
+
+@inproceedings{fiala_2005_artag,
+	title={ARTag, a fiducial marker system using digital techniques},
+	author={Fiala, Mark},
+	booktitle={IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'05)},
+	volume={2},
+	pages={590--596},
+	year={2005},
+	organization={IEEE}
+}
+
+@inproceedings{clodic_2009_shary,
+	title={Shary: a supervision system adapted to human-robot interaction},
+	author={Clodic, Aur{\'e}lie and Cao, Hung and Alili, Samir and Montreuil, Vincent and Alami, Rachid and Chatila, Raja},
+	booktitle={Experimental robotics},
+	pages={229--238},
+	year={2009},
+	organization={Springer}
+}
+
+@inproceedings{fiore_2016_planning,
+	title={On planning and task achievement modalities for human-robot collaboration},
+	author={Fiore, Michelangelo and Clodic, Aur{\'e}lie and Alami, Rachid},
+	booktitle={Experimental Robotics},
+	pages={293--306},
+	year={2016},
+	organization={Springer}
+}
+
+@inproceedings{mayima_2020_toward,
+	title={Toward a Robot Computing an Online Estimation of the Quality of its Interaction with its Human Partner},
+	author={Mayima, Amandine and Clodic, Aur{\'e}lie and Alami, Rachid},
+	booktitle={29th IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)},
+	pages={291--298},
+	year={2020},
+	organization={IEEE}
+}
+
+@article{krauss_1977_social,
+	title={Social and nonsocial speech},
+	author={Krauss, Robert M and Glucksberg, Sam},
+	journal={Scientific American},
+	volume={236},
+	number={2},
+	pages={100--105},
+	year={1977},
+	publisher={JSTOR}
+}
+
+@article{santiesteban_2012_training,
+	title={Training social cognition: from imitation to theory of mind},
+	author={Santiesteban, Idalmis and White, Sarah and Cook, Jennifer and Gilbert, Sam J and Heyes, Cecilia and Bird, Geoffrey},
+	journal={Cognition},
+	volume={122},
+	number={2},
+	pages={228--235},
+	year={2012},
+	publisher={Elsevier}
+}
+
+@article{dumontheil_2010_online,
+	title={Online usage of theory of mind continues to develop in late adolescence},
+	author={Dumontheil, Iroise and Apperly, Ian A and Blakemore, Sarah-Jayne},
+	journal={Developmental science},
+	volume={13},
+	number={2},
+	pages={331--338},
+	year={2010},
+	publisher={Wiley Online Library}
+}
+
+@article{epley_2004_perspective,
+	title={Perspective taking as egocentric anchoring and adjustment.},
+	author={Epley, Nicholas and Keysar, Boaz and Van Boven, Leaf and Gilovich, Thomas},
+	journal={Journal of personality and social psychology},
+	volume={87},
+	number={3},
+	pages={327},
+	year={2004},
+	publisher={American Psychological Association}
+}
+
+@inproceedings{petrick_2012_social,
+	title={Social state recognition and knowledge-level planning for human-robot interaction in a bartender domain},
+	author={Petrick, Ronald PA and Foster, Mary Ellen and Isard, Amy},
+	booktitle={AAAI Workshop on Grounding Language for Physical Systems, Toronto, ON, Canada, July},
+	year={2012}
+}
+
+@article{keysar_2000_taking,
+	title={Taking perspective in conversation: The role of mutual knowledge in comprehension},
+	author={Keysar, Boaz and Barr, Dale J and Balin, Jennifer A and Brauner, Jason S},
+	journal={Psychological Science},
+	volume={11},
+	number={1},
+	pages={32--38},
+	year={2000},
+	publisher={SAGE Publications Sage CA: Los Angeles, CA}
+}
+
+@article{keysar_2003_limits,
+	title={Limits on theory of mind use in adults},
+	author={Keysar, Boaz and Lin, Shuhong and Barr, Dale J},
+	journal={Cognition},
+	volume={89},
+	number={1},
+	pages={25--41},
+	year={2003},
+	publisher={Elsevier}
+}
+
+@article{keysar_1994_illusory,
+	title={The illusory transparency of intention: Linguistic perspective taking in text},
+	author={Keysar, Boaz},
+	journal={Cognitive psychology},
+	volume={26},
+	number={2},
+	pages={165--208},
+	year={1994},
+	publisher={Elsevier}
+}
+
+@article{keysar_2002_self,
+	title={Self-anchoring in conversation: Why language users do not do what they'should'},
+	author={Keysar, Boaz and Barr, Dale J},
+	year={2002},
+	publisher={Cambridge University Press}
+}
+
+@article{keysar_1998_egocentric,
+	title={The egocentric basis of language use: Insights from a processing approach},
+	author={Keysar, Boaz and Barr, Dale J and Horton, William S},
+	journal={Current directions in psychological science},
+	volume={7},
+	number={2},
+	pages={46--49},
+	year={1998},
+	publisher={SAGE Publications Sage CA: Los Angeles, CA}
+}
+
+@article{happe_1994_advanced,
+	title={An advanced test of theory of mind: Understanding of story characters' thoughts and feelings by able autistic, mentally handicapped, and normal children and adults},
+	author={Happ{\'e}, Francesca GE},
+	journal={Journal of autism and Developmental disorders},
+	volume={24},
+	number={2},
+	pages={129--154},
+	year={1994},
+	publisher={Springer}
+}
+
+@article{lin_2010_reflexively,
+	title={Reflexively mindblind: Using theory of mind to interpret behavior requires effortful attention},
+	author={Lin, Shuhong and Keysar, Boaz and Epley, Nicholas},
+	journal={Journal of Experimental Social Psychology},
+	volume={46},
+	number={3},
+	pages={551--556},
+	year={2010},
+	publisher={Elsevier}
+}
+
+@article{rubio_2017_director,
+	title={The director task: A test of Theory-of-Mind use or selective attention?},
+	author={Rubio-Fern{\'a}ndez, Paula},
+	journal={Psychonomic bulletin \& review},
+	volume={24},
+	number={4},
+	pages={1121--1128},
+	year={2017},
+	publisher={Springer}
+}
+
+@inproceedings{panchbhai_2020_exploring,
+	title={Exploring Sequence-to-Sequence Models for SPARQL Pattern Composition},
+	author={Panchbhai, Anand and Soru, Tommaso and Marx, Edgard},
+	booktitle={Iberoamerican Knowledge Graphs and Semantic Web Conference},
+	pages={158--165},
+	year={2020},
+	organization={Springer}
+}
+
+@INPROCEEDINGS{tellex_2014_asking, 
+	AUTHOR    = {Stefanie Tellex AND Ross Knepper AND Adrian Li AND Daniela Rus AND Nicholas Roy}, 
+	TITLE     = {Asking for Help Using Inverse Semantics}, 
+	BOOKTITLE = {Proceedings of Robotics: Science and Systems}, 
+	YEAR      = {2014}, 
+	ADDRESS   = {Berkeley, USA}, 
+	MONTH     = {July},
+	DOI       = {10.15607/RSS.2014.X.024} 
+} 
+
+@inproceedings{brawer_2018_situated,
+	title={Situated Human--Robot Collaboration: predicting intent from grounded natural language},
+	author={Brawer, Jake and Mangin, Olivier and Roncone, Alessandro and Widder, Sarah and Scassellati, Brian},
+	booktitle={IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+	pages={827--833},
+	year={2018},
+	organization={IEEE}
+}
+
+@inproceedings{milliez_2014_framework,
+	title={A framework for endowing an interactive robot with reasoning capabilities about perspective-taking and belief management},
+	author={Milliez, Gr{\'e}goire and Warnier, Matthieu and Clodic, Aur{\'e}lie and Alami, Rachid},
+	booktitle={23rd international symposium on robot and human interactive communication (RO-MAN)},
+	pages={1103--1109},
+	year={2014},
+	organization={IEEE}
+}
+
+@inproceedings{beetz_2018_know,
+	title={Know rob 2.0—a 2nd generation knowledge processing framework for cognition-enabled robotic agents},
+	author={Beetz, Michael and Be{\ss}ler, Daniel and Haidu, Andrei and Pomarlan, Mihai and Bozcuo{\u{g}}lu, Asil Kaan and Bartels, Georg},
+	booktitle={IEEE International Conference on Robotics and Automation (ICRA)},
+	pages={512--519},
+	year={2018},
+	organization={IEEE}
+}
+
+@inproceedings{beetz_2015_robosherlock,
+	title={Robosherlock: Unstructured information processing for robot perception},
+	author={Beetz, Michael and B{\'a}lint-Bencz{\'e}di, Ferenc and Blodow, Nico and Nyga, Daniel and Wiedemeyer, Thiemo and Marton, Zolt{\'a}n-Csaba},
+	booktitle={IEEE International Conference on Robotics and Automation (ICRA)},
+	pages={1549--1556},
+	year={2015}
+}
+
+@incollection{grice_1975_logic,
+	title={Logic and conversation},
+	author={Grice, Herbert P},
+	booktitle={Speech acts},
+	pages={41--58},
+	year={1975},
+	publisher={Brill}
+}
