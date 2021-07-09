@@ -9,12 +9,13 @@
 \faketableofcontents
 \fi
 
-\chapter{Acting for Human Robot Interaction Context and Related work}
+\chapter{Human, Robot and Interaction Models: the Funding Principles of a Decision-Making System for Human-Robot Collaboration}
 \label{chapter:chap1}
-\chaptermark{Context and Challenges}
+\chaptermark{Human, Robot and Interaction Models}
 \minitoc
 
-\section{Introduction}
+This first chapter aims at setting the context for this thesis. First, we present some related works on human-human and human-robot social interactions. These works nourished the thoughts which led to this manuscript. Then, we develop key elements for collaboration such as joint action, commitment and shared plans. Finally, we explore \acrfull{bdi} and cognitive robotic architectures  which have inspired us to design our own architecture in which, \acrshort{jahrvis} —  the main contribution of this thesis — endows a robot with the abilities not only to control, but also to evaluate its joint action with a human. 
+
 
 \section{Social interactions}
 
@@ -47,57 +48,33 @@ One of the main reference to talk about closings is~\cite{schegloff_1973_opening
 The topic termination has a pre-closing statement which signals to the partner the wish to close the conversation. Then, the leave-taking follows the pre-closing statement and its response and, includes the goodbye exchange. Finally, the partners break co-presence, \ie, physically walk apart.\footnote{It is not explicitly mentioned in~\cite{schegloff_1973_opening}  but they precise in a footnote that it would not make sense if the parties remain in co-presence after having being through the closing sequence.} In the context of a phone call, Clark and French define this co-presence breaking as the \textit{contact termination} when people hang up.
 
 With regards to non-verbal cues,  Knapp \etal lists and analyzes them~\cite{knapp_1973_rhetoric}. The more frequent are eye contact breaking,  head nodding, leaning toward the partner and positioning in the direction of the way of leaving.
-\subsubsection{Repairs}
-One last subject of CA could be interesting for our problematic in human-robot interaction, it is the repair. It is a mean of correcting a misunderstanding or a mistake in an interaction, or of correcting a deviation from the normal rules of interaction. The ability to engage in repair is essential in interaction: errors and misunderstandings are likely to arise and must be corrected if the  goal of the interaction is to be successful. Generally, they are classified in four categories \cite{schegloff_1977_preference,wooffitt_2008_conversation}:
-\begin{itemize}
-	\item Self-initiated self-repair: Repair is both initiated and carried out by the responsible of the trouble
-	\item Other-initiated self-repair: The responsible of the trouble takes care of the repair himself but the trouble have been pointed out by the other
-	\item Self-initiated other-repair: The responsible of the trouble signals that a repair is needed and get the other one to repair (e.g. he forgot a name and asks for help to remember)
-	\item Other-initiated other-repair: The one not responsible of the trouble initiates and carries out the repair. This is closest to what is conventionally understood as ``correction''.
-\end{itemize}
 
+\section{Human-Robot Social Interactions}
 
-
-
-\section{From Human-Human Joint Action to Human-Robot Joint Action}
-
-\subsection{Definitions of Joint Action and Examples of Robotic Implementations}
-\subsubsection{Human-Human Joint Action}
-An important number of social interactions and encounters are encompassed by the notion of joint action. Broadly considered, joint action is any form of social interaction whereby two agents or more coordinate their actions in order to pursue a joint goal. However, the notion of joint action has been subject to debate in philosophy and psychology. For instance, according to Sebanz \etal~\cite{sebanz_2006_joint}, joint actions require the partners to coordinate ``their actions in space and time to bring about a change in the environment'' (p. 70); while other authors~\cite{carpenter_2009_just, cohen_1991_teamwork, fiebich_2013_joint, tomasello_2005_understanding} resist the idea that instances of mere coordination  – e.g. two partners walking side by side – constitute a joint action, considering that it requires some necessary conditions like sharing goals and intentions.
-
-Moreover, while the notion of joint action is used interchangeably with the notion of collaboration or cooperation for some authors such as Becchio \etal~\cite{becchio_2010_toward} and Kobayashi \etal~\cite{kobayashi_2018_language}, other authors establish a hierarchy of interactions depending on the processes involved~\cite{amici_2015_coordination, chalmeau_1995_cooperation}. According to Amici and Bietti~\cite{amici_2015_coordination}, for example, coordination is a fast low-level process of behavioral matching and interactional synchrony which could, but not necessarily, facilitate middle-level processes like cooperation (where some individuals bear certain costs to provide benefits to others) or high-level processes like joint action, which requires other resources like turn-taking and alignment of linguistic resources during dialogue.
-
-Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. Three interrelated mechanisms appear to be key conditions for joint action: coordination, planning, and motivational alignment, each of them being supported by other processes. There has been an important deal of conceptual and empirical work investigating these processes~\cite{knoblich_2011_joint, pacherie_2012_agency}, from the sharing of a common ground to the anticipation of a partner’s actions by way of emergent coordination~\cite{curioni_2019_joint}. 
-
-Most of all, joint actions require individuals to anchor their plans in the actual situation and generate particular coordinated actions~\cite{knoblich_2011_joint, vesper_2011_making}. This coordination can rely on different mechanisms, which are not necessarily intentional, including for example perception-action matching~\cite{brass_2001_movement}, perception of joint affordances~\cite{ramenzoni_2008_short}, joint attention~\cite{sebanz_2006_joint}. As for intentional coordination – sometimes referred to as planned coordination~\cite{curioni_2019_joint} –, it requires the partners: (i) to represent their own and others' actions, as well as the consequences of these actions, (ii) to represent the hierarchy of sub-goals and sub-tasks of the plan, (iii) to generate predictions of their joint actions, and (iv) to monitor the progress toward the joint goal in order to possibly compensate or help others to achieve their contributions~\cite{pacherie_2012_agency}.
-
-Indeed, joint action often involves planning several aspects, which involves the representation of the goal and the whole plan, and/or even the sequence of actions to be performed. The formation of these types of representations could rely on different mechanisms, which include high-level processes such as theory of mind, team reasoning, or verbal negotiation~\cite{bratman_2013_shared} or more low-level processes as minimally representing the joint action goal and knowing that it will be achieved with others~\cite{vesper_2010_minimal}. An example of the mechanisms involved in planning a joint action is task co-representations, which allows individuals to represent the details of each other’s task. 
-
-These representations allow individuals to generate predictions about the other’s actions, which in turn facilitate the adjustment and coordination between the partners. Interestingly, individuals can also facilitate the others’ and their own predictions by communicating relevant and reliable information for joint action. The objective is to make actions more transparent and predictable so that the decision-making on the interaction can be fluent and successful. Thus, participants in joint action often negotiate on the fly the sub-tasks, sub-goals, or ways to proceed regarding the collective task through different explicit exchanges~\cite{clark_1996_using}.
-
-\subsubsection{Human-Robot Joint Action}\todo{part on emotions}
-
-
-\subsection{Communication in Joint Action}
-
-\subsection{Repairs in Joint Action}
-
-\subsection{Commitments in Joint Action}
-
-\section{Human-Robot Interactions Types}
+Now that we have seen how social interactions look like when happening between humans, we are going to see the different ways the human-robot interaction field divided and categorized interactions. 
 
 \subsection{Short-term Interactions}
 In~\cite{zheng_2013_designing}, they define a ``short-term interaction'' based on the Unified Theories of Cognition of Newell~\cite{newell_1994_unified}. A short-term interaction corresponds to the ``cognitive band'' of cognition, during which they focus on individual utterances and speech acts for interactions that last for tens of seconds. They leave aside longer-term interactions that can be in the ``rational band'' (minutes to hours) or the ``social band'' (days to months).
 In~\cite{gaschler_2012_modelling}, their robot is a bartender then, they define a short-term interaction as being a customer ordering a drink – from the attention request towards the bartender to the closing of interaction by payment and exchange of polite phrases.
 In~\cite{iocchi_2015_personalized}, they use ``short-term'' to refer to short interactions and that are focused on only one particular communicative objective, avoiding long and complex interactions.
 In~\cite{sanelli_2017_short}, they give three characteristics to a short-term human-robot interaction: (1) users are not familiar with the robot (2) each interaction happens with a different user (3) interaction is short in time. Then the robot has not memory of past interactions.
-\subsection{Long term Interactions}
-A survey~\cite{leite_2013_social} has been done about long-term human-robot interactions. It seems useless to reproduce their work here. However, they raise an interesting question: How Long Should ``Long-Term'' Be? They found out that some authors consider that two months is a long-term interaction. They also point that some Human-Computer Interaction studies on long-term interaction last five weeks. Finally, the authors of the survey give their point of view, which seems well-thought. They argue that it is more important to look at the number of interaction sessions and the length of these sessions (a five minutes-interaction is different from a one hour-interaction). For them, an interaction can be considered as ``long-term'' when the user becomes familiarized with the robot to a point that his perception of such robot is not biased by the novelty effect anymore. This definition raises another question: when does user’s familiarization with the robot become stable? But it will not be discussed here.
+
+\subsection{Long-term Interactions}
+A survey~\cite{leite_2013_social} has been done about long-term human-robot interactions, where long-term means, most of the time, several interactions between the same human and robot. They defined four contexts for which social robot\footnote{actually, some of the robots featured in the survey are not social robots such as a Roomba or the Personal Exploration Rover (PER)} for long-term interaction have been designed: health care and therapy, education, work environment and public spaces, and people's homes. 
+For example, Kanda \etal performed a field trial at an elementary school in Japan for two months~\cite{kanda_2007_two}. The children were able to interact with the robot for 32 days in total, during 30 minutes after lunch. The robot could switch between one hundred pre-defined behaviors (\eg hugging, shaking hand or singing) but not all of them were available during the first interactions with a human. Indeed, they had integrated a pseudo-development mechanism, \ie the more a child interacts with the robot, the more different behaviours the robot displays to that child. Also, the robot confided personal-themed matters to children who have often interacted with it (\eg ``I don't like the cold''). These abilities allowed the robot to maintain the children's interest even after the first week whereas in a first experiment where the robot's behavior was the same all along the two months, most children stopped to interact with the robot from the second week. 
+
+In their discussion part, they raise an interesting question: How Long Should ``Long-Term'' Be? They found out that some authors consider that two months is a long-term interaction. They also point that some Human-Computer Interaction studies on long-term interaction last five weeks. Finally, the authors of the survey give their point of view, which seems well-thought. They argue that it is more important to look at the number of interaction sessions and the length of these sessions (a five minutes-interaction is different from a one hour-interaction). For them, an interaction can be considered as ``long-term'' when the user becomes familiarized with the robot to a point that their perception of such robot is not biased by the novelty effect anymore. This definition raises another question: when does user’s familiarization with the robot become stable? But it is not discussed here.
+
 \subsection{Interactions divided in phases}
 Gockley \etal ~\cite{gockley_2005_designing} invests the long-term human-robot interactions, i.e. over a long period of time, nine months. They divide an interaction is in three phases: greeting, core of the interaction and departure.In the greeting phase, Valerie, the robot receptionist, greets people who might be interested in engaging in conversation. To do so, people are classified into ``attentional'' states:
-present1 (people a bit far and moving ) – Valerie doesn’t pay attention to them
-attending (people closer) – Valerie greets them engages (people next to the desk but on the side) – Valerie acknowledges their presence but does not expect input from them
-interacting (people in front of the keyboard) – Valerie prompts them for input if they are not typing. In the core of interaction, either Valerie can tell her (fictive) story or chat. Her story is subjective and evolve over time. It is about her social life, her lounge singing career, her therapy business, and her job as a receptionist. Furthermore, Valerie has a chatbot system which is very simple. Finally, inputs from visitors are from a keyboard, for easier control and reliability. Finally, at departure, when a person leaves the ``interacting'' region, Valerie signals the end of the interaction by saying ``goodbye.'' 
+\begin{itemize}
+	\item present (people a bit far and moving ) – Valerie doesn’t pay attention to them
+	\item attending (people closer) – Valerie greets them
+	\item  engages (people next to the desk but on the side) – Valerie acknowledges their presence but does not expect input from them
+	\item interacting (people in front of the keyboard) – Valerie prompts them for input if they are not typing.
+\end{itemize}
+
+In the core of interaction, either Valerie can tell her (fictive) story or chat. Her story is subjective and evolve over time. It is about her social life, her lounge singing career, her therapy business, and her job as a receptionist. Furthermore, Valerie has a chatbot system which is very simple. Finally, inputs from visitors are from a keyboard, for easier control and reliability. Finally, at departure, when a person leaves the ``interacting'' region, Valerie signals the end of the interaction by saying ``goodbye.'' 
 
 In~\cite{kidd_2008_robots}, they present a weigh loss coach. It introduces the notion of states of relationship. They are three: initial (for the first few days of interaction), normal, repair (if the result of Working Alliance Inventory – Short Form – questions asked by the robot – is less than -25). According to the state of relationship, the robot answers/questions/speech will not be the same.
 
@@ -154,6 +131,48 @@ In his thesis~\cite{kuo_2012_designing}, Kuo criticizes Kahn’s work. He says t
 He checked the validity of his patterns with the analysis of Problem statement, Context of Use, Interaction Modality, Combination with Other Patterns, Technical Performance and Limitations, User Feedback and User’s Perception, Resulting Interactive Behavior.
 
 Finally, Peltason and Wrede also based their work on design patterns from computer science, specifically applied to dialogue here~\cite{peltason_2010_pamini}. To name a few of them: Simple action request, Interaction opening, Interaction closing, Clarification. During interaction, the registered patterns are employed in a flexible way by admitting that patterns can be interrupted by other patterns and possibly resumed later which leads to interleaving patterns. By default, simpler patterns are permitted to be nested within temporally extended patterns.
+
+\section{Context around the Joint Action Concept}
+
+
+\subsection{Definitions of Joint Action and Examples of Robotic Implementations}
+Often, multiple concepts are addressed when referring to collaborative tasks: collaboration, cooperation, coordination, joint action, joint activity, shared/joint attention, shared/joint intention, shared plan, shared/common/joint goal, (joint) commitment, engagement, mental states, theory of mind, mutual knowledge. However, many terms and definitions, whether inside a field or between fields do not reach a consensus.
+
+\subsubsection{Human-Human Joint Action}
+An important number of social interactions and encounters are encompassed by the notion of joint action. Broadly considered, joint action is any form of social interaction whereby two agents or more coordinate their actions in order to pursue a joint goal. However, the notion of joint action has been subject to debate in philosophy and psychology. For instance, according to Sebanz \etal~\cite{sebanz_2006_joint}, joint actions require the partners to coordinate ``their actions in space and time to bring about a change in the environment'' (p. 70); while other authors~\cite{carpenter_2009_just, cohen_1991_teamwork, fiebich_2013_joint, tomasello_2005_understanding} resist the idea that instances of mere coordination  – e.g. two partners walking side by side – constitute a joint action, considering that it requires some necessary conditions like sharing goals and intentions.
+
+Moreover, while the notion of joint action is used interchangeably with the notion of collaboration or cooperation for some authors such as Becchio \etal~\cite{becchio_2010_toward} and Kobayashi \etal~\cite{kobayashi_2018_language}, other authors establish a hierarchy of interactions depending on the processes involved~\cite{amici_2015_coordination, chalmeau_1995_cooperation}. According to Amici and Bietti~\cite{amici_2015_coordination}, for example, coordination is a fast low-level process of behavioral matching and interactional synchrony which could, but not necessarily, facilitate middle-level processes like cooperation (where some individuals bear certain costs to provide benefits to others) or high-level processes like joint action, which requires other resources like turn-taking and alignment of linguistic resources during dialogue.
+
+Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. Three interrelated mechanisms appear to be key conditions for joint action: coordination, planning, and motivational alignment, each of them being supported by other processes. There has been an important deal of conceptual and empirical work investigating these processes~\cite{knoblich_2011_joint, pacherie_2012_agency}, from the sharing of a common ground to the anticipation of a partner’s actions by way of emergent coordination~\cite{curioni_2019_joint}. 
+
+Most of all, joint actions require individuals to anchor their plans in the actual situation and generate particular coordinated actions~\cite{knoblich_2011_joint, vesper_2011_making}. This coordination can rely on different mechanisms, which are not necessarily intentional, including for example perception-action matching~\cite{brass_2001_movement}, perception of joint affordances~\cite{ramenzoni_2008_short}, joint attention~\cite{sebanz_2006_joint}. As for intentional coordination – sometimes referred to as planned coordination~\cite{curioni_2019_joint} –, it requires the partners: (i) to represent their own and others' actions, as well as the consequences of these actions, (ii) to represent the hierarchy of sub-goals and sub-tasks of the plan, (iii) to generate predictions of their joint actions, and (iv) to monitor the progress toward the joint goal in order to possibly compensate or help others to achieve their contributions~\cite{pacherie_2012_agency}.
+
+Indeed, joint action often involves planning several aspects, which involves the representation of the goal and the whole plan, and/or even the sequence of actions to be performed. The formation of these types of representations could rely on different mechanisms, which include high-level processes such as theory of mind, team reasoning, or verbal negotiation~\cite{bratman_2013_shared} or more low-level processes as minimally representing the joint action goal and knowing that it will be achieved with others~\cite{vesper_2010_minimal}. An example of the mechanisms involved in planning a joint action is task co-representations, which allows individuals to represent the details of each other’s task. 
+
+These representations allow individuals to generate predictions about the other’s actions, which in turn facilitate the adjustment and coordination between the partners. Interestingly, individuals can also facilitate the others’ and their own predictions by communicating relevant and reliable information for joint action. The objective is to make actions more transparent and predictable so that the decision-making on the interaction can be fluent and successful. Thus, participants in joint action often negotiate on the fly the sub-tasks, sub-goals, or ways to proceed regarding the collective task through different explicit exchanges~\cite{clark_1996_using}.
+
+
+
+\subsubsection{Human-Robot Joint Action}\todo{part on emotions}
+
+
+\subsection{Communication in Joint Action}
+
+Cohen and Levesque, Teamwork, p 490
+
+\subsection{Repairs in Joint Action}
+
+One last subject of CA could be interesting for our problematic in human-robot interaction, it is the repair. It is a mean of correcting a misunderstanding or a mistake in an interaction, or of correcting a deviation from the normal rules of interaction. The ability to engage in repair is essential in interaction: errors and misunderstandings are likely to arise and must be corrected if the  goal of the interaction is to be successful. Generally, they are classified in four categories \cite{schegloff_1977_preference,wooffitt_2008_conversation}:
+\begin{itemize}
+	\item Self-initiated self-repair: Repair is both initiated and carried out by the responsible of the trouble
+	\item Other-initiated self-repair: The responsible of the trouble takes care of the repair himself but the trouble have been pointed out by the other
+	\item Self-initiated other-repair: The responsible of the trouble signals that a repair is needed and get the other one to repair (e.g. he forgot a name and asks for help to remember)
+	\item Other-initiated other-repair: The one not responsible of the trouble initiates and carries out the repair. This is closest to what is conventionally understood as ``correction''.
+\end{itemize}
+
+\subsection{Commitments in Joint Action}
+
+
 \section{Supervision systems for Decision and execution}
 
 \subsection{BDI architectures}
