@@ -17,7 +17,7 @@
 This first chapter aims at setting the context for this thesis. First, we present some related works on human-human and human-robot social interactions. These works nourished the thoughts which led to this manuscript. Then, we develop key elements for collaboration such as joint action, commitment and shared plans. Finally, we explore \acrfull{bdi} and cognitive robotic architectures  which have inspired us to design our own architecture in which, \acrshort{jahrvis} —  the main contribution of this thesis — endows a robot with the abilities not only to control, but also to evaluate its joint action with a human. 
 
 
-\section{Social interactions}
+\section{Social interactions}\label{sec:soc_int}\todo{check refs to CA}
 
 \subsection{How to define a social interaction?}
 First, let’s take a look at the dictionary and see how the word ``interaction'' is defined. According to the Oxford dictionary, an interaction is a ``reciprocal action or influence'' and more precisely a ``communication or direct involvement with someone or something''. As for the Cambridge dictionary, it defines it as an occasion when two or more people or things communicate with or react to each other''. Those definitions can give an hint about what it an interaction between humans but they are not specific enough. Now, going through social psychology literature, one of the first attempt to define ``social interaction'' can be found in~\cite{goffman_1967_interaction}. Goffman distinguishes three basic interaction units: the social occasion, the gathering and the social situation. The social occasion is an event that is temporally and spatially situated in such a way that it forms a unit that can be looked forward and back upon, by participants that are informed by the event (dinner, meeting, sport game...).  The gathering refers to any set of two or more individuals who are at the moment in one another’s immediate presence. It can be noted that a social occasion may include several gatherings but that gathering do not need social occasions to occur (they can happen in office spaces, street corners, restaurants…). The social situation refers to the full spatial environment that embraces interacting people. It is created as soon as people engage in interaction, when mutual monitoring occurs and ends when the next to the last person leaves. Furthermore, Goffman distinguishes between focused and unfocused interaction (gathering). A focused gathering has its members that can come together to sustain a joint focus of visual and cognitive attention and are open to each other for talk. He calls it encounters or engagements. On the other hand, an unfocused gathering has its members present to one another but not engaged together (e.g. persons waiting for a bus). In this same book, Goffman proposes a definition of social encounter: ``an occasion of face-to-face interaction, beginning when individuals recognize that they have moved into one another’s immediate presence and ending by an appreciated withdrawal from mutual participation''.
@@ -66,17 +66,18 @@ For example, Kanda \etal performed a field trial at an elementary school in Japa
 In their discussion part, they raise an interesting question: How Long Should ``Long-Term'' Be? They found out that some authors consider that two months is a long-term interaction. They also point that some Human-Computer Interaction studies on long-term interaction last five weeks. Finally, the authors of the survey give their point of view, which seems well-thought. They argue that it is more important to look at the number of interaction sessions and the length of these sessions (a five minutes-interaction is different from a one hour-interaction). For them, an interaction can be considered as ``long-term'' when the user becomes familiarized with the robot to a point that their perception of such robot is not biased by the novelty effect anymore. This definition raises another question: when does user’s familiarization with the robot become stable? But it is not discussed here.
 
 \subsection{Interactions divided in phases}
-Gockley \etal ~\cite{gockley_2005_designing} invests the long-term human-robot interactions, i.e. over a long period of time, nine months. They divide an interaction is in three phases: greeting, core of the interaction and departure.In the greeting phase, Valerie, the robot receptionist, greets people who might be interested in engaging in conversation. To do so, people are classified into ``attentional'' states:
-\begin{itemize}
-	\item present (people a bit far and moving ) – Valerie doesn’t pay attention to them
-	\item attending (people closer) – Valerie greets them
-	\item  engages (people next to the desk but on the side) – Valerie acknowledges their presence but does not expect input from them
-	\item interacting (people in front of the keyboard) – Valerie prompts them for input if they are not typing.
-\end{itemize}
+Among works on short-term or long-term interactions, some authors divide interactions in phases which have sometimes similarities with the phases of social interactions described in Section~\ref{sec:soc_int}.
 
+Gockley \etal divide an interaction in three phases: greeting, core of the interaction and departure~\cite{gockley_2005_designing}. In the greeting phase, Valerie, the robot receptionist, greets people who might be interested in engaging in conversation. To do so, people are classified into ``attentional'' states:
+\begin{enumerate*}
+	\item present (people a bit far and moving): Valerie doesn’t pay attention to them
+	\item attending (people closer): Valerie greets them
+	\item engages (people next to the desk but on the side): Valerie acknowledges their presence but does not expect input from them
+	\item interacting (people in front of the keyboard): Valerie prompts them for input if they are not typing.
+\end{enumerate*}
 In the core of interaction, either Valerie can tell her (fictive) story or chat. Her story is subjective and evolve over time. It is about her social life, her lounge singing career, her therapy business, and her job as a receptionist. Furthermore, Valerie has a chatbot system which is very simple. Finally, inputs from visitors are from a keyboard, for easier control and reliability. Finally, at departure, when a person leaves the ``interacting'' region, Valerie signals the end of the interaction by saying ``goodbye.'' 
 
-In~\cite{kidd_2008_robots}, they present a weigh loss coach. It introduces the notion of states of relationship. They are three: initial (for the first few days of interaction), normal, repair (if the result of Working Alliance Inventory – Short Form – questions asked by the robot – is less than -25). According to the state of relationship, the robot answers/questions/speech will not be the same.
+In~\cite{kidd_2008_robots}, they present a weigh loss coach. It introduces the notion of states of relationship. They are three: initial (for the first few days of interaction), normal, repair. According to the state of relationship, the robot answers/questions/speech will not be the same.
 
 In~\cite{kasap_2012_building}, to each user, corresponds an interaction session. Each session is composed of four dialogue phases: welcome, warm up, teach and farewell. The system has a memory of users and past interactions. In the memory, is recorded the context (initial state and goal), contents (events) and the outcome (goal succeeded or not).  A bit similar to the relationship state defined in~\cite{kidd_2008_robots}, they define a notion that they call relationship level. It is computed from the emotional interactions from the episodic memory associated to a user. It will influence the mood level and then the facial expression and the speech.
 
@@ -84,12 +85,13 @@ In~\cite{gaschler_2012_modelling}, they divide the interaction in three phases (
 They leave open the possibility to have sub-phases inside phases.
 
 We can also find in~\cite{lee_2012_personalization} the notion of structure of interaction: interactions start with the vendor identifying the customer, greeting and engaging in small talk with the customer, engaging in the snack transaction, and then enacting social leave-taking.
+
 \subsection{Hierarchical interactions}
-In~\cite{dautenhahn_2002_embodied} and~\cite{ogden_2001_interactional}, they define two levels of approach for interactions, a global one and a local one. Both papers are from the same authors but present some small differences in their definitions of the levels.
-In~\cite{dautenhahn_2002_embodied}, the global level approach defines a unit of interaction as being relatively large, such as the script for a greeting as described by Kendon in~\cite{kendon_1990_conducting}. At this level, an interaction may be seen as a unit similar to a schema or script, in the computer/cognitive science senses of these terms. They name this level of interaction a global interactional unit, or GIU. Furthermore, a GIU can be divided in phases, each of which has associated behaviors. Behaviors have meaning and their meaning depends on the phase in which they occur, the context (e.g. a ‘wave hello’ vs. a ‘wave goodbye’). Finally, they discuss the advantages and drawbacks to describe an interaction at a global level. In~\cite{ogden_2001_interactional}, they prefer the use of the term ``long sequences of interaction'' rather than ``large units of interaction''.
+Not only, interactions can be divided in phases but also in levels. In~\cite{dautenhahn_2002_embodied} and~\cite{ogden_2001_interactional}, they define two levels of approach for interactions, a global one and a local one. Both papers are from the same authors but present some small differences in their definitions of the levels.
+In~\cite{dautenhahn_2002_embodied}, the global level approach defines a unit of interaction as being relatively large, such as the script for a greeting as described by Kendon in~\cite{kendon_1990_conducting}. At this level, an interaction may be seen as a unit similar to a schema or script, in the computer/cognitive science senses of these terms. They name this level of interaction a Global Interactional Unit (GIU). Furthermore, a GIU can be divided in phases, each of which has associated behaviors. Behaviors have meaning and their meaning depends on the phase in which they occur, the context (e.g. a ‘wave hello’ vs. a ‘wave goodbye’). Finally, they discuss the advantages and drawbacks to describe an interaction at a global level. In~\cite{ogden_2001_interactional}, they prefer the use of the term ``long sequences of interaction'' rather than ``large units of interaction''.
 In~\cite{dautenhahn_2002_embodied}, their local level approach is quite similar to the way CA views and analyzes interaction (e.g. adjacency pairs). This interactional structure is a much smaller unit, often as simple as an action and a response to that action. This view of interaction has the advantage of greater flexibility and robustness compared to the globally structured view. Flexibility is a result of the possibility of specifying acts that may occur in many global interactional structures. But, as contextual details are ignored, the ability to assign a specific meaning to an action is lost.
 
-In his thesis~\cite{kuo_2012_designing}, Kuo insists about this flexibility and the re-usability. A lower level of design is more appropriate for reuse. For him, a unit of interaction corresponds to an ``interaction cue'' (or social cue) that a robot can perceive and act upon or express in an interaction. These cues can be verbal, non-verbal, or a combination of both (multi-modal interaction). A complete episode of interaction should be constructed through composition of interaction cues with some common patterns repeated over the course of the interaction (e.g. awareness of human presence).
+In his thesis, Kuo insists about this flexibility and the re-usability~\cite{kuo_2012_designing}. A lower level of design is more appropriate for reuse. For him, a unit of interaction corresponds to an ``interaction cue'' (or social cue) that a robot can perceive and act upon or express in an interaction. These cues can be verbal, non-verbal, or a combination of both (multi-modal interaction). A complete episode of interaction should be constructed through composition of interaction cues with some common patterns repeated over the course of the interaction (e.g. awareness of human presence).
 
 \subsection{Patterns of Interaction}
 Before talking about design patterns or interaction patterns, Goffman in 1983~\cite{goffman_1983_interaction} argues that human interactions follow a specific ``order'' and characterized a number of patterns in which people interact, such as how greetings unfold and how people leave an interaction.
@@ -132,16 +134,19 @@ He checked the validity of his patterns with the analysis of Problem statement, 
 
 Finally, Peltason and Wrede also based their work on design patterns from computer science, specifically applied to dialogue here~\cite{peltason_2010_pamini}. To name a few of them: Simple action request, Interaction opening, Interaction closing, Clarification. During interaction, the registered patterns are employed in a flexible way by admitting that patterns can be interrupted by other patterns and possibly resumed later which leads to interleaving patterns. By default, simpler patterns are permitted to be nested within temporally extended patterns.
 
-\section{Context around the Joint Action Concept}
+\section{Around the Joint Action Concept}
+Often, multiple concepts are addressed when referring to collaborative tasks: collaboration, cooperation, coordination, joint action, joint activity, shared/joint attention, shared/joint intention, shared plan, shared/common/joint goal, (joint) commitment, engagement, mental states, theory of mind, mutual knowledge. However, many terms and definitions, whether inside a field\footnote{Here, philosophy, psychology or robotics} or between fields do not reach a consensus. This can be quite confusing, especially for roboticists for which it is not the range of expertise at first.
 
+\subsection{How to define Joint Action ?}
 
-\subsection{Definitions of Joint Action and Examples of Robotic Implementations}
-Often, multiple concepts are addressed when referring to collaborative tasks: collaboration, cooperation, coordination, joint action, joint activity, shared/joint attention, shared/joint intention, shared plan, shared/common/joint goal, (joint) commitment, engagement, mental states, theory of mind, mutual knowledge. However, many terms and definitions, whether inside a field or between fields do not reach a consensus.
-
-\subsubsection{Human-Human Joint Action}
-An important number of social interactions and encounters are encompassed by the notion of joint action. Broadly considered, joint action is any form of social interaction whereby two agents or more coordinate their actions in order to pursue a joint goal. However, the notion of joint action has been subject to debate in philosophy and psychology. For instance, according to Sebanz \etal~\cite{sebanz_2006_joint}, joint actions require the partners to coordinate ``their actions in space and time to bring about a change in the environment'' (p. 70); while other authors~\cite{carpenter_2009_just, cohen_1991_teamwork, fiebich_2013_joint, tomasello_2005_understanding} resist the idea that instances of mere coordination  – e.g. two partners walking side by side – constitute a joint action, considering that it requires some necessary conditions like sharing goals and intentions.
+An important number of social interactions and encounters are encompassed by the notion of joint action. Broadly considered, joint action is any form of social interaction whereby two agents or more coordinate their actions in order to pursue a joint goal. However, the notion of joint action has particularly been subject to debate in philosophy and psychology. For instance, according to Sebanz \etal~\cite{sebanz_2006_joint}, ``joint action can be regarded as
+any form of social interaction whereby two or more individuals coordinate their actions in space and time to bring about a change in the environment.'' (p. 70); while other authors~\cite{carpenter_2009_just, cohen_1991_teamwork\todo{à laisser ? mecs de l'IA ?}, fiebich_2013_joint, tomasello_2005_understanding} resist the idea that instances of mere coordination  – e.g. two partners walking side by side – constitute a joint action, considering that it requires some necessary conditions like sharing goals and intentions.
 
 Moreover, while the notion of joint action is used interchangeably with the notion of collaboration or cooperation for some authors such as Becchio \etal~\cite{becchio_2010_toward} and Kobayashi \etal~\cite{kobayashi_2018_language}, other authors establish a hierarchy of interactions depending on the processes involved~\cite{amici_2015_coordination, chalmeau_1995_cooperation}. According to Amici and Bietti~\cite{amici_2015_coordination}, for example, coordination is a fast low-level process of behavioral matching and interactional synchrony which could, but not necessarily, facilitate middle-level processes like cooperation (where some individuals bear certain costs to provide benefits to others) or high-level processes like joint action, which requires other resources like turn-taking and alignment of linguistic resources during dialogue.
+
+If we look at Sebanz and colleagues definition of joint action, it could be considered as a kind of activity based on the usual sense of this term. Thus, some authors use the concept ``joint activity'' interchangeably with ``joint action''~\cite{tollefsen_2005_let,grafenhain_2013_three} while others see the joint activity composed of joint actions~\cite{clark_1996_using, feltovitch_2005_common}. Clark says that ``Joint activities advance mostly through joint actions''. He defines the properties of a joint activity among which there are: it is carried out by 2 or more participants, each participant has a public role or they try to establish and achieve joint goals, and they may have private goals. He also highlights the need for coordination. 
+
+\subsection{What is necessary for Joint Action ?}
 
 Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. Three interrelated mechanisms appear to be key conditions for joint action: coordination, planning, and motivational alignment, each of them being supported by other processes. There has been an important deal of conceptual and empirical work investigating these processes~\cite{knoblich_2011_joint, pacherie_2012_agency}, from the sharing of a common ground to the anticipation of a partner’s actions by way of emergent coordination~\cite{curioni_2019_joint}. 
 
@@ -153,14 +158,14 @@ These representations allow individuals to generate predictions about the other�
 
 
 
-\subsubsection{Human-Robot Joint Action}\todo{part on emotions}
+\section{Human-Robot Joint Action}\todo{part on emotions}
 
 
-\subsection{Communication in Joint Action}
+\subsection{Focus on Communication in Human-Robot in Joint Action}
 
 Cohen and Levesque, Teamwork, p 490
 
-\subsection{Repairs in Joint Action}
+\subsection{Focus on Repairs in Human-Robot Joint Action}
 
 One last subject of CA could be interesting for our problematic in human-robot interaction, it is the repair. It is a mean of correcting a misunderstanding or a mistake in an interaction, or of correcting a deviation from the normal rules of interaction. The ability to engage in repair is essential in interaction: errors and misunderstandings are likely to arise and must be corrected if the  goal of the interaction is to be successful. Generally, they are classified in four categories \cite{schegloff_1977_preference,wooffitt_2008_conversation}:
 \begin{itemize}
@@ -170,7 +175,7 @@ One last subject of CA could be interesting for our problematic in human-robot i
 	\item Other-initiated other-repair: The one not responsible of the trouble initiates and carries out the repair. This is closest to what is conventionally understood as ``correction''.
 \end{itemize}
 
-\subsection{Commitments in Joint Action}
+\subsection{Focus on Commitments in Human-Robot in Joint Action}
 
 
 \section{Supervision systems for Decision and execution}
