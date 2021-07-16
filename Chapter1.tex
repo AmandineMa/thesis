@@ -17,7 +17,7 @@
 This first chapter aims at setting the context for this thesis. First, we present some related works on human-human and human-robot social interactions. These works nourished the thoughts which led to this manuscript. Then, we develop key elements for collaboration such as joint action, commitment and shared plans. Finally, we explore \acrfull{bdi} and cognitive robotic architectures  which have inspired us to design our own architecture in which, \acrshort{jahrvis} —  the main contribution of this thesis — endows a robot with the abilities not only to control, but also to evaluate its joint action with a human. 
 
 
-\section{Social interactions}\label{sec:soc_int}\todo{check refs to CA}
+\section{Social interactions}\label{chap1:sec:soc_int}\todo{check refs to CA}
 
 \subsection{How to define a social interaction?}
 First, let’s take a look at the dictionary and see how the word ``interaction'' is defined. According to the Oxford dictionary, an interaction is a ``reciprocal action or influence'' and more precisely a ``communication or direct involvement with someone or something''. As for the Cambridge dictionary, it defines it as an occasion when two or more people or things communicate with or react to each other''. Those definitions can give an hint about what it an interaction between humans but they are not specific enough. Now, going through social psychology literature, one of the first attempt to define ``social interaction'' can be found in~\cite{goffman_1967_interaction}. Goffman distinguishes three basic interaction units: the social occasion, the gathering and the social situation. The social occasion is an event that is temporally and spatially situated in such a way that it forms a unit that can be looked forward and back upon, by participants that are informed by the event (dinner, meeting, sport game...).  The gathering refers to any set of two or more individuals who are at the moment in one another’s immediate presence. It can be noted that a social occasion may include several gatherings but that gathering do not need social occasions to occur (they can happen in office spaces, street corners, restaurants…). The social situation refers to the full spatial environment that embraces interacting people. It is created as soon as people engage in interaction, when mutual monitoring occurs and ends when the next to the last person leaves. Furthermore, Goffman distinguishes between focused and unfocused interaction (gathering). A focused gathering has its members that can come together to sustain a joint focus of visual and cognitive attention and are open to each other for talk. He calls it encounters or engagements. On the other hand, an unfocused gathering has its members present to one another but not engaged together (e.g. persons waiting for a bus). In this same book, Goffman proposes a definition of social encounter: ``an occasion of face-to-face interaction, beginning when individuals recognize that they have moved into one another’s immediate presence and ending by an appreciated withdrawal from mutual participation''.
@@ -28,7 +28,7 @@ Then, \cite{rummel_1976_understanding} proposes a definition of a few words: ``S
 
 Finally, the elements brought here, trying to define what is an interaction and more precisely a social interaction, are chosen among a large amount of work. It is possible to find different definitions, as \cite{enriquez_2017_vocabulaire} precises: ``although the term ``interaction'' is frequently used, it does not have a unique definition but presents semantic divergences''.
 
-\subsection{Structure of a social interaction}\label{subsec:social_int}
+\subsection{Structure of a social interaction}\label{chap1:subsec:social_int}
 Most of the research about interaction and social interaction belongs to the field of social psychology. As for the structure of a social interaction, it is more from the field of Conversation Analysis (CA) which mixes sociology, anthropology, linguistics, speech-communication and psychology.
 In~\cite{robinson_overall_2012}, Robinson makes a review of the work that has been done about ``overall structural organization''. Most of the time in the literature, overall structural organization is discussed in terms of ``the overall structural organization of entire, single occasions of interaction''.  Then ``overall structural organization'' term is generally used to talk about one particular (albeit large) unit of interaction. However, many different types of interactional units can have an overall structural organization. For example, in~\cite{schegloff_2011_word}, Schegloff encourages to recognize ``‘overall structural organization’ not as something for the unit ‘a single conversation’ (or encounter, or session, etc.) alone, but for units like turns, actions and courses of action (like answering or telling), sequences, and who knows what else as well.'' He also mentioned that every unit of organization should probably have a local organization and a global organization.
 Here, the term ``overall structural organization'' is to refer to ``the overall structural organization of entire, single occasions of interaction''. Robinson tells us that this concept has received relatively little analytic attention and thus is still not well understood~\cite{robinson_overall_2012}. Indeed, research has been more focused on analyzing the organization of individual sequences of action such as turn-takings or conversation openings. Several terms have been used to talk about a ``supra-sequential coherence'': big package, set of pre-organized sequences, (social) activity, project of activity or plan of action. As the subject has not been investigated so much, it has not evolved a lot in 40 years, since what was proposed by Sacks~\cite{sacks_lectures_1995} to define overall structural organization of single occasions of interaction: it ``deals, roughly, with beginnings and endings, and how beginnings work to get from beginnings to something else, and how, from something else, endings are gotten to. And also the relationship - if there is one - between beginnings and endings''. Robinson summarizes research about the subject by saying that single occasions of interaction (in a generic or context-free sense) are normatively organized as: (1) beginning with an opening (2) ending with a closing and (3) having ``something'' in between opening and closing'' which can be referred to as topics.
@@ -66,7 +66,7 @@ For example, Kanda \etal performed a field trial at an elementary school in Japa
 In their discussion part, they raise an interesting question: How Long Should ``Long-Term'' Be? They found out that some authors consider that two months is a long-term interaction. They also point that some Human-Computer Interaction studies on long-term interaction last five weeks. Finally, the authors of the survey give their point of view, which seems well-thought. They argue that it is more important to look at the number of interaction sessions and the length of these sessions (a five minutes-interaction is different from a one hour-interaction). For them, an interaction can be considered as ``long-term'' when the user becomes familiarized with the robot to a point that their perception of such robot is not biased by the novelty effect anymore. This definition raises another question: when does user’s familiarization with the robot become stable? But it is not discussed here.
 
 \subsection{Interactions divided in phases}
-Among works on short-term or long-term interactions, some authors divide interactions in phases which have sometimes similarities with the phases of social interactions described in Section~\ref{sec:soc_int}.
+Among works on short-term or long-term interactions, some authors divide interactions in phases which have sometimes similarities with the phases of social interactions described in Section~\ref{chap1:sec:soc_int}.
 
 Gockley \etal divide an interaction in three phases: greeting, core of the interaction and departure~\cite{gockley_2005_designing}. In the greeting phase, Valerie, the robot receptionist, greets people who might be interested in engaging in conversation. To do so, people are classified into ``attentional'' states:
 \begin{enumerate*}
@@ -96,9 +96,9 @@ In his thesis, Kuo insists about this flexibility and the re-usability~\cite{kuo
 \subsection{Patterns of Interaction}
 Before talking about design patterns or interaction patterns, Goffman in 1983~\cite{goffman_1983_interaction} argues that human interactions follow a specific ``order'' and characterized a number of patterns in which people interact, such as how greetings unfold and how people leave an interaction.
 
-In!\cite{kahn_2008_design}, they introduce design patterns, that they will later called interaction patterns in~\cite{kahn_2010_validating}, inspired from computer science. They propose rules to follow using them and eight patterns. The two main ideas to retain is that a sequence of patterns has to be well ordered and that patterns can be hierarchical. 
+In~\cite{kahn_2008_design}, they introduce design patterns, that they will later called interaction patterns in~\cite{kahn_2010_validating}, inspired from computer science. They propose rules to follow using them and eight patterns. The two main ideas to retain is that a sequence of patterns has to be well ordered and that patterns can be hierarchical. 
 The 8 patterns: 
-\begin{enumerate*}
+\begin{enumerate}
 	\item The initial introduction: largely scripted, conventionally-established verbal and behavioral repertoire to recognize the other, inquire politely about the other, engage in some physical acknowledgment (e.g. handshake)
 	\item Didactic communication: one-way communication of information 
 	\item In motion together: walk together
@@ -107,12 +107,12 @@ The 8 patterns:
 	\item Reciprocal turn-taking in game contextual: taking turns with one another when playing games
 	\item Physical intimacy: to engage in holding or touching or embracing
 	\item Claiming unfair treatment or wrongful harms: allows to make claim to its moral standing
-\end{enumerate*}
+\end{enumerate}
 
 
 Following the same idea and going further, Sauppé and Mutlu~\cite{sauppe_2014_design} introduces the interaction blocks. Compared to Kahn’s work, they offer a pattern language and a tool/environment to design human-robot interaction. To conceive their patterns, they collected and analyzed data from 5 kinds of interaction scenarios: Conversation, Collaboration, Instruction, Interview and Storytelling.
 Then, they identified common interaction structures, which served as ``design interaction patterns'':
-\begin{enumerate*}
+\begin{enumerate}
 	\item Introductory monologue: A short introduction can be used to introduce other participants to a scenario by giving an overview of the remainder of the interaction or it can be a greeting for example.
 	\item Question and Answer: A question is a sentence meant to elicit information from other participants. An answer is the response to a question that aims to satisfy the questioning participant’s curiosity.
 	\item Generic Comment and Personal Comment: A comment is a short statement offering the speaker’s opinion. Comments are either generic (e.g., ``Wow'') or personal (e.g., ``I tried that and didn’t like it'').
@@ -120,16 +120,16 @@ Then, they identified common interaction structures, which served as ``design in
 	\item Instruction and Action: An instruction is a command offered by one participant to direct the actions of another participant. The proper response to this instruction is often an action, although the action might follow the instruction with a delay depending on whether it is an appropriate time to perform that action
 	\item Finished Comment: Upon the completion of the goals of the scenario, one or more of the participants will note that the scenario is completed by offering a finished comment.
 	\item Wait: One pattern implicit in all scenarios involving two or more participants is the wait pattern.
-\end{enumerate*}
+\end{enumerate}
 Finally, they designed a software to easily implement those patterns in a robot.
 
 In his thesis~\cite{kuo_2012_designing}, Kuo criticizes Kahn’s work. He says that these patterns involve sequences of interaction cues and should be decomposed to a lower level for detailed design and reuse. He proposes his own patterns:
-\begin{enumerate*}
+\begin{enumerate}
 	\item Human presence detection: detect when there is a person who might be interested in
 	\item Showing interest for interaction: express the robot’s awareness of a user’s presence around it and its interest and willingness to interact
 	\item User’s attention on the robot: Know when a user is paying attention to the robot in an interaction and its information on its screen
 	\item User identification by face: Provides the fundamental block for personal service and social interaction by recognising the human counterpart in an interaction
-\end{enumerate*}
+\end{enumerate}
 He checked the validity of his patterns with the analysis of Problem statement, Context of Use, Interaction Modality, Combination with Other Patterns, Technical Performance and Limitations, User Feedback and User’s Perception, Resulting Interactive Behavior.
 
 Finally, Peltason and Wrede also based their work on design patterns from computer science, specifically applied to dialogue here~\cite{peltason_2010_pamini}. To name a few of them: Simple action request, Interaction opening, Interaction closing, Clarification. During interaction, the registered patterns are employed in a flexible way by admitting that patterns can be interrupted by other patterns and possibly resumed later which leads to interleaving patterns. By default, simpler patterns are permitted to be nested within temporally extended patterns.
@@ -137,7 +137,7 @@ Finally, Peltason and Wrede also based their work on design patterns from comput
 \section{Around the Joint Action Concept}
 Often, multiple concepts are addressed when referring to collaborative tasks: collaboration, cooperation, coordination, joint action, joint activity, shared/joint attention, shared/joint intention, shared plan, shared/common/joint goal, (joint) commitment, engagement, mental states, theory of mind, mutual knowledge... However, many terms and definitions, whether inside a field\footnote{Here, philosophy, psychology or robotics} or between fields do not reach a consensus. This can be quite confusing, especially for roboticists for which it is initially not the range of expertise. Thus, we will first give an overview of the more characteristic definitions of what is Joint Action. Then, we will present a non-exhaustive set of notions related to Joint Action. 
 
-A part of this work on Joint Action is the result of the collaborative work with Kathleen Belhassein, a PhD student in psychology, and V{\'\i}ctor Fern{\'a}ndez Castro, a post-doctoral researcher in philosophy. It has been the subject of a publication at the International Research Conference Robophilosophy 2020~\cite{belhassein_2020_horizontal}, a publication under submission at Acta Psychologica and a publication under submission at~\todo{add name of journal/conf}.
+A part of this work on Joint Action is the result of the collaborative work with Kathleen Belhassein, a PhD student in psychology, and V{\'\i}ctor Fern{\'a}ndez Castro, a post-doctoral researcher in philosophy. It has been the subject of a publication at the International Research Conference Robophilosophy 2020~\cite{belhassein_2020_horizontal}, a publication under submission at Acta Psychologica~\cite{belhassein_2021_adressing} and a publication under submission at~\todo{add name of journal/conf}~\cite{castro_2021_adressing}.
 
 \subsection{How to define Joint Action ?}
 
@@ -152,14 +152,14 @@ In this manuscript, the word joint action will be used to indifferently refer to
 
 \subsection{Two possible segmentations around Joint Action}
 
-Before going through the mechanisms involved in joint action, we will briefly present two segmentations of joint action: a temporal segmentations, \ie the different phases a joint action goes through, and a cognitive model for human agency \ie the different neurocognitive levels that are involved in joint action. It seemed necessary to present these two segmentations as the processes related to joint action described in Section~\ref{subsec:necess_ja} are sometimes involved in one phase/level but not in another. However, we will not go through these details as it is not necessarily relevant to the rest of the manuscript.
+Before going through the mechanisms involved in joint action, we will briefly present two segmentations of joint action: a temporal segmentations, \ie the different phases a joint action goes through, and a cognitive model for human agency \ie the different neurocognitive levels that are involved in joint action. It seemed necessary to present these two segmentations as the processes related to joint action described in Section~\ref{chap1:subsec:necess_ja} are sometimes involved in one phase/level but not in another. However, we will not go through these details as it is not necessarily relevant to the rest of the manuscript.
 
 \subsubsection{Temporal segmentation of Joint Action}
-As a joint action is a form of social interaction, it can also be divided in three phases as presented in Section~\ref{subsec:social_int}: an initiation, a body and a closing~\cite{heesen_2017_social}. Each phase a role; the initial phase establishes among other things the joint commitment, \ie who is to participate, in what roles, what actions will be performed, and when and where they will be performed different roles for the participants~\cite{clark_2006_social}. Then, in the body they coordinate to perform their goal. Finally, ``to complete a joint action, participants first need to arrive at the mutual conviction that they are both indeed ready to terminate it''~\cite{heesen_2017_social}, if they achieved their goal for example.
+As a joint action is a form of social interaction, it can also be divided in three phases as presented in Section~\ref{chap1:subsec:social_int}: an initiation, a body and a closing~\cite{heesen_2017_social}. Each phase a role; the initial phase establishes among other things the joint commitment, \ie who is to participate, in what roles, what actions will be performed, and when and where they will be performed different roles for the participants~\cite{clark_2006_social}. Then, in the body they coordinate to perform their goal. Finally, ``to complete a joint action, participants first need to arrive at the mutual conviction that they are both indeed ready to terminate it''~\cite{heesen_2017_social}, if they achieved their goal for example.
 
 \subsubsection{Neurocognitive segmentation of Joint Action}
 
-To describe the levels of the neurocognitive mechanisms involved in joint action, we will base ourselves on the conceptual framework established by Pacherie~\cite{pacherie_2008_phenomenology}. This framework is particularly relevant for the rest of manuscript as it has a lot similarities with the three-layered robotic architecture that will be described in Section~\ref{sec:rob_archi}, as noticed in~\cite{clodic_2017_key}. It is based on a dynamic model of intentions and distinguishes:
+To describe the levels of the neurocognitive mechanisms involved in joint action, we will base ourselves on the conceptual framework established by Pacherie~\cite{pacherie_2008_phenomenology}. This framework is particularly relevant for the rest of manuscript as it has a lot similarities with the three-layered robotic architecture that will be described in Section~\ref{chap2:sec:rob_archi}, as noticed in~\cite{clodic_2017_key}. It is based on a dynamic model of intentions and distinguishes:
 
 \begin{itemize}
 	\item A distal intentions level (D-intentions) in charge of the dynamics of decision making, temporal flexibility and high level rational guidance and monitoring of action;
@@ -167,19 +167,20 @@ To describe the levels of the neurocognitive mechanisms involved in joint action
 	\item A motor intentions level (M-intentions), which encodes the fine-grained details of the action (corresponding to what neuroscientists call motor representations), is responsible for the precision and smoothness of action execution, and operates at a finer time scale than either D-intentions or P-intentions
 \end{itemize}
 
-\subsection{What is necessary for Joint Action ?}\label{subsec:necess_ja}
+\subsection{What is necessary for Joint Action ?}\label{chap1:subsec:necess_ja}
 
-Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. What we found to be the mechanism on which every author (or almost) agrees on to say that it is required for a joint action is the \textit{coordination}. This mechanism itself is supported by other cognitive and sensorimotor processes. Also, philosophers introduced another concept involved in joint action which is the \textit{shared intentions}. In Figure~\ref{fig:chap1:ja}, we made an attempt to represent, in a non-exhaustive way, a number of these processes and how they are connected to each other.
+Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. What we found to be the mechanism on which every author (or almost) agrees on to say that it is required for a joint action is the \textit{coordination}. This mechanism itself is supported by other cognitive and sensorimotor processes. Also, philosophers introduced another concept involved in joint action which is the \textit{shared intentions}. In Figure~\ref{chap1:fig:ja}, we made an attempt to represent, in a non-exhaustive way, a number of these processes and how they are connected to each other.
 
  \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter1/joint_action.png}
 	\caption{Overview of a non-exhaustive set of processes related to joint action}
-	\label{fig:chap1:ja}
+	\label{chap1:fig:ja}
 \end{figure}
 
 \subsubsection{Coordination}
+Coordination is a central mechanism to distinguish individual actions from joint actions. There has been an important deal of conceptual and empirical work investigating this process, such as the one of Knoblich \etal~\cite{knoblich_2011_joint} and the one of Pacherie~\cite{pacherie_2012_agency}. Coordination relies on several mechanisms, which are not necessarily intentional (emergent coordination~\cite{knoblich_2011_joint}), including for example perception-action matching~\cite{brass_2001_movement}, perception of joint affordances~\cite{ramenzoni_2008_short} or action simulation~\cite{sebanz_2009_prediction}. As for intentional coordination – sometimes referred to as planned coordination~\cite{knoblich_2011_joint} –, it requires the partners: (i) to represent their own and others' actions, as well as the consequences of these actions, (ii) to represent the hierarchy of sub-goals and sub-tasks of the plan, (iii) to generate predictions of their joint actions, and (iv) to monitor the progress toward the joint goal in order to possibly compensate or help others to achieve their contributions~\cite{pacherie_2012_agency}. From Section~\ref{chap1:subsubsec:shared_rep} to Section~\ref{chap1:subsubsec:coord_smooth}, we present a non-exhaustive set of mechanisms on which relies coordination. We chose the ones that seemed: to be the most mentioned in the philosophy and psychology literatures, to obtain consensus about their involvement in coordination and to be relevant to Human-Robot Interaction. 
 
-\subsubsection{Shared representations}
+\subsubsection{(Shared) Representations}\label{chap1:subsubsec:shared_rep}
 
 \paragraph{(Shared) Plans}
 
@@ -190,8 +191,24 @@ Leaving aside the debate on the concept of joint action, we aim to focus on the 
 \paragraph{Actions and Effects}
 
 \subsubsection{Joint Attention}
+We will start with two complementary definitions of \textit{attention}. The first one is from Tomasello \etal who say ``attention may thus be thought of as intentional perception (selective attention)''~\cite{tomasello_2005_understanding}. The second one is from Kaplan and Hafner~\cite{kaplan_2006_challenges} who define attention as ``the temporally-extended process whereby an agent concentrates on some features of the environment to the (relative) exclusion of others''. They distinguish to situations for which the process can occur: passive attention when a salient event happens and thus automatically triggers the attention of the agent, and active attention the agent is involved in an
+intentionally directed process and must actively select particular features of its environment. 
+
+What happens to this process in the context of a joint action ? We then talk about \textit{joint attention}. To perform a joint action, partners need a common goal. Indeed, joint action requires that individuals plan and perform their actions according to their predictions about the other’s actions to reach this goal. Joint attention is a key feature for this purpose, playing a crucial role in ``being and acting together''~\cite{tomasello_2009_cultural}, as it allows the partners to establish and share a perceptual common ground, necessary to initiate the joint action but also for individuals already engaged in a joint action to coordinate successfully. 
+
+Despite this agreement to affirm that joint attention is important for joint action, Siposova stated that ``there is still surprisingly little agreement on exactly what joint attention is and how it is achieved''~\cite{siposova_2019_new}. While for some authors, two agents orienting their attention towards the same referent is a sufficient criterion to speak about joint attention~\cite{butterworth_1991_minds}, others like Pacherie precised that ``the phenomenon of joint attention involves more than just two people attending to the same object or event''. A classic way to define joint attention is the ability to coordinate our attention to the same object of interest (e.g. as shown by Bakeman and Adamson~\cite{bakeman_1984_coordinating}), enabling us to integrate others’ attentional focus and therefore to experience the world together as described by Tomasello~\cite{tomasello_2009_cultural}. 
+
+To complete this view of joint attention, we can mention Carpenter and Liebal that highlighted the need (1) to develop mutual knowledge of this coordinated attention, and (2) to represent the other agent’s intentional states~\cite{carpenter_2011_joint} or Kaplan and Hafner that make the notion of goal appear in their definition, describing joint attention as (1) a coordinated and collaborative coupling between intentional agents where (2) the goal of each agent is to attend to the same aspect of the environment~\cite{kaplan_2006_challenges}.
+
+Joint attention can either be explained with basic learning mechanisms -- lean joint attention -- or as ``the result of particular cognitive operations or second-order representational competencies''~\cite{racine_2011_getting}, \ie what Tomasello and Carpenter called socio-cognitive abilities of shared intentionality~\cite{tomasello_2007_shared} -- rich joint attention. Kaplan and Hafner noticed in 2006 that current research in HRI about joint attention tended to focus on ``surface behaviors'', like simultaneous looking or coordinated behaviors~\cite{kaplan_2006_challenges} which corresponds to lean joint attention.\todo{check si evolution depuis 2006}
+
+Finally, sometimes it is possible to see references to ``shared attention'' is the literature, which can be confusing for the reader when no precision or definition is given. Some authors use the two words interchangeably, while some consider that there is a difference between both. There are especially two works mentioning this fact and making a distinction, the one of Emery~\cite{emery_2000_eyes} and a bit later the one of Triesch \etal~\cite{triesch_2006_gaze}. They define joint attention as two people having the same focus of attention while they define shared attention as a more complex form of communication where each agent knows on what the other agent is focused. We can notice that it is quite similar to the definitions of joint attention we gave above.
+
+
 
 \subsubsection{Common Ground}
+
+
 
 \subsubsection{Monitoring}
 
@@ -199,15 +216,12 @@ Leaving aside the debate on the concept of joint action, we aim to focus on the 
 
 \subsubsection{Prediction}
 
-\subsubsection{Coordination Smoothers}
+\subsubsection{Coordination Smoothers}~\label{chap1:subsubsec:coord_smooth}
 
 \subsubsection{Shared Intention}
 
 \subsubsection{Joint Commitment}
 
-%Three interrelated mechanisms appear to be key conditions for joint action: coordination, planning, and motivational alignment, each of them being supported by other processes. There has been an important deal of conceptual and empirical work investigating these processes~\cite{knoblich_2011_joint, pacherie_2012_agency}, from the sharing of a common ground to the anticipation of a partner’s actions by way of emergent coordination~\cite{curioni_2019_joint}. dd
-%
-%Most of all, joint actions require individuals to anchor their plans in the actual situation and generate particular coordinated actions~\cite{knoblich_2011_joint, vesper_2011_making}. This coordination can rely on different mechanisms, which are not necessarily intentional, including for example perception-action matching~\cite{brass_2001_movement}, perception of joint affordances~\cite{ramenzoni_2008_short}, joint attention~\cite{sebanz_2006_joint}. As for intentional coordination – sometimes referred to as planned coordination~\cite{curioni_2019_joint} –, it requires the partners: (i) to represent their own and others' actions, as well as the consequences of these actions, (ii) to represent the hierarchy of sub-goals and sub-tasks of the plan, (iii) to generate predictions of their joint actions, and (iv) to monitor the progress toward the joint goal in order to possibly compensate or help others to achieve their contributions~\cite{pacherie_2012_agency}.
 %
 %Indeed, joint action often involves planning several aspects, which involves the representation of the goal and the whole plan, and/or even the sequence of actions to be performed. The formation of these types of representations could rely on different mechanisms, which include high-level processes such as theory of mind, team reasoning, or verbal negotiation~\cite{bratman_2013_shared} or more low-level processes as minimally representing the joint action goal and knowing that it will be achieved with others~\cite{vesper_2010_minimal}. An example of the mechanisms involved in planning a joint action is task co-representations, which allows individuals to represent the details of each other’s task. 
 %
@@ -225,7 +239,7 @@ One last subject of CA could be interesting for our problematic in human-robot i
 	\item Other-initiated other-repair: The one not responsible of the trouble initiates and carries out the repair. This is closest to what is conventionally understood as ``correction''.
 \end{itemize}
 
-\section{Human-Robot Joint Action}\todo{part on emotions}
+\section{Human-Robot Joint Action}\label{chap1:sec:hri_ja}\todo{part on emotions}
 
 
 \subsection{Focus on Communication in Human-Robot in Joint Action}
