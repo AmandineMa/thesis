@@ -28,7 +28,7 @@ Then, \cite{rummel_1976_understanding} proposes a definition of a few words: ``S
 
 Finally, the elements brought here, trying to define what is an interaction and more precisely a social interaction, are chosen among a large amount of work. It is possible to find different definitions, as \cite{enriquez_2017_vocabulaire} precises: ``although the term ``interaction'' is frequently used, it does not have a unique definition but presents semantic divergences''.
 
-\subsection{Structure of a social interaction}
+\subsection{Structure of a social interaction}\label{subsec:social_int}
 Most of the research about interaction and social interaction belongs to the field of social psychology. As for the structure of a social interaction, it is more from the field of Conversation Analysis (CA) which mixes sociology, anthropology, linguistics, speech-communication and psychology.
 In~\cite{robinson_overall_2012}, Robinson makes a review of the work that has been done about ``overall structural organization''. Most of the time in the literature, overall structural organization is discussed in terms of ``the overall structural organization of entire, single occasions of interaction''.  Then ``overall structural organization'' term is generally used to talk about one particular (albeit large) unit of interaction. However, many different types of interactional units can have an overall structural organization. For example, in~\cite{schegloff_2011_word}, Schegloff encourages to recognize ``‘overall structural organization’ not as something for the unit ‘a single conversation’ (or encounter, or session, etc.) alone, but for units like turns, actions and courses of action (like answering or telling), sequences, and who knows what else as well.'' He also mentioned that every unit of organization should probably have a local organization and a global organization.
 Here, the term ``overall structural organization'' is to refer to ``the overall structural organization of entire, single occasions of interaction''. Robinson tells us that this concept has received relatively little analytic attention and thus is still not well understood~\cite{robinson_overall_2012}. Indeed, research has been more focused on analyzing the organization of individual sequences of action such as turn-takings or conversation openings. Several terms have been used to talk about a ``supra-sequential coherence'': big package, set of pre-organized sequences, (social) activity, project of activity or plan of action. As the subject has not been investigated so much, it has not evolved a lot in 40 years, since what was proposed by Sacks~\cite{sacks_lectures_1995} to define overall structural organization of single occasions of interaction: it ``deals, roughly, with beginnings and endings, and how beginnings work to get from beginnings to something else, and how, from something else, endings are gotten to. And also the relationship - if there is one - between beginnings and endings''. Robinson summarizes research about the subject by saying that single occasions of interaction (in a generic or context-free sense) are normatively organized as: (1) beginning with an opening (2) ending with a closing and (3) having ``something'' in between opening and closing'' which can be referred to as topics.
@@ -135,28 +135,95 @@ He checked the validity of his patterns with the analysis of Problem statement, 
 Finally, Peltason and Wrede also based their work on design patterns from computer science, specifically applied to dialogue here~\cite{peltason_2010_pamini}. To name a few of them: Simple action request, Interaction opening, Interaction closing, Clarification. During interaction, the registered patterns are employed in a flexible way by admitting that patterns can be interrupted by other patterns and possibly resumed later which leads to interleaving patterns. By default, simpler patterns are permitted to be nested within temporally extended patterns.
 
 \section{Around the Joint Action Concept}
-Often, multiple concepts are addressed when referring to collaborative tasks: collaboration, cooperation, coordination, joint action, joint activity, shared/joint attention, shared/joint intention, shared plan, shared/common/joint goal, (joint) commitment, engagement, mental states, theory of mind, mutual knowledge. However, many terms and definitions, whether inside a field\footnote{Here, philosophy, psychology or robotics} or between fields do not reach a consensus. This can be quite confusing, especially for roboticists for which it is not the range of expertise at first.
+Often, multiple concepts are addressed when referring to collaborative tasks: collaboration, cooperation, coordination, joint action, joint activity, shared/joint attention, shared/joint intention, shared plan, shared/common/joint goal, (joint) commitment, engagement, mental states, theory of mind, mutual knowledge... However, many terms and definitions, whether inside a field\footnote{Here, philosophy, psychology or robotics} or between fields do not reach a consensus. This can be quite confusing, especially for roboticists for which it is initially not the range of expertise. Thus, we will first give an overview of the more characteristic definitions of what is Joint Action. Then, we will present a non-exhaustive set of notions related to Joint Action. 
+
+A part of this work on Joint Action is the result of the collaborative work with Kathleen Belhassein, a PhD student in psychology, and V{\'\i}ctor Fern{\'a}ndez Castro, a post-doctoral researcher in philosophy. It has been the subject of a publication at the International Research Conference Robophilosophy 2020~\cite{belhassein_2020_horizontal}, a publication under submission at Acta Psychologica and a publication under submission at~\todo{add name of journal/conf}.
 
 \subsection{How to define Joint Action ?}
 
-An important number of social interactions and encounters are encompassed by the notion of joint action. Broadly considered, joint action is any form of social interaction whereby two agents or more coordinate their actions in order to pursue a joint goal. However, the notion of joint action has particularly been subject to debate in philosophy and psychology. For instance, according to Sebanz \etal~\cite{sebanz_2006_joint}, ``joint action can be regarded as
-any form of social interaction whereby two or more individuals coordinate their actions in space and time to bring about a change in the environment.'' (p. 70); while other authors~\cite{carpenter_2009_just, cohen_1991_teamwork\todo{à laisser ? mecs de l'IA ?}, fiebich_2013_joint, tomasello_2005_understanding} resist the idea that instances of mere coordination  – e.g. two partners walking side by side – constitute a joint action, considering that it requires some necessary conditions like sharing goals and intentions.
+An important number of social interactions and encounters are encompassed by the notion of joint action. Broadly considered, joint action is any form of social interaction whereby two agents or more coordinate their actions in order to pursue a joint goal. However, the notion of joint action has particularly been subject to debate in philosophy and psychology. For instance, according to Sebanz \etal~\cite[p.~70]{sebanz_2006_joint}, ``joint action can be regarded as
+any form of social interaction whereby two or more individuals coordinate their actions in space and time to bring about a change in the environment.''; while other authors~\cite{carpenter_2009_just, cohen_1991_teamwork, fiebich_2013_joint, tomasello_2005_understanding,pacherie_2012_agency} resist the idea that instances of mere coordination – \eg two partners walking side by side – constitute a joint action, considering that it requires some necessary conditions like sharing goals and intentions.
 
 Moreover, while the notion of joint action is used interchangeably with the notion of collaboration or cooperation for some authors such as Becchio \etal~\cite{becchio_2010_toward} and Kobayashi \etal~\cite{kobayashi_2018_language}, other authors establish a hierarchy of interactions depending on the processes involved~\cite{amici_2015_coordination, chalmeau_1995_cooperation}. According to Amici and Bietti~\cite{amici_2015_coordination}, for example, coordination is a fast low-level process of behavioral matching and interactional synchrony which could, but not necessarily, facilitate middle-level processes like cooperation (where some individuals bear certain costs to provide benefits to others) or high-level processes like joint action, which requires other resources like turn-taking and alignment of linguistic resources during dialogue.
 
-If we look at Sebanz and colleagues definition of joint action, it could be considered as a kind of activity based on the usual sense of this term. Thus, some authors use the concept ``joint activity'' interchangeably with ``joint action''~\cite{tollefsen_2005_let,grafenhain_2013_three} while others see the joint activity composed of joint actions~\cite{clark_1996_using, feltovitch_2005_common}. Clark says that ``Joint activities advance mostly through joint actions''. He defines the properties of a joint activity among which there are: it is carried out by 2 or more participants, each participant has a public role or they try to establish and achieve joint goals, and they may have private goals. He also highlights the need for coordination. 
+If we look at Sebanz and colleagues definition of joint action, it could be considered as a kind of activity based on the usual sense of this term. Thus, some authors use the concept ``joint activity'' interchangeably with ``joint action''~\cite{tollefsen_2005_let,grafenhain_2013_three} while others see the joint activity composed of joint actions~\cite{clark_1996_using, feltovitch_2005_common}. Clark says that ``Joint activities advance mostly through joint actions''. He defines the properties of a joint activity among which there are: it is carried out by 2 or more participants, each participant has a public role or they try to establish and achieve joint goals, and they may have private goals. He also highlights the need for coordination: ``What makes an action a joint one, ultimately, is the coordination of individual actions by two or more people. There is coordination of both \textit{content}, what the participants intend to do, and \textit{processes}, the physical and mental systems they recruit in carrying out those intentions''~\cite[p~.59]{clark_1996_using}. 
 
-\subsection{What is necessary for Joint Action ?}
+In this manuscript, the word joint action will be used to indifferently refer to an activity/task composed of several (joint) actions, \ie a high level joint action or as a single action, but in both cases it will imply that it is a ``social interaction social interaction where two or more individuals coordinate their actions in pursuit of a common goal''~\cite{castro_2020_joint}.
 
-Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. Three interrelated mechanisms appear to be key conditions for joint action: coordination, planning, and motivational alignment, each of them being supported by other processes. There has been an important deal of conceptual and empirical work investigating these processes~\cite{knoblich_2011_joint, pacherie_2012_agency}, from the sharing of a common ground to the anticipation of a partner’s actions by way of emergent coordination~\cite{curioni_2019_joint}. 
+\subsection{Two possible segmentations around Joint Action}
 
-Most of all, joint actions require individuals to anchor their plans in the actual situation and generate particular coordinated actions~\cite{knoblich_2011_joint, vesper_2011_making}. This coordination can rely on different mechanisms, which are not necessarily intentional, including for example perception-action matching~\cite{brass_2001_movement}, perception of joint affordances~\cite{ramenzoni_2008_short}, joint attention~\cite{sebanz_2006_joint}. As for intentional coordination – sometimes referred to as planned coordination~\cite{curioni_2019_joint} –, it requires the partners: (i) to represent their own and others' actions, as well as the consequences of these actions, (ii) to represent the hierarchy of sub-goals and sub-tasks of the plan, (iii) to generate predictions of their joint actions, and (iv) to monitor the progress toward the joint goal in order to possibly compensate or help others to achieve their contributions~\cite{pacherie_2012_agency}.
+Before going through the mechanisms involved in joint action, we will briefly present two segmentations of joint action: a temporal segmentations, \ie the different phases a joint action goes through, and a cognitive model for human agency \ie the different neurocognitive levels that are involved in joint action. It seemed necessary to present these two segmentations as the processes related to joint action described in Section~\ref{subsec:necess_ja} are sometimes involved in one phase/level but not in another. However, we will not go through these details as it is not necessarily relevant to the rest of the manuscript.
 
-Indeed, joint action often involves planning several aspects, which involves the representation of the goal and the whole plan, and/or even the sequence of actions to be performed. The formation of these types of representations could rely on different mechanisms, which include high-level processes such as theory of mind, team reasoning, or verbal negotiation~\cite{bratman_2013_shared} or more low-level processes as minimally representing the joint action goal and knowing that it will be achieved with others~\cite{vesper_2010_minimal}. An example of the mechanisms involved in planning a joint action is task co-representations, which allows individuals to represent the details of each other’s task. 
+\subsubsection{Temporal segmentation of Joint Action}
+As a joint action is a form of social interaction, it can also be divided in three phases as presented in Section~\ref{subsec:social_int}: an initiation, a body and a closing~\cite{heesen_2017_social}. Each phase a role; the initial phase establishes among other things the joint commitment, \ie who is to participate, in what roles, what actions will be performed, and when and where they will be performed different roles for the participants~\cite{clark_2006_social}. Then, in the body they coordinate to perform their goal. Finally, ``to complete a joint action, participants first need to arrive at the mutual conviction that they are both indeed ready to terminate it''~\cite{heesen_2017_social}, if they achieved their goal for example.
 
-These representations allow individuals to generate predictions about the other’s actions, which in turn facilitate the adjustment and coordination between the partners. Interestingly, individuals can also facilitate the others’ and their own predictions by communicating relevant and reliable information for joint action. The objective is to make actions more transparent and predictable so that the decision-making on the interaction can be fluent and successful. Thus, participants in joint action often negotiate on the fly the sub-tasks, sub-goals, or ways to proceed regarding the collective task through different explicit exchanges~\cite{clark_1996_using}.
+\subsubsection{Neurocognitive segmentation of Joint Action}
 
+To describe the levels of the neurocognitive mechanisms involved in joint action, we will base ourselves on the conceptual framework established by Pacherie~\cite{pacherie_2008_phenomenology}. This framework is particularly relevant for the rest of manuscript as it has a lot similarities with the three-layered robotic architecture that will be described in Section~\ref{sec:rob_archi}, as noticed in~\cite{clodic_2017_key}. It is based on a dynamic model of intentions and distinguishes:
 
+\begin{itemize}
+	\item A distal intentions level (D-intentions) in charge of the dynamics of decision making, temporal flexibility and high level rational guidance and monitoring of action;
+	\item A proximal intentions level (P-intentions) that inherits a plan from the previous level and whose role is to anchor this plan in the situation of action, this anchoring has to be performed at two levels: temporal anchoring and situational anchoring;
+	\item A motor intentions level (M-intentions), which encodes the fine-grained details of the action (corresponding to what neuroscientists call motor representations), is responsible for the precision and smoothness of action execution, and operates at a finer time scale than either D-intentions or P-intentions
+\end{itemize}
+
+\subsection{What is necessary for Joint Action ?}\label{subsec:necess_ja}
+
+Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. What we found to be the mechanism on which every author (or almost) agrees on to say that it is required for a joint action is the \textit{coordination}. This mechanism itself is supported by other cognitive and sensorimotor processes. Also, philosophers introduced another concept involved in joint action which is the \textit{shared intentions}. In Figure~\ref{fig:chap1:ja}, we made an attempt to represent, in a non-exhaustive way, a number of these processes and how they are connected to each other.
+
+ \begin{figure}[!ht]
+	\includegraphics[width=\linewidth]{figures/chapter1/joint_action.png}
+	\caption{Overview of a non-exhaustive set of processes related to joint action}
+	\label{fig:chap1:ja}
+\end{figure}
+
+\subsubsection{Coordination}
+
+\subsubsection{Shared representations}
+
+\paragraph{(Shared) Plans}
+
+\paragraph{(Shared) Goals}
+
+\paragraph{(Shared) Affordances}
+
+\paragraph{Actions and Effects}
+
+\subsubsection{Joint Attention}
+
+\subsubsection{Common Ground}
+
+\subsubsection{Monitoring}
+
+\subsubsection{Action Simulation}
+
+\subsubsection{Prediction}
+
+\subsubsection{Coordination Smoothers}
+
+\subsubsection{Shared Intention}
+
+\subsubsection{Joint Commitment}
+
+%Three interrelated mechanisms appear to be key conditions for joint action: coordination, planning, and motivational alignment, each of them being supported by other processes. There has been an important deal of conceptual and empirical work investigating these processes~\cite{knoblich_2011_joint, pacherie_2012_agency}, from the sharing of a common ground to the anticipation of a partner’s actions by way of emergent coordination~\cite{curioni_2019_joint}. dd
+%
+%Most of all, joint actions require individuals to anchor their plans in the actual situation and generate particular coordinated actions~\cite{knoblich_2011_joint, vesper_2011_making}. This coordination can rely on different mechanisms, which are not necessarily intentional, including for example perception-action matching~\cite{brass_2001_movement}, perception of joint affordances~\cite{ramenzoni_2008_short}, joint attention~\cite{sebanz_2006_joint}. As for intentional coordination – sometimes referred to as planned coordination~\cite{curioni_2019_joint} –, it requires the partners: (i) to represent their own and others' actions, as well as the consequences of these actions, (ii) to represent the hierarchy of sub-goals and sub-tasks of the plan, (iii) to generate predictions of their joint actions, and (iv) to monitor the progress toward the joint goal in order to possibly compensate or help others to achieve their contributions~\cite{pacherie_2012_agency}.
+%
+%Indeed, joint action often involves planning several aspects, which involves the representation of the goal and the whole plan, and/or even the sequence of actions to be performed. The formation of these types of representations could rely on different mechanisms, which include high-level processes such as theory of mind, team reasoning, or verbal negotiation~\cite{bratman_2013_shared} or more low-level processes as minimally representing the joint action goal and knowing that it will be achieved with others~\cite{vesper_2010_minimal}. An example of the mechanisms involved in planning a joint action is task co-representations, which allows individuals to represent the details of each other’s task. 
+%
+%These representations allow individuals to generate predictions about the other’s actions, which in turn facilitate the adjustment and coordination between the partners. Interestingly, individuals can also xfacilitate the others’ and their own predictions by communicating relevant and reliable information for joint action. The objective is to make actions more transparent and predictable so that the decision-making on the interaction can be fluent and successful. Thus, participants in joint action often negotiate on the fly the sub-tasks, sub-goals, or ways to proceed regarding the collective task through different explicit exchanges~\cite{clark_1996_using}.
+
+\subsection{Communication}
+
+\subsection{Handling Errors}
+
+One last subject of CA could be interesting for our problematic in human-robot interaction, it is the repair. It is a mean of correcting a misunderstanding or a mistake in an interaction, or of correcting a deviation from the normal rules of interaction. The ability to engage in repair is essential in interaction: errors and misunderstandings are likely to arise and must be corrected if the  goal of the interaction is to be successful. Generally, they are classified in four categories \cite{schegloff_1977_preference,wooffitt_2008_conversation}:
+\begin{itemize}
+	\item Self-initiated self-repair: Repair is both initiated and carried out by the responsible of the trouble
+	\item Other-initiated self-repair: The responsible of the trouble takes care of the repair himself but the trouble have been pointed out by the other
+	\item Self-initiated other-repair: The responsible of the trouble signals that a repair is needed and get the other one to repair (e.g. he forgot a name and asks for help to remember)
+	\item Other-initiated other-repair: The one not responsible of the trouble initiates and carries out the repair. This is closest to what is conventionally understood as ``correction''.
+\end{itemize}
 
 \section{Human-Robot Joint Action}\todo{part on emotions}
 
@@ -167,13 +234,7 @@ Cohen and Levesque, Teamwork, p 490
 
 \subsection{Focus on Repairs in Human-Robot Joint Action}
 
-One last subject of CA could be interesting for our problematic in human-robot interaction, it is the repair. It is a mean of correcting a misunderstanding or a mistake in an interaction, or of correcting a deviation from the normal rules of interaction. The ability to engage in repair is essential in interaction: errors and misunderstandings are likely to arise and must be corrected if the  goal of the interaction is to be successful. Generally, they are classified in four categories \cite{schegloff_1977_preference,wooffitt_2008_conversation}:
-\begin{itemize}
-	\item Self-initiated self-repair: Repair is both initiated and carried out by the responsible of the trouble
-	\item Other-initiated self-repair: The responsible of the trouble takes care of the repair himself but the trouble have been pointed out by the other
-	\item Self-initiated other-repair: The responsible of the trouble signals that a repair is needed and get the other one to repair (e.g. he forgot a name and asks for help to remember)
-	\item Other-initiated other-repair: The one not responsible of the trouble initiates and carries out the repair. This is closest to what is conventionally understood as ``correction''.
-\end{itemize}
+
 
 \subsection{Focus on Commitments in Human-Robot in Joint Action}
 
