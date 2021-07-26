@@ -7,7 +7,7 @@ As the metrics are aggregated to compute the QoI, their values need to be on the
 \end{itemize}
 Therefore, we designed three functions to be used with metrics having bounded values and three functions for metrics that do not have upper bounds. Then, among these two sets of functions, it is possible to choose the one to use according to the positive, neutral or negative impact a value should have on the QoI.
 
-\section{Scaling of bounded metrics: Min-Max Normalization} \label{subsubsec:norma} We defined three min-max normalization functions, illustrated in Fig.~\ref{fig:norma}. They were designed to be used for metrics whose values belong to a bounded set, i.e., metrics for which the minimum and maximum values are known. The first function is to apply in cases for which a measure approaching the bound value $b_1$ has a negative impact on the quality evaluation whereas a measure approaching $b_2$ has a positive one. It allows to scale a measure $x$ between -1 and 1:
+\section{Scaling of bounded metrics: Min-Max Normalization} \label{subsubsec:norma} We defined three min-max normalization functions, illustrated in Fig.~\ref{fig:norma}. They were designed to be used for metrics whose values belong to a bounded set, \ie metrics for which the minimum and maximum values are known. The first function is to apply in cases for which a measure approaching the bound value $b_1$ has a negative impact on the quality evaluation whereas a measure approaching $b_2$ has a positive one. It allows to scale a measure $x$ between -1 and 1:
 \begin{equation}\label{eq:norma1}
 n_1(x) = 2 * \dfrac{x-b_1}{b_2-b_1} -1
 \end{equation}
@@ -33,19 +33,19 @@ The first function allows to scale between -1 and 1 the values of a metric, for 
 \begin{equation}\label{eq:sig1}
 s_1(x) = 1 - 2 \exp{\left(-\ln{(2)}\left(\dfrac{x}{th}\right)^k\right)}, x > 0
 \end{equation}
-with $s_1(x) \in [-1,1]$, $th$ the value of the sigmoid's midpoint (i.e., $s_1(th)=0$) and, $k$ setting the shape of the function curve. $k$ and $th$ values are set off-line by the designer and they allow to define the shape of the metric scaling.
+with $s_1(x) \in [-1,1]$, $th$ the value of the sigmoid's midpoint (\ie $s_1(th)=0$) and, $k$ setting the shape of the function curve. $k$ and $th$ values are set off-line by the designer and they allow to define the shape of the metric scaling.
 
 The second function is designed for metric which cannot have a negative impact on the QoI as it scales the value between 0 and 1 (and with $x \in [0,+\infty]$ as well):
 \begin{equation}\label{eq:sig2}
 s_2(x) = 1 - \exp{\left(-\ln{(2)}\left(\dfrac{x}{th}\right)^k\right)}, x > 0
 \end{equation}
-with $s_2(x) \in [0,1]$, $th$ the value of the sigmoid's midpoint (i.e., $s_2(th)=0.5$) and, $k$ setting the shape of the function curve.
+with $s_2(x) \in [0,1]$, $th$ the value of the sigmoid's midpoint (\ie $s_2(th)=0.5$) and, $k$ setting the shape of the function curve.
 
 The third function is designed for metric which cannot have a positive impact on the QoI as it scales the value between -1 and 0 (and with $x \in [0,+\infty]$ as well):
 \begin{equation}\label{eq:sig3}
 s_3(x) = - 1 + \exp{\left(-\ln{(2)}\left(\dfrac{x}{th}\right)^k\right)}, x > 0
 \end{equation}
-with $s_3(x) \in [-1,0]$, $th$ the value of the sigmoid's midpoint (i.e., $s_3(th)=-0.5$) and, $k$ setting the shape of the function curve.
+with $s_3(x) \in [-1,0]$, $th$ the value of the sigmoid's midpoint (\ie $s_3(th)=-0.5$) and, $k$ setting the shape of the function curve.
 
 The functions $s_1(x)$ and $s_2(x)$ are illustrated in Fig.~\ref{fig:chart} with four examples.
 \begin{figure}[!htp]
