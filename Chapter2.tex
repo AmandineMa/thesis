@@ -53,20 +53,58 @@ In our model, an agent (human or robot) is a contributor to the task and has a m
 
 \section{An Overview of our Robotic Architecture}\label{chap2:sec:rob_archi}
 
+In this section, we will shortly present an overview of the robotic architecture that has been developed inside the RIS team of LAAS-CNRS. The purpose of this overview is to give the reader inform the reader about the inputs available for the supervision software, \acrshort{jahrvis}. Two instantiations of this architecture for two different tasks will be described in Chapter~\ref{chapter:chap3} and Chapter~\ref{chapter:chap4}. This architecture model, shown in Figure~\ref{chap2:fig:archi}, is a descendant of the architecture developed by Lemaignan and colleagues~\cite{lemaignan_2017_artificial}, mentioned in Section~\ref{chap1:subsec:archi}. 
+
+\begin{figure}[!ht]
+	\includegraphics[width=\linewidth]{figures/chapter2/archi_overview.pdf}
+	\caption{Overview of the RIS architecture}
+	\label{chap2:fig:archi}
+\end{figure}
+
+
+
 \subsection{Situation Assessment}
+The Situation Assessment has two roles:
+\begin{enumerate}
+	\item  to gather different perceptual information and build an internal geometric representation of the world, composed of objects and agents; from this world representation, the module runs reasoning processes to interpret it in terms of symbolic statements between the objects themselves and between the involved agents and the objects,
+	\item estimate the human's perspective and build an estimation of their world representation; it is the first step allowing to implement the theory of mind principles \cite{baron_1985_does}
+\end{enumerate}
 
-\subsection{Knowledge bases}
+Thus, the Situation Assessment outputs data, which we call \textit{symbolic facts}, such as \mbox{\textit{isOnTopOf}(cube\_1,cube\_3)} or \mbox{\textit{isReachableBy}(cube\_2,human\_0)}.
 
-\subsection{Motion Planning}
+\subsection{Knowledge Base}
 
-\subsection{Resource Manager}
+During an interaction, each agent has their knowledge base, as they can have belief divergences. A Knowledge Base is divided into two parts :
+\begin{enumerate}
+	\item The \textit{semantic} part is in charge of representing the environment elements meaning, the objects' and agents' types, their applicable properties, the descriptions and parameters of the actions, a part of the language model with verbs or pronouns, and their names in natural language. Besides, it is also in charge of representing the current symbolic world-state (the computed facts) and thus the instantiation of the concepts in terms of physical (\eg this particular block) or abstract (\eg this particular action instance) entities.
+	\item  The \textit{episodic} part is a timeline, keeping track of the symbolic facts computed over time.
+\end{enumerate}
 
-\subsection{Task Planning}
+The Supervisor can subscribe to a given type of fact, allowing to receive every fact update of this type (\eg the Supervisor can ask to receive every update (addition or deletion) of any fact belonging to the type \textit{isOnTopOf}(Cube,Table)). It can also query a information when needed (\eg the Supervisor can ask the human understandable name of pick\_action which is pick).
+
+\subsection{Motion Planner}
+The Motion Planner allows the robot to execute actions, such as pick and place, and also to navigate in its environment. To do so, it generates a plan for the move when requested by the Supervisor and then execute it. It sends feedbacks about the current execution, \eg when something goes wrong or estimated remaining time of execution.
+
+\subsection{Task Planner}
+The Task Planner can generate a shared plan in which each agent, human and robot, has actions of the task assigned to them, depending on some criteria. However, the human is neither an agent that the planner can directly control or an agent that will know the complete plan. Thus, it allows the robot to plan by emulating the human decision, action, and reaction processes. 
 
 \subsection{Supervision}
+The Supervision is the puppet master of the system, embedding the robot high-level decisions, controls its behavior and tries to react to contingencies, always considering the human it is interacting with. It is not standalone, relying on the components described above to be able to take decisions, be aware of the environment and make the robot moves.
 
 \section{JAHRVIS: to Control and Evaluate a Human-Robot Joint Action}
 
+We defined two roles for \acrfull{jahrvis}, the Supervision component: to be able to control the robot's actions and behavior in a human-robot joint action, and to be able to evaluate if this interaction is going well or not. This latter should enhance the decision-making, giving an additional data to take into account. 
+
+\subsection{The Role and Features of JAHRVIS}
+
+\acrshort{jahrvis} is what we call a supervision system, \ie it embeds the robot high-level decisions, controls its behavior and tries to react to contingencies, always considering the human it is interacting with. It is able to do so by taking into account shared plans, human mental states, its knowledge about the current state of the environment, and human actions. The module to monitor and recognize these actions is model-based and allows to take into account a potentially unreliable perception of the actions by the robot. JAHRVIS is designed in such a way that it is generic enough to handle various kinds of tasks. It can also manage  different kinds of human-robot shared plans as input: shared plans for which actions might not be allocated to an agent at planning time and objects might be referred to with a semantic query, and conditional shared plans which anticipate different possibilities for the human decision/action. 
+
+Not only \acrshort{jahrvis} controls the robot contribution to a collaborative task, it also tries to evaluate if the interaction is going well or not. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make more pertinent its decision-making processes. The evaluation of the Quality of Interaction (QoI) relies on a model of interaction, considered at  three levels: the interaction session level, the tasks level and the actions level. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low QoI is assessed. Indeed, for instance, a task can be of poor quality while the session can still be considered as going well.
+
+
+\subsection{Implementation}
+
+\subsubsection{The Choice of the Framework}
 Restart from scratch or base oneself work on an existing software ? This is the question which has been studied at the beginning of this thesis work about the implementation of the supervision software. It was possible 
 \begin{enumerate*}[label={(\arabic*)}]
 	\item to develop the wanted features using the code\footnote{\url{https://github.com/laas/supervisor}} of the previous PhD student working on the supervision, Sandra Devin,\label{chap2:list:sandra}
@@ -75,15 +113,101 @@ Restart from scratch or base oneself work on an existing software ? This is the 
 	\item to develop a new software from scratch.\label{chap2:list:new}
 \end{enumerate*}
 
-The obvious drawback of \ref{chap2:list:new} is that it takes a lot of time to start a new software from scratch and that it often leads to reinvent the wheel. Then, first we looked at existing solutions. Concerning the possibility \ref{chap2:list:sandra}, she had developed interested features but the code is not modular and it was difficult to add new features or to do modification of the existing ones without breaking everything. Thus, there was the solutions \ref{chap2:list:soft_hri} and \ref{chap2:list:robot} left. When looking for existing software to manage human-robot interactions, we could find any open-source one with a minimum of features, documentation and not entirely dedicated to a given task. Therefore, we turned ourselves toward robotic frameworks. We compared existing open-source decision-making and execution software for robots. To cite a few, there is the PetriNetPlans library introduced by Ziparo \etal~\cite{ziparo_2011_petri} which is a framework for planning and execution. Beetz \etal{} developed CRAM, a software implementing reasoning mechanisms that can infer control decisions~\cite{beetz_2010_cram}. A framework to implement hierarchical state machines is available among ROS libraries, SMACH\footnote{http://wiki.ros.org/smach}, defined as ``task-level architecture for rapidly creating complex robot behavior''. Finally, there are several implementations of the BDI model presented in Section~\ref{chap1:sec:archi} such as JAM~\cite{huber_1999_jam}, Jadex~\cite{braudach_2005_jadex}, SPARK~\cite{morley_2004_spark}, dMARS~\cite{dinverno_1998_formal}, OpenPRS~\cite{ingrand_1996_prs} or Jason~\cite{bordini_2007_jason}.
+The obvious drawback of \ref{chap2:list:new} is that it takes a lot of time to start a new software from scratch and that it often leads to reinvent the wheel. Then, first we looked at existing solutions. Concerning the possibility \ref{chap2:list:sandra}, she had developed interested features but the code is not modular and it was difficult to add new features or to do modification of the existing ones without breaking everything. Thus, there was the solutions \ref{chap2:list:soft_hri} and \ref{chap2:list:robot} left. When looking for existing software to manage human-robot interactions, we could find any open-source one with a minimum of features, documentation and not entirely dedicated to a given task. Therefore, we turned ourselves toward robotic frameworks. We compared existing open-source decision-making and execution software for robots. To cite a few, there is the PetriNetPlans library introduced by Ziparo \etal~\cite{ziparo_2011_petri} which is a framework for planning and execution. Beetz \etal{} developed CRAM, a software implementing reasoning mechanisms that can infer control decisions~\cite{beetz_2010_cram}. A framework to implement hierarchical state machines is available among ROS libraries, SMACH\footnote{http://wiki.ros.org/smach}, defined as ``task-level architecture for rapidly creating complex robot behavior''. Finally, there are several implementations of the BDI model presented in Section~\ref{chap1:sec:archi} such as JAM~\cite{huber_1999_jam}, Jadex~\cite{braudach_2005_jadex}, SPARK~\cite{morley_2004_spark}, dMARS~\cite{dinverno_1998_formal}, OpenPRS~\cite{ingrand_1996_prs} or Jason~\cite{bordini_2007_jason}. 
 
-For project deadline purposes, we needed a first implementation of the execution controller quite quickly. As the middle-ware of the complete system was ROS, we decided to use the SMACH\footnote{http://wiki.ros.org/smach} library. Indeed, it is a ``\textit{task-level architecture for rapidly creating complex robot behavior}'' using hierarchical state machines and, it has an interface allowing its integration with ROS. Therefore, states from state machines can manipulate ROS concepts such as the services, topics and action servers. However, as more features were added to the task and a robot more complex behavior was needed, state machines were less and less appropriate. It was not possible to design some desired behaviors because of the limitations of the library and the graph was becoming complex and difficult to apprehend.
+Our choice went to SMACH because its compatibility with ROS and its facility to be used. However, after having built a first prototype with it, we realized the limitations of the framework, as it became more and more difficult to program complex robot behaviors, state machine were not enough powerful. Thus, we returned to the drawing board, minus one option. After a comparison considering potential compatibility with ROS, possible integration with the other software of our architecture, availability of documentation, users' feedbacks, maintenance, and possibility of code modifications, our choice went to Jason designed by Bordini \etal~\cite{bordini_2007_jason} which is a Java interpreter of AgentSpeak created by Rao~\cite{rao_1996_agentspeak}. It has the advantage to be a BDI (Beliefs, Desires, Intentions) (see Section~\ref{chap1:subsec:archi}) agent-oriented framework, fitting with our architecture. BDI frameworks are primarily focused on practical reasoning, \ie the process of deciding, step by step, which action to perform to reach a goal. It allows more modularity than state machines to handle contingencies and events. It also facilitates reasoning on agents' -- humans and robot -- beliefs. We chose this framework among the BDI ones and not another because it is implemented in Java and thus was compatible with rosjava\footnote{\url{https://github.com/rosjava/rosjava_core}} (\ie ROS implementation in Java), it is still developed and maintained, it is well documented (theoretically~\cite{bordini_2007_jason} and implement-ally\footnote{\url{http://jason.sourceforge.net/api/}}) which allows source code understanding and modifications, and there is a mailing list for users and its archives available\footnote{\url{https://sourceforge.net/p/jason/mailman/jason-users/}}.
 
-Then, when we got more time, we looked for a framework with the following criteria: already implemented, open-source, which can be integrated with the other components, enabling more flexibility and a modular design. We compared open-source software such as OpenPRS presented in~\cite{ingrand2007}, PNP introduced in~\cite{ziparo2011}, CRAM shown in~\cite{beetz2010}, different agent-programming software presented in the state of the art of~\cite{hubner2009} such as 2APL or STAPLE. We selected a framework called Jason, introduced in~\cite{Bordini:2007:PMS:1197104}. It is a JAVA interpreter for an extended version of AgentSpeak Language from \cite{rao1996}. It provides a platform for the development of for multi-agent systems. We decided to make use of its features for human-robot interactions. We chose it among the others as the software is widely used and so has a large documentation and is maintained, is compatible with ROS through rosjava\footnote{http://wiki.ros.org/rosjava} and allows to program complex behaviors. 
+\subsubsection{Programming with Jason}
+As said above, Jason is a BDI-based framework, allowing what is called \textit{agent-oriented programming}. Originally designed for multi-robot programming, it can be used for other purposes such as our. How does it work ?
 
-\subsection{A framework for BDI architectures: Jason}
-To implement the Supervisor, we chose a framework among the different existing ones dedicated to supervision and execution. We compared existing open-source decision-making and execution software. To cite a few, there is the PetriNetPlans library introduced by Ziparo \etal~\cite{ziparo_2011_petri} which is a framework for planning and execution. Beetz \etal{} developed CRAM, a software implementing reasoning mechanisms that can infer control decisions~\cite{beetz_2010_cram}. Finally, our choice went to Jason designed by Bordini \etal~\cite{bordini_2007_jason} which is a Java interpreter of AgentSpeak created by Rao~\cite{rao_1996_agentspeak}. Compared to the other software, it has the advantage to be a BDI (Beliefs, Desires, Intentions) agent-oriented framework, fitting with our architecture. As mentioned previously, BDI frameworks are primarily focused on practical reasoning, \ie the process of deciding, step by step, which action to perform to reach a goal. It allows more modularity than state machines to handle contingencies and events. It also facilitates reasoning on agents' -- humans and robot -- beliefs.
+We explained in Section~\ref{chap1:subsec:archi} that there were three main concepts to retain from the BDI model: beliefs, desires and intentions. Well, Jason's purpose is to program agents. Thus, each agent has a beliefs, desires and intentions. The beliefs are what it perceives, acquires from other agents and computes. They can produce desires, \ie states of affairs the agent wants to achieve. Then, the agent deliberates on its desires and chose to commit to some of them, \ie the chosen desires become intentions. To satisfy its intentions, the agent executes plans leading to actions. 
 
+The programming of the behavior of an agent is in the AgentSpeakLanguage (ASL). The program is designed by a user, a programmer. A program contains, among other things, plans. These plans have actions. An action is described by a Java program, written by the Jason's user. Then, to run, a program uses the decision loop, the \textit{reasoning cycle}, integrated to Jason. It is possible to customize some functions of the reasoning cycle by overloading or adding Java functions of the agent's constructors, belief base and reasoning cycle. 
+
+\paragraph{Agents} In the ASL program of an agent, it is possible to see plans, beliefs, achievement goal (desire) and test goal. First, let's see a very simple example of program with the agent Bob\footnote{\url{http://jason.sourceforge.net/mini-tutorial/hello-bdi/}}, presented in Listing~\ref{chap2:lst:bob}. Bob has one initial (\ie given by the programmer, not acquired by perception) belief which is |happy(bob)|. A belief is a property, here |happy|, which can have whatever number of arguments (including zero), here |bob|. Then, he has one initial desire, or achievement goal, which is recognizable by |!|. And finally, he has a the plan allowing to achieve the desire |say(hello)|. A plan is triggered by an event, here |+!say(X)| (\ie the event is that the goal |say(hello)| has been added), has a context (\ie a precondition), here |happy(bob)| and has a body which contains the actions to execute, here |.print(X)| (\ie |X| is a non-initiated variable at first, that will take the value |hello| when Bob will transform his desire into an intention). If we remove the initial belief |happy(bob)| from the first line, as the program is written and considering that Bob is the only agent, he cannot print hello, as the precondition of the plan will not be true.
+
+\begin{lstlisting}[caption={ASL program of Bob, a Jason agent}, label={chap2:lst:bob}]
+happy(bob).	\\belief
+
+!say(hello).	\\achievement goal
+
++!say(X) : happy(bob) <- .print(X).		\\plan
+\end{lstlisting} 
+
+In another example, illustrated by Listing~\ref{chap2:lst:bobalice}, Bob has no initial belief nor initial goal. He has plans for two events: starting to believe he is happy and having the goal to say hello. We can see that there is also a program for another agent, Alice. She has an initial goal, her, which is to inform bob that he is happy. Therefore, we can see that an agent can add a belief in another agent's belief base. When Bob gets the information that he is happy, this triggers his first plan, creating for him the goal |!say(hello)|. As Bob does not believe that today is Monday, he can trigger his second plan to say hello. In this plan, there a three elements: a print action, a wait action and the addition of a new goal. And thus, here, we are in the presence of a recursive plan which never ends. 
+
+\begin{lstlisting}[caption={ASL programs of Bob and Alice, two Jason agent}, label={chap2:lst:bobalice}]
+\\bob.asl
++happy(bob) : true <- !say(hello).
+
++!say(X) : not today(monday) <- 
+.print(X); 
+.wait(500); 
+!say(X).
+
+\\alice.asl
+!inform.
+
++!inform : true <- .send(bob,tell,happy(bob)).
+\end{lstlisting} 
+
+\paragraph{Actions} To give an idea of what looks like the Java program of an action, here is an example of a Java function for the action |.print| in Listing~\ref{chap2:lst:print}.
+
+\begin{lstlisting}[caption={.print action}, label={chap2:lst:print}, language=Java]
+public class print extends DefaultInternalAction {
+	@Override
+	public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
+		String sout = argsToString(args);
+		System.out.print(sout.toString() + "\n");
+	}
+	return true;
+	}
+}
+\end{lstlisting} 
+
+In Jason, there are two types of action: \textit{environment actions} and \textit{internal actions}. \textit{Environment actions} allow an agent to act within its environment whereas \textit{internal actions} are designed to be run internally within an agent such as the print action.
+
+We have seen what looks like the program of Jason agent. Now, we are going to see how it is run by the Jason interpreter.
+
+
+\paragraph{Reasoning cycle} Each agent has what has been coined a \textit{reasoning cycle} composed of 10 steps. It resembles a decision loop, running each step one by one and starting again at the first one. The steps 1 to 4 are dedicated to the belief update of the agent. The steps 5 to 10 describe the interpretation of the ASL program. In these latter, an event is selected, as well as a plan corresponding to this event and then the first formula (\eg an action or a goal) of the plan is executed. The steps are the following ones, in this order:
+\begin{enumerate}
+	\item Perceiving the Environment: Each agent has a Java function called |perceive|. This function can retrieve data from a simulated environment or be customized by the programmer to get actual perception data. The function output a list of beliefs (\eg |<isOn(box1,table)[source(percept)]|, |color(box1,red)[source(percept)]>|).
+	\item Updating the Belief Base: The agent's belief base is updated with the perception data. Each change in the belief base generates an event (\eg |+color(box1,red)[source(percept)]| and if later the color of the box is not perceived anymore, it will be |-color(box1,red)[source(percept)]|).
+	\item Receiving Communication from Other Agents: It checks if an agent received a message from another agent such as the message Bob received from Alice in Listing~\ref{chap2:lst:bobalice}. A message can be a belief, a plan, a goal or a questioning on a given belief.
+	\item Selecting ‘Socially Acceptable’ Messages: It is a function the programmer should customize. It allows that an agent refuses messages or types of message from some given agents.
+	\item Selecting an Event: Events are either perceived changes in the environment or changes in the agent's own goals. There is a queue of events and at each reasoning cycle only one is selected to be handled. The default method to select it is a FIFO but as every function of the reasoning cycle, it can be customized. 
+	\item Retrieving all Relevant Plans: From the selected event, it tries to find all the relevant plans for this event, in the plan library, \ie the plans written by the programmer in ASL. The function tries to find the plans that can be \textit{unified} with event, \ie the ones with their left part (the trigger) match the event. For example, if the selected event is |+color(box1,red)[source(percept)]| and in the plan library there is these six plans:
+\begin{lstlisting}[style=inline]
++position(Object,Coords) : true <- .print(Coords).
++color(Object,red) : true <- .print(nice).
++color(Object,red)[source(self)] : true <- .print(nice).
++color(box1,Color) : true <- .print(nice).
++color(Object,Color) : false <- .print(Color).
++color(Object,blue) : true <- .print(so-so).
+\end{lstlisting}
+	then there are three relevant plans:
+\begin{lstlisting}[style=inline]
++color(Object,red) : true <- .print(nice).
++color(box1,Color) : true <- .print(nice).
++color(Object,Colour) : false <- .print(Colour).
+\end{lstlisting}
+	\item Determining the Applicable Plans: It takes the list of relevant plans and sees which ones are applicable. To do so, it looks at the context (the preconditions) of the plans. The context can be beliefs, prolog-like rules, internal actions, logical expressions or booleans. If we look at the example of the previous step, there were three relevant plans. Their contexts are simple booleans. Two of them is true, the other one is false, thus the two first plans are applicable.
+	\item Selecting One Applicable Plan: It takes the list of applicable plans and select the one that will be elected to become an intention, \ie to be executed. As usual, this is a customizable function for which the default behavior is to take the first plan in the order of the plan library, \ie in the order written by the programmer. Still with the same example, thus, the one plan to be selected is the first one, |+color(Object,red) : true <- .print(nice).| If the event was external, \ie from perception, it creates a new intention, adding it to the set of intentions. Then, the agent has a new \textit{focus of attention}. If the event was internal, \eg a belief addition inside a plan, then the selected plan is added on the top of the existing intention. 
+	\item Selecting an Intention for Further Execution: As seen in the previous step, an agent can have more than one intention in the set of intentions, each representing a different focus of attention. Then, at this step is chosen the intention of which the formula will be executed. The default function choses the first intention of the list. After execution of the formula, the intention will go at the end of the intentions list.
+	\item Executing One Step of an Intention: The first formula of the selected intention is executed (this number is also customizable and the programmer can choose that an agent execute more than once formula in the same reasoning cycle). It can be an internal action, an environment action, a goal, a belief addition or deletion and two other types that will not be developed here. 
+\end{enumerate}
+
+
+
+\subsubsection{Architecture of JAHRVIS}
+
+
+\begin{figure}[!ht]
+	\includegraphics[width=\linewidth]{figures/chapter2/supervisor_modules.pdf}
+	\caption{The \acrshort{jahrvis} processes (in blue) and their interactions between themselves and with the other components of the architecture.}
+	\label{chap2:fig:sup_overview}
+\end{figure}
 
 \section{A robot controlling its contribution to a human-robot joint action}
 

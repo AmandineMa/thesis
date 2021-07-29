@@ -265,9 +265,19 @@ urlcolor=linkcol %couleur des liens pour les url
 \algdef{S}[FOR]{ForEach}[2]{\algorithmicforeach\ #1\ \algorithmicin\ #2\ \algorithmicdo}
 
 \usepackage{listings}
-\lstdefinestyle{customPlan}{
-  language=C,
-  commentstyle=\itshape\color{green!25!black},
+\lstset{
+	frame=single,
+	captionpos=b,
+	breaklines=true,
+	basicstyle=\ttfamily,
+	numberstyle=\color{black}
+}
+
+\lstdefinestyle{inline}{
+	frame=none,
+	mathescape=true,
+	aboveskip=\smallskipamount,
+	belowskip=\smallskipamount,
 }
 \usepackage{pdfpages}
 
