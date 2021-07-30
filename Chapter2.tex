@@ -173,7 +173,7 @@ We have seen what looks like the program of Jason agent. Now, we are going to se
 \paragraph{Reasoning cycle} Each agent has what has been coined a \textit{reasoning cycle}, composed of 10 steps. It resembles a decision loop, running each step one by one and starting again at the first one. The steps 1 to 4 are dedicated to the belief update of the agent. The steps 5 to 10 describe the interpretation of the ASL program. In these latter, an event is selected, as well as a plan corresponding to this event and then the first formula (\eg an action or a goal) of the plan is executed. The steps are the following ones, in this order:
 \begin{enumerate}
 	\item Perceiving the Environment: Each agent has a Java function called |perceive|. This function can retrieve data from a simulated environment or be customized by the programmer to get actual perception data. The function output a list of beliefs (\eg |<isOn(box1,table)[source(percept)]|, |color(box1,red)[source(percept)]>|).
-	\item Updating the Belief Base: The agent's belief base is updated with the perception data. Each change in the belief base generates an event (\eg |+color(box1,red)[source(percept)]| and if later the color of the box is not perceived anymore, it will be |-color(box1,red)[source(percept)]|).
+	\item Updating the Belief Base: The agent's belief base is updated with the perception data. Each change in the belief base generates an event (\eg |+color(box1,red)[source(percept)]| and if later the color of the box is not perceived anymore, it will be |-color(box1,red)[source(percept)]|).\label{chap2:list:update_bb}
 	\item Receiving Communication from Other Agents: It checks if an agent received a message from another agent such as the message Bob received from Alice in Listing~\ref{chap2:lst:bobalice}. A message can be a belief, a plan, a goal or a questioning on a given belief.
 	\item Selecting ‘Socially Acceptable’ Messages: It is a function the programmer should customize. It allows that an agent refuses messages or types of message from some given agents.
 	\item Selecting an Event: Events are either perceived changes in the environment or changes in the agent's own goals. There is a queue of events and at each reasoning cycle only one is selected to be handled. The default method to select it is a FIFO but as every function of the reasoning cycle, it can be customized. 
@@ -201,10 +201,50 @@ We have seen what looks like the program of Jason agent. Now, we are going to se
 Therefore, each agent has a reasoning cycle running repeatedly.
 
 \subsubsection{Jason Integration with ROS}
-The robotic architecture presented in Section~\ref{chap2:sec:rob_archi} uses the ROS framework\cite{quigley_2009_ros} to enable communication between its components. Thus, to be able to build a supervision software based on Jason, we needed to interface it with ROS as well. At the time, there was no available bridge between Jason and ROS, Jason being extensively used in simulation contexts. Thus, we developed our own, and at about the same moment, the Jason's developers started to develop theirs (what we realized a bit later).  
+The robotic architecture presented in Section~\ref{chap2:sec:rob_archi} uses the ROS framework\cite{quigley_2009_ros} to enable communication between its components. Thus, to be able to build a supervision software based on Jason, we needed to interface it with ROS as well. At the time, there was no available bridge between Jason and ROS, Jason being extensively used in simulation contexts. Thus, we developed our own -- and at about the same moment, the Jason's developers started to develop theirs~\cite{silva_2020_embedded} (what we realized a bit later), both using rosjava. We tackled the problem in very different ways. A user of their implementation only needs to fill one perception (topics) and one action (topics/services) manifests to link the system with ROS and then implement their agent in ASL. Thus, it is quite easy to use. However, it seems to have backlashes. Therefore, action requests are directly sent from ASL to the hardware controller, with no possibility of Java processing. Moreover, action status/result can only be boolean which is not enough for a system like ours needing to perform service queries of data to the external Knowledge Base for example. Finally, there is no bridge with action servers which are often use for motion planers for example. 
+
+\begin{figure}[!ht]
+	\includegraphics[width=\linewidth]{figures/chapter2/RJS_diagram.pdf}
+	\caption{Simplified Java class diagram of our ROS-Jason implementation. In white are our customized classes and in grey the native ROS and Jason classes.}
+	\label{chap2:fig:rjs}
+\end{figure}
+
+A simplified Java class diagram of our implementation\footnote{\url{https://github.com/amdia/rjs}} is presented in Figure~\ref{chap2:fig:rjs}. We defined for each Jason agent a customized Java class (ROS-Jason Agent on the figure) which has an Agent Node, an action factory and a belief base where all beliefs are time stamped with the roscore time. 
+
+An Agent Node has an attribute, the ROS Parameter Tree, allowing to load YAML parameters from files in which, among other things, are written services, topics and action servers info, as shown in Listing~\ref{chap2:lst:ros-jason}, a bit similarly to the manifests of~\cite{silva_2020_embedded}. From these parameters, the Agent Node can automatically instantiate all the needed ROS components through its ROS node. 
+
+The Belief Base can receive perception updates through ROS topic listeners. Moreover, we customized\footnote{This modification of the belief update function is not part of our ROS-Jason implementation but is on top of it, in the \acrshort{jahrvis} implementation which relies on ROS-Jason.} the belief update function (step~\ref{chap2:list:update_bb} of the reasoning cycle) so percepts are not elements that when perceived at time T are added to the belief base and disappearing when not perceived anymore at time T+1. There are updates (additions and deletions) from the external Knowledge Base, in this way, it limits the number of message exchanges, \ie instead of receiving every 500 ms during 10 seconds that the agent perceives |cube_1|, it receives for example an addition at t=18s and a deletion at t=28s. 
+
+For each belief added in the belief base, from perception or internal computation, is added a time stamp from the current ROS time. It is useful for the computation of the Quality of Interaction presented in Section~\ref{sec:qoi} and for debugging.
+
+A ROS-Jason Agent has a Action Factory -- abstract in the ROS-Jason framework and instantiated in \acrshort{jahrvis} -- containing the list of environment actions it can perform -- in the case of our architecture, not all actions of this type are for the robot to act on its environment, sometimes there are queries to other components of the architecture. The Action Factory instantiates the Action called through the ASL program at execution time. An Action can either be based on either a ROS service client, or an ROS action client or a ROS publisher for the request and a ROS listener for the result. 
+
+\begin{lstlisting}[caption={Example of service, topic and action server definitions in a YAML file.}, label={chap2:lst:ros-jason}]
+services:
+	onto_individual: 
+		name: /ontologenius/individual/robot
+		type: ontologenius/OntologeniusService
+	onto_class: 
+		name: /ontologenius/class/robot
+		type: ontologenius/OntologeniusService
+topics:
+	mementar_occasions: 
+		name: /mementar/occasions/robot
+		type: mementar/MementarOccasion
+		function: sub
+	plan_request:
+		name: /planner/request_new_plan
+		type: planner_msgs/PlanRequest
+		function: pub
+action_servers:
+	plan_motion: /pr2_tasks_node/plan
+	execute_motion: /pr2_tasks_node/execute
+\end{lstlisting}
+
+
 
 \subsubsection{Architecture of JAHRVIS}
-
+The \acrfull{jahrvis} is implemented on top of our ROS-Jason framework. During the design of \acrshort{jahrvis}, we identified a number of features we needed and then their associated processes\footnote{The design of \acrshort{jahrvis} was an iterative work, indeed the first version being the supervisor implemented for the task described in Chapter~\ref{chapter:chap3}, the second one was the supervisor of the task described in Chapter~\ref{chapter:chap4} and the final one was the supervisor of the task described in Chapter~\ref{chapter:chap5}}\todo{derniere tache existera ???}. 
 
 
 \begin{figure}[!ht]
@@ -213,24 +253,76 @@ The robotic architecture presented in Section~\ref{chap2:sec:rob_archi} uses the
 	\label{chap2:fig:sup_overview}
 \end{figure}
 
+\todo{to formulate}
+\begin{itemize}
+	\item generic supervisor, not specific to a task, can handle a lot of various plans
+	\item leave some decisions to the human: handle conditional plan and handle agent X~\cite{devin_2017_decisional} (two different ways)
+	\item take human into account: abilities, knowledge about the task progress, belief divergences
+	\item to do relevant communication actions (verbal, non-verbal)
+	\item considerate not only tasks but also interaction sessions
+	\item recognize the human actions
+	\item to know if the interaction is going well to be able to react on it
+	\item active perception (object/human search)
+	\item handle contingencies
+\end{itemize}
+
+For each processes, we implemented a ROS-Jason Agent, with the wanted behavior coded in ASL and the needed customizations added in Java.
+
+
+\paragraph{Interaction Session}
+
 \section{A robot controlling its contribution to a human-robot joint action}
 
 
 
 
-\subsection{Knowledge Management}
+\subsection{Knowledge Representations and Management}
+action model defined in ontologenius (type, verbalizations);
+mementar timeline; 
+belief divergence;
+what the human knows about the current plan
+
+\subsection{Human Actions Monitoring}
+developed model:
+internal action model with preconditions, ongoing effects and final effects;
+state machine
 
 \subsection{Shared Plans Handling}
+handle conditional plan (collaborative work with Guilhem Buisan) and handle agent X (two different ways);
+extension of Sandra work about agent X with generic object in sparql language (collaborative work with Guillaume Sarthou)
+can work with different HTN-like planer (and others ?) after formating with java class. Integration with two planers (tested and working)
+\subsubsection{Robot Plan management}
+a plan manager for the robot side; 
+present algo or state machine
+\subsubsection{Human Plan management}
+a plan manager for the human side according to human presence/visibilities/reachabilities;
+present algo or state machine
 
-\subsection{Human Mental States Management}
+\subsubsection{Robot Resource Management}
+depending on the robotic platform (pepper arms+head; pr2 needs planer for action manipulation so no arm manager, only head manager)
+head manager: when robot execute an action, look the action object; when the robot speaks, look at the human. Programmed through channels.\todo{deplacer presentation dans mummer ici ?}
 
-\subsection{Action Monitoring}
+\subsection{Action Execution Management}
+action model;
+generic algo, just task as input the action model;
 
+\subsection{Communication management}
+REG to communicate about actions and objects;
+relevant communications;
+different communication types (inform executed action, ask to perform action, other informative sentence) (cite Clodic or others ?);
+human attention
 
+\subsection{Future work}
+integrate multiple humans
 
-\subsection{Communication}
+improve goal management and interaction
+
+plan invariants, plans pas entier
+ 
 
 \section{A robot evaluating its contribution to a human-robot joint action}\label{sec:qoi}
+
+The work presented in this section has been excerpted from a paper published in the Journal of Social Robotics~\cite{mayima_2021_towards}.
 
 \subsection{Introduction}
 
@@ -241,7 +333,7 @@ Finally, from a methodological point of view, a robot deployed in the wild able 
 
 In this paper, we only focus on the Quality of Interaction evaluation process and not on how to use its result for decision making. Therefore,  we present in the sequel the methods and tools we developed, allowing the robot to evaluate in real-time the quality of the human-robot collaborative activity it is involved in. It is based on a set of metrics we have defined, focused on two concepts: the measure of human engagement and the measure of the effectiveness of collaborative tasks performance. However, this is by no means exhaustive, and other metrics and parameters could (and should) be added later. Our work can be seen as a toolbox among which it is possible to pick the desired metrics according to tasks or contexts. We propose a way to aggregate these metrics, producing the QoI. The evaluation of the QoI is performed at three different levels of abstraction: the interaction session level, the task level and the action level. In further work, this ability could provide additional information to the robot and open the possibility for reconsidering its behaviour in case it estimates that the quality of the interaction is degrading (\eg changing its plan or the way it is achieving it, informing the human or requesting a change in their behaviour, or even deciding to disengage).
 
-The chapter is organized as follows. In the next section, we briefly discuss related work and the main challenges. In section~\ref{sec:levels} we present the representation of human-robot collaborative activity which we use and its hierarchical  decomposition. Finally, in sections \ref{sec:eval} and \ref{sec:metrics}, we introduce our concept and proposed set of metrics to evaluate the Quality of Interaction.
+The section is organized as follows. First, we briefly discuss related work and the main challenges. In section~\ref{sec:levels} we present the representation of human-robot collaborative activity which we use and its hierarchical  decomposition. Finally, in sections \ref{sec:eval} and \ref{sec:metrics}, we introduce our concept and proposed set of metrics to evaluate the Quality of Interaction.
 
 \subsection{Related work}\label{sec:rel}
 
