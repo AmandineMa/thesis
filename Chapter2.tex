@@ -170,14 +170,14 @@ In Jason, there are two types of action: \textit{environment actions} and \texti
 We have seen what looks like the program of Jason agent. Now, we are going to see how it is run by the Jason interpreter.
 
 
-\paragraph{Reasoning cycle} Each agent has what has been coined a \textit{reasoning cycle} composed of 10 steps. It resembles a decision loop, running each step one by one and starting again at the first one. The steps 1 to 4 are dedicated to the belief update of the agent. The steps 5 to 10 describe the interpretation of the ASL program. In these latter, an event is selected, as well as a plan corresponding to this event and then the first formula (\eg an action or a goal) of the plan is executed. The steps are the following ones, in this order:
+\paragraph{Reasoning cycle} Each agent has what has been coined a \textit{reasoning cycle}, composed of 10 steps. It resembles a decision loop, running each step one by one and starting again at the first one. The steps 1 to 4 are dedicated to the belief update of the agent. The steps 5 to 10 describe the interpretation of the ASL program. In these latter, an event is selected, as well as a plan corresponding to this event and then the first formula (\eg an action or a goal) of the plan is executed. The steps are the following ones, in this order:
 \begin{enumerate}
 	\item Perceiving the Environment: Each agent has a Java function called |perceive|. This function can retrieve data from a simulated environment or be customized by the programmer to get actual perception data. The function output a list of beliefs (\eg |<isOn(box1,table)[source(percept)]|, |color(box1,red)[source(percept)]>|).
 	\item Updating the Belief Base: The agent's belief base is updated with the perception data. Each change in the belief base generates an event (\eg |+color(box1,red)[source(percept)]| and if later the color of the box is not perceived anymore, it will be |-color(box1,red)[source(percept)]|).
 	\item Receiving Communication from Other Agents: It checks if an agent received a message from another agent such as the message Bob received from Alice in Listing~\ref{chap2:lst:bobalice}. A message can be a belief, a plan, a goal or a questioning on a given belief.
 	\item Selecting ‘Socially Acceptable’ Messages: It is a function the programmer should customize. It allows that an agent refuses messages or types of message from some given agents.
 	\item Selecting an Event: Events are either perceived changes in the environment or changes in the agent's own goals. There is a queue of events and at each reasoning cycle only one is selected to be handled. The default method to select it is a FIFO but as every function of the reasoning cycle, it can be customized. 
-	\item Retrieving all Relevant Plans: From the selected event, it tries to find all the relevant plans for this event, in the plan library, \ie the plans written by the programmer in ASL. The function tries to find the plans that can be \textit{unified} with event, \ie the ones with their left part (the trigger) match the event. For example, if the selected event is |+color(box1,red)[source(percept)]| and in the plan library there is these six plans:
+	\item Retrieving all Relevant Plans: From the selected event, it tries to find all the relevant plans for this event, in the plan library, \ie the plans written by the programmer in ASL. The function tries to find the plans that can be \textit{unified} with event, \ie the ones with their left part (the trigger) match the event. For example, if the selected event is |+color(box1,red)[source(percept)]| and in the plan library there are these six plans:
 \begin{lstlisting}[style=inline]
 +position(Object,Coords) : true <- .print(Coords).
 +color(Object,red) : true <- .print(nice).
@@ -192,15 +192,19 @@ We have seen what looks like the program of Jason agent. Now, we are going to se
 +color(box1,Color) : true <- .print(nice).
 +color(Object,Colour) : false <- .print(Colour).
 \end{lstlisting}
-	\item Determining the Applicable Plans: It takes the list of relevant plans and sees which ones are applicable. To do so, it looks at the context (the preconditions) of the plans. The context can be beliefs, prolog-like rules, internal actions, logical expressions or booleans. If we look at the example of the previous step, there were three relevant plans. Their contexts are simple booleans. Two of them is true, the other one is false, thus the two first plans are applicable.
+	\item Determining the Applicable Plans: It takes the list of relevant plans and sees which ones are applicable. To do so, it looks at the context (the preconditions) of the plans. The context can be beliefs, prolog-like rules, internal actions, logical expressions or booleans. If we look at the example of the previous step, there were three relevant plans. Their contexts are simple booleans. Two of them are true, the other one is false, thus the two first plans are applicable.
 	\item Selecting One Applicable Plan: It takes the list of applicable plans and select the one that will be elected to become an intention, \ie to be executed. As usual, this is a customizable function for which the default behavior is to take the first plan in the order of the plan library, \ie in the order written by the programmer. Still with the same example, thus, the one plan to be selected is the first one, |+color(Object,red) : true <- .print(nice).| If the event was external, \ie from perception, it creates a new intention, adding it to the set of intentions. Then, the agent has a new \textit{focus of attention}. If the event was internal, \eg a belief addition inside a plan, then the selected plan is added on the top of the existing intention. 
 	\item Selecting an Intention for Further Execution: As seen in the previous step, an agent can have more than one intention in the set of intentions, each representing a different focus of attention. Then, at this step is chosen the intention of which the formula will be executed. The default function choses the first intention of the list. After execution of the formula, the intention will go at the end of the intentions list.
 	\item Executing One Step of an Intention: The first formula of the selected intention is executed (this number is also customizable and the programmer can choose that an agent execute more than once formula in the same reasoning cycle). It can be an internal action, an environment action, a goal, a belief addition or deletion and two other types that will not be developed here. 
 \end{enumerate}
 
+Therefore, each agent has a reasoning cycle running repeatedly.
 
+\subsubsection{Jason Integration with ROS}
+The robotic architecture presented in Section~\ref{chap2:sec:rob_archi} uses the ROS framework\cite{quigley_2009_ros} to enable communication between its components. Thus, to be able to build a supervision software based on Jason, we needed to interface it with ROS as well. At the time, there was no available bridge between Jason and ROS, Jason being extensively used in simulation contexts. Thus, we developed our own, and at about the same moment, the Jason's developers started to develop theirs (what we realized a bit later).  
 
 \subsubsection{Architecture of JAHRVIS}
+
 
 
 \begin{figure}[!ht]
