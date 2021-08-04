@@ -255,6 +255,7 @@ urlcolor=linkcol %couleur des liens pour les url
 {\newpage\vspace*{\fill}\thispagestyle{empty}\renewcommand{\headrulewidth}{0pt}}
 {\vspace*{\fill}}
 
+
 \usepackage{tablefootnote}
 
 \theoremstyle{plain}
@@ -271,14 +272,31 @@ urlcolor=linkcol %couleur des liens pour les url
 	breaklines=true,
 	basicstyle=\ttfamily,
 	numberstyle=\color{black},
-	tabsize=2
+	tabsize=2,
+	mathescape=true,
+	literate=%
+		{â}{{\^a}}1
 }
 
 \lstdefinestyle{inline}{
 	frame=none,
-	mathescape=true,
 	aboveskip=\smallskipamount,
 	belowskip=\smallskipamount,
+}
+
+\lstdefinestyle{OwlTurtle}{
+	language=C,
+	tabsize=4,
+	basicstyle=\scriptsize\ttfamily,
+	keywordstyle=\bfseries\color{darkgray},
+	morekeywords={rdf:type, rdfs:domain, rdfs:subPropertyOf, rdfs:range, :hasSubtask, :DecompositionUsedBy, rdfs:subClassOf, :hasDecomposition, owl:inverseOf, htn_actions:hasEffect, rdfs:label},
+	alsoletter=:
+}
+
+\lstdefinestyle{aslDef}{
+	frame=none,
+%	breaklines=false,
+	%xleftmargin=.1\textwidth, xrightmargin=.1\textwidth
 }
 
 \usepackage{pdfpages}
@@ -287,3 +305,4 @@ urlcolor=linkcol %couleur des liens pour les url
 \newcommand{\etal}{\textit{et al}.}
 \newcommand{\ie}{\textit{i.e.}, }
 \newcommand{\eg}{\textit{e.g.}, }
+\newcommand{\fact}[3]{\mbox{\textit{#1}(#2, #3)}}

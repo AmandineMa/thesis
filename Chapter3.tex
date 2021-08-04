@@ -535,7 +535,7 @@ In total, the robot ran the direction-giving task during approximately 96 hours 
 
 
 \section{Integration and test of the QoI Evaluator}\label{sec:qoi_integration}
-As a proof-of-concept for the QoI Evaluator presented in Section~\ref{sec:qoi} of the Chapter~\ref{chapter:chap2}, we integrated it in the direction-giving task described in this chapter.
+As a proof-of-concept for the QoI Evaluator presented in Section~\ref{chap2:sec:qoi} of the Chapter~\ref{chapter:chap2}, we integrated it in the direction-giving task described in this chapter.
 
 
 More specifically, this implementation of the Quality of Interaction Evaluator measured the interaction quality at the direction-giving task level and at the elementary actions level, omitting the interaction session level as this latter was not our focus in the \acrshort{mummer} project. The QoI Evaluator was integrated into \acrshort{jahrvis} presented in Chapter~\ref{chapter:chap2}. The QoI Evaluator is implemented into a Jason function (the reasoning cycle) which is invoked periodically. After multiple testings, we reached the conclusion that it was pertinent, at least in the context of the direction-giving task, to have the Evaluator computing the QoI every second for both levels. Therefore, every second, the system computes the value of each metric and then outputs a value for $QoI_{task}$ and $QoI_{action}$. 
