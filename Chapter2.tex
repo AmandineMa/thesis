@@ -25,7 +25,7 @@ Not only \acrshort{jahrvis} controls the robot contribution to a collaborative t
 A part of the control features presented here is inspired from Sandra Devin~\cite{devin_2017_decisional}. Indeed, we intended to pursue her work, re-implementing a part of her software using a more friendly framework, \ie with Jason instead of if/else statements in C++, giving our software more flexibility, readability and genericness.
 Then, to go further, we developed \acrshort{jahrvis}, a more complete approach of a supervision component dedicated to HRI which tries to satisfy multiple objectives:
 
-\begin{itemize}
+\begin{bulletList}
 	\item \textbf{Be generic}. The objectives developed in the rest of list are to reach for most collaborative tasks. Thus, it seemed essential to us to develop a software not dedicated to a particular human-robot task but able to handle plans for varied tasks. 
 	\item \textbf{Consider the human partner}. In HRI, the human and the robot are partners. As seen in Section~\ref{chap1:sec:ja}, partners perform better when taking the other into account. Thus, by considering human abilities, perspective and mental states, the supervisor makes the robot a better partner for the human.
 	\item \textbf{Leave some decisions to the human}. In some cases, it is not useful, nay counterproductive that the robot plans all the human action parameters beforehand, who should execute a given action when it does not matter, or the order in which some actions should be executed. Thus, we propose a supervisor handling two types of plan allowing to latitude to human decisions and actions: conditional plans, and plans extending ``Agent X'' shared plans~\cite{devin_2017_decisions}.
@@ -35,7 +35,7 @@ Then, to go further, we developed \acrshort{jahrvis}, a more complete approach o
 	\item \textbf{Considerate the interaction session level} A robot dedicated to collaborative tasks, in a real-life context, will interact with humans outside or between these tasks. We propose to consider this fact by defining what we called \textit{interaction sessions}. An interaction session gives a frame to the interaction and allow to take into account a number of facts from one task to another or from one session to another.
 	\item \textbf{Evaluate the quality of the interaction}. Enriching the robot knowledge with a good estimation about how the interaction is going, can enhance its decision-making process and thus, its social behaviour.
 	\item \textbf{Adapt to the human experience, abilities or preferences}. Humans are all different, because of their experience, abilities or preferences among other things. A robot taking into account its previous interactions with a human (\eg behaving differently with a novel user or an experienced user) or adapting to their abilities (\eg some people cannot climb stairs, a robot guide can indicate the elevator instead) will improve the efficiency and the quality of the interaction, and the user's experience.
-\end{itemize}
+\end{bulletList}
 
 
 \section{An Overview of our Robotic Architecture}\label{chap2:sec:rob_archi}
@@ -263,19 +263,21 @@ The \acrfull{jahrvis} is implemented on top of our ROS-Jason framework. During t
 
 For each processes (in blue in Figure~\ref{chap2:fig:sup_overview}), we implemented an \acrshort{rja}, with the wanted behavior coded in ASL and the needed customizations added in Java. Thus, internal communications between the \acrshort{jahrvis} processes, and so \acrshort{rja}s, use Jason messages (see Section~\ref{chap2:subsec:jason}). External communication with the other components of the robotic architecture is based on either ROS messages, services or action clients.
 
-Not all \acrshort{rja}s are active at each level of interaction defined in Section~\ref{chap2:sec:levels}. Indeed, as its name suggests, the \textit{Interaction Session Manager} handles interaction sessions. The \textit{Robot} and \textit{Human Plan Managers} handle the task level. And, the \textit{Action Execution Manager} and the \textit{Human Actions Monitoring} are in charge of the action level. The \textit{QoI Evaluator} and the \textit{Communication Manager} are active at all levels. We can also make the distinction between the component dedicated to the assessment of the quality of interaction, \ie the QoI Evaluator, and the components dedicated to the decision-making and control, \ie all the components except the QoI Evaluator.
+Not all \acrshort{rja}s are active at each level of interaction defined in Section~\ref{chap2:sec:levels}. Indeed, as its name suggests, the \textit{Interaction Session Manager} handles interaction sessions. The \textit{Robot} and \textit{Human Plan Managers} handle the task level. And, the \textit{Action Execution Manager} and the \textit{\acrlong{ham}} are in charge of the action level. The \textit{QoI Evaluator} and the \textit{Communication Manager} are active at all levels. We can also make the distinction between the component dedicated to the assessment of the quality of interaction, \ie the QoI Evaluator, and the components dedicated to the decision-making and control, \ie all the components except the QoI Evaluator.
 
 
 \section{A robot controlling its contribution to a human-robot joint action}\label{chap2:sec:control}
 
+The objective of this section is to present the \acrshort{jahrvis} processes involved in the decision-making and the control of the robot when jointly interacting with a human. First, we present the knowledge representations used, then the Interaction Session Manager, the Human Actions Monitoring, the Shared Plans Handling composed of two processes, one for the robot and one for the human, the Action Execution Manager, and finally the Communication Manager.
 
-\subsection{Knowledge Representations and Management}
+\subsection{Knowledge Representations and Management}\label{chap2:subsec:know}
+As shown in Section~\ref{chap1:subsubsec:shared_rep} and Section~\ref{chap1:subsubsec:common_g}, when involved in joint actions, humans have shared representations of tasks, actions, goals and have a common ground. Thus, it is important that the robot has such internal representations.
+
 During an interaction, \acrshort{jahrvis} processes use knowledge bases (KB) of two types: external and internal ones. The external knowledge bases with which we interfaced \acrshort{jahrvis} are Ontologenius\footnote{\url{https://github.com/sarthou/ontologenius/}}~\cite{sarthou_2019_ontologenius} for the semantic knowledge and Mementar\footnote{\url{https://github.com/sarthou/mementar}} for the episodic one. They have been developed by Guillaume Sarthou with whom we collaborated closely. Then, each \acrshort{rja} has its own knowledge base that we call belief base in Jason vocabulary. It is used for knowledge which serves to \acrshort{jahrvis} internal computations only.
-
 
 Ontologenius allows to store common-sense knowledge (\eg a cube is an object), knowledge about the environment (\eg object\_1245 is a Cube and is on top of table\_2) and knowledge about activities grounded in space and time (\eg object\_1245 has been put on the table\_2 by robot (action ID 475)). Mementar allows to store facts and actions in a timeline (\eg action ID 475 started at 3286 seconds and was over at 3290 seconds). As stated in Section~\ref{chap2:sec:rob_archi}, it receives and stores facts about the current state from the Situation Assessment component. It reasons on it (\eg after receiving \fact{isOnTof}{cube\_2}{table\_1} and it computes \fact{isUnder}{table\_1}{cube\_2}). 
 
-To access to the knowledge stored in Ontologenius, \acrshort{jahrvis} can make a request to know if a given fact exists or ask an information about a class, a property or an object instantiation. Another way is to subscribe to updates (addition or deletion) for a given fact. It is useful to keep updates about the environment and avoid to be snowed under too much data (\eg to monitor human place actions, \acrshort{jahrvis} needs \textit{isOnTopOf} but not \textit{isUnder} so Human Actions Monitoring can subscribe to updates about this first fact). It is possible to either specify the class or individual of the subjects/objects that should be concerned by the subscription, or to receive every facts (\eg it can subscribe to receive additions of the human looking at the robot |[add]human_0$\lvert$isLookingAt$\lvert$robot| or to receive all updates about every objects that the human looks at |[?]human_0$\lvert$isLookingAt$\lvert$?|).
+To access to the knowledge stored in Ontologenius, \acrshort{jahrvis} can make a request to know if a given fact exists or ask an information about a class, a property or an object instantiation. Another way is to subscribe to updates (addition or deletion) for a given fact. It is useful to keep updates about the environment and avoid to be snowed under too much data (\eg to monitor human place actions, \acrshort{jahrvis} needs \textit{isOnTopOf} but not \textit{isUnder} so \acrlong{ham} can subscribe to updates about this first fact). It is possible to either specify the class or individual of the subjects/objects that should be concerned by the subscription, or to receive every facts (\eg it can subscribe to receive additions of the human looking at the robot |[add]human_0$\lvert$isLookingAt$\lvert$robot| or to receive all updates about every objects that the human looks at |[?]human_0$\lvert$isLookingAt$\lvert$?|).
 
 \subsubsection{Action Representations}
 Action representations allow the robot to recognize actions, to execute actions, to monitor the human monitoring its actions and to communicate about them. We defined three of them. We chose to have one stored in Ontologenius to benefit from the reasoning features and to have the two others written in an ASL file to benefit from Jason reasoning features.
@@ -328,7 +330,7 @@ Finally, as mentioned earlier and as visible in Listing~\ref{chap2:lst:classes},
 
 We have seen the possibilities offered by Ontologenius to \acrshort{jahrvis}. Now, we present the two internal action representations, one of the human actions in order to monitor them and the other one is of the robot actions, to allow the robot to monitor the human monitoring of its actions. 
 
-\paragraph{Internal Representation}
+\paragraph{Internal Representation}\label{chap2:par:act_rep}
 What does \acrshort{jahrvis} needs to monitor a human action? We defined a human action |Act| as: a predicate in the form of a triplet |ActPred| with its name |ActName|, the agent |AgentName| performing it and parameters |Params|; a list of preconditions |PrecondL|, a list of distinctive movements |MoveL| that the human could do when performing the action; a list of effects that we coined \textit{progression effects} |ProgEffectL| which are action effects but not enough to rule the action end; and a list of effects that we coined \textit{necessary effects} |NecessEffectL| which are action effects existing iff the action is over. Our action model takes the form of Jason beliefs written in an ASL file, added as input of the \acrshort{rja} Human Action Monitoring. A human action |Act| is represented as:
 \begin{lstlisting}[style=aslDef]
 actionModel(ActPred,PrecondL,MoveL,ProgEffectL,NecessEffectL).
@@ -419,14 +421,121 @@ Until know, we stayed focus on semantic knowledge going from the external \acrsh
 
 Moreover, \acrshort{jahrvis} adds the semantic data associated to a task -- agent and parameters -- to the semantic ontology.
 
-\subsection{Interaction Session Management} This process handles the interaction sessions. An interaction session is triggered when a human is close enough to start a conversation and seems willing to, \ie when the fact  \fact{isEngagedWith}{human\_i}{robot} is added to the knowledge base and sent to \acrshort{jahrvis}. In this way, the robot tries to respect people that does not want to interact with it. From there, the robot is in the first phase of the interaction session, the \textit{greetings}. The robot says hello to the human and announces the activities it can perform with them, depending on the context they are. The interaction manager triggers the tracking of the human's head by the robot head. This has two purposes: to signal the robot's engagement and to monitor the human's actions. This behavior is quite similar to the one described by~\cite{satake_2015_should}. 
+\subsection{Interaction Session Management} \todo{mettre state machine théorique que j'ai faite ? je n'ai pas redeveloppé ce module depuis mummer}
+This process handles the interaction sessions. An interaction session is triggered when a human is close enough to start a conversation and seems willing to, \ie when the fact  \fact{isEngagedWith}{human\_i}{robot} is added to the knowledge base and sent to \acrshort{jahrvis}. In this way, the robot tries to respect people that does not want to interact with it. From there, the robot is in the first phase of the interaction session, the \textit{greetings}. The robot says hello to the human and announces the activities it can perform with them, depending on the context they are. The interaction manager triggers the tracking of the human's head by the robot head. This has two purposes: to signal the robot's engagement and to monitor the human's actions. This behavior is quite similar to the one described by Satake \etal~\cite{satake_2015_should}. 
 
 An interaction session stays open as long as the human and the robot perform activities together, \ie as long as the human is engaged in the interaction. This engagement is monitored by the robot in different ways: through the predicate \fact{isEngagedWith}{human\_i}{robot} during dialogue phases outside a task and through what is happening during a task. If at some point the human is not perceived for a while or the human says goodbye, then the manager ends the session. In the latter case, the robot replies with goodbyes. Finally, it returns to its home-base if it has one.
 
 \subsection{Human Actions Monitoring}\label{chap2:subsec:h_moni}
-developed model:
-internal action model with preconditions, ongoing effects and final effects;
-state machine
+In order to coordinate properly, humans monitor each others when they are in a joint action (see Section~\ref{chap1:subsubsec:monitoring}). The robot needs the same kind of process to be able to assess if the human is doing the action of the plan it expects or not. Existing solutions exist to monitor or recognize human actions but none of them matched all our criteria which are: \todo{faire un état de l'art rapide ?}
+\begin{bulletList}
+	\item it should be easy and quick to add a new action that the robot can monitor
+	\item the process should output the action parameters
+	\item the process should give information about the action progress, \ie model the action start and progression when possible and not only the end
+	\item it needs to be robust to a potentially unreliable perception
+	\item an available open-source code 
+\end{bulletList}
+
+Thus, we implemented our own model-based solution with an \acrshort{rja} dedicated to \acrfull{ham}. It relies on the action model presented in Section~\ref{chap2:par:act_rep} which it loads at initiation. We chose to base our action monitoring process on human movements and action effects that the robot can observe. As it needs to monitor them, it extracts the predicate types corresponding to those and subscribes to updates about these facts to Ontologenius as explained in Section~\ref{chap2:subsec:know}. 
+
+Continuously, the \acrshort{ham} \acrshort{rja} monitors facts and human movements that are present in the action model, and sends to the \acrfull{hpm} \acrshort{rja} three types of lists of facts: 
+\begin{bulletList}
+	\item list of actions that may have started that we coined \emph{possibly started actions}
+	\item list of actions that may be progressing that we coined \emph{possibly progressing actions}
+	\item list of actions that are estimated as finished that we coined \emph{possibly achieved actions} 
+\end{bulletList}
+
+Action states are updated according to received facts. When the state of an action changed to \emph{possibly started}, \emph{possibly progressing} or \emph{possibly achieved}, the affected list is updated and sent to the \acrshort{hpm}. 
+
+The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap2:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Each transition is triggered by the addition or the deletion of a fact. Using Jason rules -- they are quite similar to Prolog rules, facts are analyzed to see if they match a movement or an effect of a known action. For example, if we look at the Place action example presented in Section~\ref{chap2:par:act_rep}, it expects the fact \fact{rightHandMovingTowards}{Human}{Support} as a movement. Therefore, receiving \fact{rightHandMovingTowards}{human\_4}{table\_2} will match a Place action movement, however, receiving \fact{rightHandMovingTowards}{human\_4}{milk\_bottle\_2} will not, as the milk\_bottle\_2 does not belong to the Support class (but this fact may be useful to monitor another action). 
+
+The transitions of the state machine are described in Table~\ref{chap2:tab:action_monitoring}. 
+ 
+\begin{figure}[!ht]
+	\includegraphics[width=\linewidth]{figures/chapter2/action_sm.pdf}
+	\caption{Representation of the \acrfull{ham} \acrshort{rja} in the form of a Finite State Machine representing the state of one action.}
+	\label{chap2:fig:action_monitoring}
+\end{figure}
+
+\newgeometry{left=1.5in,right=1.3in,top=1.1in,bottom=0.5in,includefoot,includehead,headheight=13.6pt}
+\begin{landscape}
+	\vspace*{\fill}
+	\begin{table}[htb!]
+	\caption{Description of the Finite State Machine shown in Figure~\ref{chap2:fig:action_monitoring}.}
+	\label{chap2:tab:action_monitoring}
+	\begin{tabularx}{\linewidth}{| c | c | c | X |}
+		Current State & Input and Condition & Next State & Explanation\\ 
+		\hline \hline
+	\multirow{4}{*}{Initial State}  & +Fact [matchActionMovement(Fact)] & Possibly Started & When a fact matching a movement for a given action is received, \acrshort{ham} computes that the human may have initiated an action\\  
+		\cline{2-4}
+		&  \makecell{+Fact [matchNecessEffect(Fact) 
+			\\ \&\& length(actionNecessEffectL)	== 1
+			\\ \&\& possibleActorExists]} & Possibly Achieved & The robot may have missed the movement or the progression effect of an action because it was not looking or the perception did not detect it. Then when a necessary effect is received and that only one exists for the action, the action is estimated as achieved if it is possible to find an agent who may have performed it.\\  
+		\cline{2-4}
+		&  \makecell{+Fact [matchNecessEffect(Fact) 
+		\\ \&\& length(matchedNecessEffectL)
+		\\ < length(actionNecessEffectL)
+		\\ \&\& possibleActorExists
+		\\ || matchProgEffect(Fact)]} & Possibly Progressing & Similarly to the case above, the robot may have missed the movement or the progression effect of an action. However, if this action has several necessary effects, the action is considered as progressing.\\  
+		\cline{2-4}
+		& \makecell{+Fact [matchRobotAction(Fact)
+		\\ || matchEffect(Fact) \&\& !possibleActorExists]} & Final State & The \acrshort{ham} is aware of the actions executing by the robot so it does not mismatched its action effects with the ones of another agent. If an effect matches, nothing happen. Likewise if an effect is detected but no agent could be found that might have done it.\\  
+		\hline 
+	\end{tabularx}
+\end{table}
+\vspace*{\fill}
+ \begin{table}[htb!]
+ 	\caption*{Table~\ref{chap2:tab:action_monitoring}: (continued)}
+	\begin{tabularx}{\linewidth}{| c | c | c | X |}
+		Current State & Input and Condition & Next State & Explanation\\ 
+		\hline \hline
+		\multirow{3}{*}{Possibly Started}  
+		& \makecell{+Fact [matchProgEffect(Fact)
+			\\ || matchNecessEffect(Fact) 
+			\\ \&\& length(actionNecessEffectL) > 1]} & Possibly Progressing & When a fact corresponding to a progression effect of the started action is received, or it matches a necessary effect but there are more than one for this action, \acrshort{ham} reinforces its estimation that this action is ongoing by setting it to the progressing state.\\  
+		\cline{2-4}
+		& \makecell{+Fact [matchNecessEffect(Fact) 
+			\\ \&\& length(matchedNecessEffectL) == 1]} & Possibly Achieved 
+		& When a fact corresponding to a necessary effect is received and that there is only one for the started action, the action is considered as achieved as the robot is able to observe its effect and that it had observed the human starting it.\\  
+		\cline{2-4}
+		& -Fact	[matchActionMovement(Fact)] & On Probation & When a movement fact is removed from the belief base without having observed an effect, it might mean that it was a false estimation and that the action is not starting. However, it might also be the robot perception being sporadic and so the action goes in this temporary state waiting for a potential coming effect.\\  
+		\hline
+	\end{tabularx}
+\end{table}
+\vspace*{\fill}
+  \begin{table}[htb!]
+  	\caption*{Table~\ref{chap2:tab:action_monitoring}: (continued)}
+	\begin{tabularx}{\linewidth}{| c | c | c | X |}
+		Current State & Input and Condition & Next State & Explanation\\ 
+		\hline \hline
+		\multirow{2}{*}{On Probation} 
+		& \makecell{+Fact [matchProgEffect(Fact)
+			\\ || matchNecessEffect(Fact)
+			\\ \&\& length(actionNecessEffectL) > 1]} & Possibly Progressing & An effect is detected and the action state is resumed.\\
+		\cline{2-4}
+		& \makecell{+Fact [matchNecessEffect(Fact) 
+			\\ \&\& length(matchedNecessEffectL) == 1]} & Possibly Achieved 
+		& A necessary effect is detected and as there is only one for this action, it is considered as achieved.\\
+		\hline
+		\multirow{2}{*}{Possibly Progressing} 
+		& \makecell{+Fact [matchNecessEffect(Fact) 
+			\\ \&\& length(matchedNecessEffectL)
+			\\ == length(actionNecessEffectL)]} & Possibly Achieved 
+		& An necessary effect is received and in total, for this action, there was as many necessary effects received as the ones defined for this action.\\
+		\cline{2-4}
+		& \makecell{+Fact [matchEffect(Fact) 
+			\\ \&\& length(matchedNecessEffectL)
+			\\ < length(actionNecessEffectL)]} & Possibly Progressing 
+		& When an action effect is received and that either it is another progressing or not the last necessary effect expected for the action, the action state remains progressing.\\  
+		\hline
+		Possibly Achieved & -- & Final State & When an action is estimated as achieved, this is its final state.\\
+		\hline
+	\end{tabularx}
+	
+\end{table}
+\vspace*{\fill}
+\end{landscape}
+\restoregeometry
 
 \subsection{Shared Plans Handling}\label{chap2:subsec:plan_handling}
 belief divergence before human action (human missed robot action)(sandra) -> com; 
@@ -515,11 +624,11 @@ We believe the real-time assessment of the Quality of Interaction (QoI) with a h
 \end{figure}
 
 The QoI of each level is computed as a score between [($1$) for a good quality] and [($-1$) for a poor one]. Metrics used to compute the QoI are divided in three categories: 
-\begin{itemize}
+\begin{bulletList}
 	\item $Mp \in [0,1]$ if it can only have a positive effect on the evaluation;
 	\item $Mn \in [-1,0]$ if a metric can only have a negative effect on the evaluation;
 	\item $M \in [-1,1]$ if a metric can have a positive or a negative effect.
-\end{itemize}
+\end{bulletList}
 
 Defined by the designer according to the needs and context, a metric can belong to one category or another depending on the target application. When needed, metrics values are scaled with the equations presented in Appendix~\ref{annex:functions}.
 

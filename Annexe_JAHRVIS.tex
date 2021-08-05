@@ -1,0 +1,77 @@
+\chapter{Code of JAHRVIS ROS-Jason Agents}\label{app:jahrvis}\todo{add colors and rules}
+
+
+\section{Human Actions Monitoring}\label{app:jahrvis:h_monitoring}
+
+
+\begin{asl}
+   
++\aslvar{NewPredicate}\annotation{[source(percept)]}\\
+\>:  \> \context{(action(\aslvar{\_30}, \aslvar{\_31}, \aslvar{Name}, \aslvar{\_32}, \aslvar{Params})\annotation{[source(robot\_executor)]} \& isPredicateRobotAction(\aslvar{NewPredicate}, \aslvar{Params}))}.\\
+\\
++\aslvar{NewPredicate}\annotation{[source(percept)]}\\
+\>:  \> \context{(isMovementRelatedToActions(\aslvar{NewPredicate}, \aslvar{ActionList}) \& (possibleStartedActions(\aslvar{ActionList2}) \& (jia.intersection\_literal\_list(\aslvar{ActionList}, \aslvar{ActionList2}, \aslvar{I}) \& ((.length(\aslvar{I})) > \aslnumber{0}))))}\\
+\><- \> \planbody{jia.update\_action\_list(possibleStartedActions, \aslvar{ActionList});\\
+    ++possibleStartedActions(\aslvar{ActionList})}\\
+\\
++\aslvar{NewPredicate}\annotation{[source(percept)]}\\
+\>:  \> \context{isMovementRelatedToActions(\aslvar{NewPredicate}, \aslvar{ActionList})}\\
+\><- \> \planbody{++possibleStartedActions(\aslvar{ActionList})}\\
+\\
++\aslvar{NewPredicate}\annotation{[source(percept)]}\\
+\>:  \> \context{(isProgressionEffect(\aslvar{NewPredicate}, \aslvar{ActionList}) \& matchingStartedActions(\aslvar{Predicate}, \aslvar{ActionList}, \aslvar{ActionList2}))}\\
+\><- \> \planbody{jia.update\_action\_list(possibleStartedActions, \aslvar{ActionList2});\\
+    ++possibleProgressingActions(\aslvar{ActionList2})}\\
+\\
++\aslvar{NewPredicate}\annotation{[source(percept)]}\\
+\>:  \> \context{isProgressionEffect(\aslvar{NewPredicate}, \aslvar{ActionList})}\\
+\><- \> \planbody{++possibleProgressingActions(\aslvar{ActionList})}\\
+\\
++\aslvar{NewPredicate}\annotation{[source(percept)]}\\
+\>:  \> \context{(isNecessaryEffect(\aslvar{NewPredicate}, \aslvar{ActionList}) \& (matchingProgressingActions(\aslvar{Predicate}, \aslvar{ActionList}, \aslvar{ActionList2}) $\lvert$ matchingStartedActions(\aslvar{Predicate}, \aslvar{ActionList}, \aslvar{ActionList2})))}\\
+\><- \> \planbody{!addFinishedActions(\aslvar{ActionList2})}\\
+\\
++!addFinishedActions(\aslvar{ActionList})\\
+\><- \> \planbody{jia.update\_action\_list(possibleStartedActions, \aslvar{ActionList});\\
+    jia.update\_action\_list(possibleProgressingActions, \aslvar{ActionList});\\
+    ++possibleFinishedActions(\aslvar{ActionList})}\\
+\\
++\aslvar{NewPredicate}\annotation{[source(percept)]}\\
+\>:  \> \context{isNecessaryEffect(\aslvar{NewPredicate}, \aslvar{ActionList2})}\\
+\><- \> \planbody{++possibleFinishedActions(\aslvar{ActionList2})}\\
+\\
++possibleStartedActions(\aslvar{ActionList})\\
+\><- \> \planbody{.send(human\_management, tell, possibleStartedActions(\aslvar{ActionList}));\\
+    .fork(or, .wait((possibleProgressingActions(\aslvar{A}) \& (jia.intersection\_literal\_list(\aslvar{A}, \aslvar{ActionList}, \aslvar{I}) \& ((.length(\aslvar{I})) > \aslnumber{0})))), .wait((possibleFinishedActions(\aslvar{A}) \& (jia.intersection\_literal\_list(\aslvar{A}, \aslvar{ActionList}, \aslvar{I}) \& ((.length(\aslvar{I})) > \aslnumber{0})))), !timeoutMovement(\aslvar{ActionList}))}\\
+\\
++!timeoutMovement(\aslvar{ActionList})\\
+\><- \> \planbody{.wait(\aslnumber{50000});\\
+    -possibleStartedActions(\aslvar{ActionList})\annotation{[add\_time(\aslvar{\_33})]}}\\
+\\
++possibleProgressingActions(\aslvar{ActionList})\\
+\><- \> \planbody{.send(human\_management, tell, possibleProgressingActions(\aslvar{ActionList}));\\
+    .fork(or, .wait((possibleFinishedActions(\aslvar{A}) \& (jia.intersection\_literal\_list(\aslvar{A}, \aslvar{ActionList}, \aslvar{I}) \& ((.length(\aslvar{I})) > \aslnumber{0})))), !timeoutProgressing(\aslvar{ActionList}))}\\
+\\
++possibleFinishedActions(\aslvar{ActionList})\\
+\><- \> \planbody{.send(human\_management, tell, possibleFinishedActions(\aslvar{ActionList}));\\
+    -possibleFinishedActions(\aslvar{ActionList})}\\
+\\
+-possibleStartedActions(\aslvar{ActionList})\\
+\><- \> \planbody{.send(human\_management, untell, possibleStartedActions(\aslvar{ActionList}))}\\
+\\
+-possibleProgressingActions(\aslvar{ActionList})\\
+\><- \> \planbody{.send(human\_management, untell, possibleProgressingActions(\aslvar{ActionList}))}\\
+\\
++!timeoutProgressing(\aslvar{ActionList})\\
+\><- \> \planbody{.wait(\aslnumber{30000});\\
+    -possibleProgressingActions(\aslvar{ActionList})\annotation{[add\_time(\aslvar{\_34})]};\\
+    .findall(possibleStartedActions(\aslvar{A}), (possibleStartedActions(\aslvar{A}) \& (jia.intersection\_literal\_list(\aslvar{A}, \aslvar{ActionList}, \aslvar{I}) \& ((.length(\aslvar{I})) > \aslnumber{0}))), \aslvar{L});\\
+    .foreach(.member(\aslvar{M}, \aslvar{L}), -\aslvar{M};\\
+    +\aslvar{M})}\\
+\\
++!drop(\aslvar{G})\\
+\><- \> \planbody{!reset}\\
+
+
+
+\end{asl}

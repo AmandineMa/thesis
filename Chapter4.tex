@@ -146,7 +146,7 @@ The four worlds we create for the Director Task and their connexions are represe
 \end{figure}
 
 The world of the middle (b) is the robot's world representation. Information from the perception worlds are merged along with the static elements, like the building walls, and the robot model. From this world, additional perception reasoning processes are applied for the objects that are no more visible in the way of~\cite{milliez_2014_framework}. If an entity is no more perceived in one of the previous worlds, we first test if it should be in the robot's FOV. If so, the robot should see it. To get an explanation of this absence, we test if another entity could hide it. If not, the object is removed from the world representation. Otherwise, we keep it as we have found an explanation.
-Once the entities are stabilised, geometric reasoners are applied to them to extract symbolic facts. In the current version of the system, the computed facts are \textit{isOnTopOf}, for an object on top of another with a direct contact, \textit{isInside}, for a block in a compartment, \textit{isVisibleBy}, assessing if an agent could see the object or not from his position, and \textit{isReachableBy}, assessing if an object can be taken by an agent. All these facts are sent to the robot's semantic knowledge base, where reasoners will deduce further facts. For example, if a block is in a compartment, thanks to inverse property \textit{hasInside} the fact that the compartment has the block inside is computed. In the same way, if this compartment is on top of the table, the block inside is computed to be above the table (\textit{isAbove)} thanks to chain axiom.
+Once the entities are stabilised, geometric reasoners are applied to them to extract symbolic facts. In the current version of the system, the computed facts are \emph{isOnTopOf}, for an object on top of another with a direct contact, \emph{isInside}, for a block in a compartment, \emph{isVisibleBy}, assessing if an agent could see the object or not from his position, and \emph{isReachableBy}, assessing if an object can be taken by an agent. All these facts are sent to the robot's semantic knowledge base, where reasoners will deduce further facts. For example, if a block is in a compartment, thanks to inverse property \emph{hasInside} the fact that the compartment has the block inside is computed. In the same way, if this compartment is on top of the table, the block inside is computed to be above the table (\emph{isAbove)} thanks to chain axiom.
 
 While the previous world corresponds to the robot's representation, the human partner cannot have the same because of the occluded compartments. The world c) thus aims at estimating the representation of the world from the partner's perspective. From the robot's world, we compute a segmentation image from the human point of view and use it as a filtered perception world. This allows us to instantiate the same world management process we used for the robot but this time for the human. In this way, we emulate their perception capability and geometric reasoning process. Symbolic facts are thus computed and sent to the human's semantic knowledge base. In the world of the bottom (c) on figure~\ref{fig:chap9_uwds}, we can see that the two blocks in the occluded compartments are not present in the human world. Here we make explicit the difference between an object that is unknown and an object that is known but not visible. We could have an interaction where the human goes to see the robot side and the robot would consequently estimate the blocks in the occluded compartments as known to the human but not visible.
 
@@ -200,12 +200,12 @@ We start this section with a Pr2 in the role of the director (0:21 in the video)
 
 Figure~\ref{fig:chap9_director} represents the entire interaction when the robot is the director. At the initial state, four blocks are visible from both agents. Describing them with all their visual features, they are:
 
-\begin{itemize}
+\begin{bulletList}
 	\item A blue block with a blue border and a green triangle
 	\item A blue block with a blue border and a green circle
 	\item A blue block with a green border and a blue triangle
 	\item A green block with a green border and a blue circle
-\end{itemize}
+\end{bulletList}
 
 Thanks to the estimation of the communication cost at task planning using the results of the REG, the robot is able to find the optimal sequence of blocks to intrust. The overall communication is thus minimized and the RE is unambiguous in each situation. In the initial state (a to b), the robot asks for the green block as only one of the visible blocks is green. Since the green block has a circle on it, removing it, only one of the remaining blocks has a circle on it. The robot can thus use this feature to refer to the next block (b to c).
 
@@ -239,7 +239,7 @@ Since the robot assumes the human to speak about objects on the table, the under
 	(?0, isA, Block), (?0, hasFigure, ?1), (?1, isA, Circle)
 \end{quote}
 
-The third instruction given by the human as the director is the most interesting for us. The human asks for \textit{``The block with a triangle''}. However, the speech to text returns \textit{``take is about to whip a triangle''}. With this sentence, the NLU module can only extract two known concepts being ``take'' and ``triangle''. Due to the limited amount of word understood, it does not try to generate a \sparql{} query. The robot thus informs the human about its incapacity and repeat the heard sentence as a back loop for the human. At the second try, the sentence is understood and gives the query:
+The third instruction given by the human as the director is the most interesting for us. The human asks for \emph{``The block with a triangle''}. However, the speech to text returns \emph{``take is about to whip a triangle''}. With this sentence, the NLU module can only extract two known concepts being ``take'' and ``triangle''. Due to the limited amount of word understood, it does not try to generate a \sparql{} query. The robot thus informs the human about its incapacity and repeat the heard sentence as a back loop for the human. At the second try, the sentence is understood and gives the query:
 
 \begin{quote} 
 	\centering 
@@ -252,7 +252,7 @@ To be proactive, we want the robot to ask precision about the block to take by p
 
 \begin{quote} 
 	\centering 
-	\textit{``Do you mean the block with a green triangle or the block with a blue triangle?''}
+	\emph{``Do you mean the block with a green triangle or the block with a blue triangle?''}
 \end{quote}
 
 When the human responds, for sure it does not generate a complete description f the block to be taken. It rather answers the question. The query extracted from his answer is thus combined with the previously understood one in case some information is missing. Matching this last query to the human's estimated ontology, the robot finally get the block to remove.
