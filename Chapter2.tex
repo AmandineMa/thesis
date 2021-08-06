@@ -447,9 +447,9 @@ Continuously, the \acrshort{ham} \acrshort{rja} monitors facts and human movemen
 
 Action states are updated according to received facts. When the state of an action changed to \emph{possibly started}, \emph{possibly progressing} or \emph{possibly achieved}, the affected list is updated and sent to the \acrshort{hpm}. 
 
-The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap2:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Each transition is triggered by the addition or the deletion of a fact. Using Jason rules -- they are quite similar to Prolog rules, facts are analyzed to see if they match a movement or an effect of a known action. For example, if we look at the Place action example presented in Section~\ref{chap2:par:act_rep}, it expects the fact \fact{rightHandMovingTowards}{Human}{Support} as a movement. Therefore, receiving \fact{rightHandMovingTowards}{human\_4}{table\_2} will match a Place action movement, however, receiving \fact{rightHandMovingTowards}{human\_4}{milk\_bottle\_2} will not, as the milk\_bottle\_2 does not belong to the Support class (but this fact may be useful to monitor another action). 
-
-The transitions of the state machine are described in Table~\ref{chap2:tab:action_monitoring}. 
+The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap2:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Each transition is triggered by the addition or the deletion of a fact. Using Jason rules -- they are quite similar to Prolog rules, facts are analyzed to see if they match a movement or an effect of a known action. For example, if we look at the Place action example presented in Section~\ref{chap2:par:act_rep}, it expects the fact \fact{rightHandMovingTowards}{Human}{Support} as a movement. Therefore, receiving \fact{rightHandMovingTowards}{human\_4}{table\_2} will match a Place action movement, however, receiving \fact{rightHandMovingTowards}{human\_4}{milk\_bottle\_2} will not, as the milk\_bottle\_2 does not belong to the Support class (but this fact may be useful to monitor another action).
+ 
+It is not shown on the Figure for clarity reasons, but each state, except Possibly achieved, has a transition to the final state which is triggered by a timeout. All the other transitions of the state machine are described in Table~\ref{chap2:tab:action_monitoring}. 
  
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/action_sm.pdf}
@@ -538,6 +538,8 @@ The transitions of the state machine are described in Table~\ref{chap2:tab:actio
 \restoregeometry
 
 \subsection{Shared Plans Handling}\label{chap2:subsec:plan_handling}
+All the developments concerning Shared Plans handling have been 
+
 belief divergence before human action (human missed robot action)(sandra) -> com; 
 inaction whereas compute human should act -> com;
 handle conditional plan (collaborative work with Guilhem Buisan) and handle agent X (two different ways);
@@ -552,6 +554,7 @@ a plan manager for the human side according to human presence/visibilities/reach
 present algo or state machine
 
 \subsubsection{Robot Resource Management}
+joint attention
 depending on the robotic platform (pepper arms+head; pr2 needs planer for action manipulation so no arm manager, only head manager)
 head manager: when robot execute an action, look the action object; when the robot speaks, look at the human. Programmed through channels.\todo{deplacer presentation dans mummer ici?}
 
