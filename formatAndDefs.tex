@@ -267,6 +267,11 @@ urlcolor=linkcol %couleur des liens pour les url
 \algnewcommand\algorithmicin{\textbf{in}}
 \algdef{S}[FOR]{ForEach}[2]{\algorithmicforeach\ #1\ \algorithmicin\ #2\ \algorithmicdo}
 
+\algnewcommand\algorithmicforkxor{\textbf{do fork-join-xor}}
+\algnewcommand\algorithmicendforkxor{\textbf{end fork-join-xor}}
+\algdef{SE}{ForkXor}{EndForkXor}{\algorithmicforkxor}{\algorithmicendforkxor}
+
+
 \usepackage{listings}
 \lstset{
 	frame=single,
@@ -305,6 +310,7 @@ urlcolor=linkcol %couleur des liens pour les url
 \usepackage{makecell}
 \usepackage{pdflscape} 
 \usepackage{mathtools}
+\usepackage[section]{placeins}
 
 %%%%%%%% my commands
 \newcommand{\etal}{\textit{et al}.}

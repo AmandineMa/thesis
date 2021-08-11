@@ -365,7 +365,7 @@ actionModel(place(Robot,[Pickable,Support]),
 				isOnTopOf(Pickable,Support)]).
 \end{lstlisting}
 
-\subsubsection{Shared Plan Representation}\label{chap2:subsubsec:shared_p}
+\subsubsection{Shared Plan Representation}\label{chap2:subsubsec:shared_p_rep}
 As explained in Section~\ref{chap2:sec:levels}, we represent Shared Plans using \acrfull{htn}. This formalism allows to deal with goal-based and situation-based activities at different levels of hierarchy such as task, subtasks -- abstract tasks using planning vocabulary -- and actions -- atomic primitive tasks -- and consequently to consider different level of granularity. For example, it may be useful to \acrshort{jahrvis} to be able to request a plan for a given abstract task which failed\footnote{This is future work.}. Another advantage is that it is easy then for the robot to communicate about subtasks and not only about actions without context. However, according to the task or the domain, the \acrshort{htn} expressiveness for this matter raises discussion. Indeed, \acrshort{htn} plans often make use of recursive abstract tasks which becomes useless for replanning because such abstract tasks have no semantic meaning (\eg an abstract task called DropAllObjects can be decomposed into a primitive task DropObject and the abstract task DropAllObjects which is itself decomposed into DropObject and DropAllObjects, etc., in this case, to say that the abstract task DropAllObjects has failed does not give a useful information). 
 
 Moreover, in the next section (see~\ref{chap2:subsec:feeding}), we show how \acrshort{jahrvis} feeds the episodic ontology, a timeline, with abstract and primitive task executions. It becomes humanly unreadable with recursive tasks. A concept such as the ``iterative task'' proposed by Martinie \etal{}~\cite{martinie_2011_structuring} would be interesting if used in a \acrshort{htn} plan for \acrshort{hri}. However, there is currently no such thing, so when manipulating such plans we have two modalities:
@@ -538,13 +538,13 @@ It is not shown on the Figure for clarity reasons, but each state, except Possib
 \restoregeometry
 
 \subsection{Shared Plans Handling}\label{chap2:subsec:plan_handling}
-In order to correctly perform collaborative tasks with humans, the robot needs to know to do them. One way is to have a planner with a domain, computing a plan at execution time based on its current knowledge about the environment and interaction. Then, the robot must be endowed with a way to manage the execution of this recipe. As we place ourselves in the context of joint action, plans manipulated by the robot are shared plans, as presented in Section~\ref{chap2:subsubsec:shared_p} (to differentiate from the ASL plans presented in Section~\ref{chap2:subsec:jason} which code all the \acrshort{rja}).
+In order to correctly perform collaborative tasks with humans, the robot needs to know to do them. One way is to have a planner with a domain, computing a plan at execution time based on its current knowledge about the environment and interaction. Then, the robot must be endowed with a way to manage the execution of this recipe. As we place ourselves in the context of joint action, plans manipulated by the robot are shared plans, as presented in Section~\ref{chap2:subsubsec:shared_p_rep} (to differentiate from the ASL plans presented in Section~\ref{chap2:subsec:jason} which code all the \acrshort{rja}).
 
 We claim that the robot ability to handle and execute shared plan is enhanced when endowed with \acrfull{tom} (see Sections~\ref{chap1:subsec:tom} and~\ref{chap1:subsec:tom_hri}), as shown by Devin~\cite{devin_2016_implemented}. It allows the robot to be aware of false beliefs or belief divergences in the human's point of view. When such things happen, it can react appropriately, either by acting or communicating. We gave the robot such ability\footnote{The robot has a first-order \acrshort{tom}, it estimates the human knowledge about the task but it does not compute what the human thinks of the robot knowledge about the task (second-order \acrshort{tom})}, \textit{via} two processes: the \acrfull{rpm} and the \acrfull{hpm} (see Figure~\ref{chap2:fig:sup_overview}). Therefore, the first one handles the robot's beliefs about the plan and the action execution while the second handles the human's beliefs about the plan and the communication with the human. The \acrshort{rja}s implementing these processes are presented in Sections~\ref{chap2:subsubsec:robot_plan} and~\ref{chap2:subsubsec:human_plan}.
 
 As we designed \acrshort{jahrvis} to be as generic as possible, it can manage different kinds of human-robot shared plans as input: (1) classical shared plans, (2) shared plans for which actions might not be allocated to an agent at planning time and objects might be referred to with a semantic query, and (3) conditional shared plans which anticipate different possibilities for the human decision/action. What we call classical shared plans are as the ones returned by \acrfull{hatp}~\cite{lallement_2014_hatp}. 
 
-The second type of shared plans is an extension of the work of Devin about postponing some decisions from planning time to execution time about the actor of some actions and some parameters~\cite{devin_2017_decisions}. In works previous to Devin, all the actions of the computed plans were
+The second type of shared plans is an extension of the work of Devin about postponing some decisions from planning time to execution time about the actor of some actions and some parameters~\cite{devin_2017_decisions}. In works previous to Devin, all the actions\footnote{We use the term action interchangeably with primitive task in this section.} of the computed plans were
 allocated and completely instantiated during plan elaboration. For example, the first action of the shared plan for a blocks building task could be: 
 \begin{lstlisting}[style=inline]
 primTask(7, "planned", "pick_place_cube", "robot", 
@@ -569,7 +569,7 @@ NOT EXISTS { ?0 isOnTopOf ?2. ?2 isA Cube }",
 \end{lstlisting}
 This allows the \acrshort{rpm} to directly request Ontologenius to get an object list matching this query and to choose among it at execution time. And, when the human performs an action with a SPARQL query as parameter, the \acrshort{hpm} can check if the object on which the human is acting matches the query. We can see that this solution brings precision compared to the one presented by Devin. Indeed, |"red_cube"| doest not tell that it should be reachable by an agent and that it should not be on the top of another cube yet but |"?0 isA Cube. ?0 hasColor red. ?0 isReachableBy ?1| |NOT EXISTS { ?0 isOnTopOf ?2. ?2 isA Cube }"| does. For example, in Devin, the reachability test was added to the plan manager of the supervisor which is task specific. 
 
-\begin{figure}[!htb]
+\begin{figure}[!htb]]
 	\centering
 	\includegraphics[width=\linewidth]{figures/chapter2/cond_plan_coffee.png}
 	\caption{A conditional plan computed by \acrshort{hatpehda}, a planner developed by Guilhem Buisan who also wrote the domain which served for this plan. The plan indicates that the robot has to ask for human help. Then, the human will either get the coffee or fill the water. Thus, at planning time, the choice of human actions is not made, but thanks to the conditional plan, both possible solutions are planned and it is up to \acrshort{jahrvis} to follow the proper one depending on the human action detected during execution.}
@@ -584,39 +584,165 @@ Finally, the last type of shared plans we manipulated is conditional plan, gener
 
 \subsubsection{Robot Plan management}\label{chap2:subsubsec:robot_plan}
 
+As explained earlier, there are two processes to manage the shared plans. One of them is the \acrfull{rpm}. It is in charge of the plan updates, maintaining the robot knowledge about the ongoing goal, and deciding which action should be performed by the robot and when. 
 
-\begin{algorithm}
+When it receives a new goal from the \acrlong{ism}, it queries the Task Planner for a plan. This plan is a sequence of abstract and primitive tasks as described in Section~\ref{chap2:subsubsec:shared_p_rep}. First, when receiving the plan, and then at each end of action execution, the abstract and primitive task states of the plan are screened in order to find the next primitive task to perform. The found ones have their state set to |todo|. The implemented algorithm to do so is presented in Algorithm~\ref{chap2:algo:UP}. 
+
+\begin{algorithm}[!htb]
 	\caption{Update of a plan}
 	\label{chap2:algo:UP}
 	\begin{algorithmic}
 		\Function{UpdatePlan}{}
-		\ForEach{primTask($i$, \algNormTextSub{State}{i},$preds_i$,$decompoOf_i$),\\\hfill State $=$ \algConst{PLANNED}$,i \in \mathbb{N}$}{planPrimTasks[]}
+		\ForEach{primTask($i$,$state_i$,$preds_i$,$decompoOf_i$),\\\hfill $state_i=$ \algConst{PLANNED}$,i \in \mathbb{N}$}{planPrimTasks}
 		\State $preds$ $\coloneqq$\textsc{FindAll}($j$) 
-		\\\hfill such as primTask($j$,\algNormTextSub{State}{j},$preds_j$,$decompoOf_i$) $\in$ planPrimTasks[],\\ \hfill $j \in preds_i$, \algNormTextSub{State}{j} $\neq$ \algConst{EXECUTED}
+		\\\hfill such as primTask($j$,$state_j$,$preds_j$,$decompoOf_i$) $\in$ planPrimTasks,\\ \hfill $j \in preds_i$, $state_j$ $\neq$ \algConst{EXECUTED}
 		\If{$preds = \emptyset$}
-		\State primTask($i$,\algConst{PLANNED},$preds_i$) 
-		\\\hfill $\coloneqq$ primTask($i$, \algConst{TODO},$preds_i$,$decompoOf_i$)
+		\State primTask($i$,\algConst{PLANNED},$preds_i$,$decompoOf_i$) 
+		\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},$preds_i$,$decompoOf_i$)
 		\State \textsc{UpdateAbstractTasksToOngoing($decompoOf_i$)}
 		\EndIf
 		\EndFor
+		\If{$\forall$ primTask($state$) $\in$ planPrimTasks, 
+			\\\hfill $state=$ \algConst{EXECUTED} or $state=$\algConst{UNPLANNED}}
+		\State Goal(\algConst{ONGOING}) $\coloneqq$ Goal(\algConst{SUCCEEDED})
+		\EndIf
 		\EndFunction
-	\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-	\caption{Update of abstract tasks on action update}
-	\label{chap2:algo:UATO}
-	\begin{algorithmic}
+		\Statex
 		\Function{UpdateAbstractTasksToOngoing}{$i$}
-		\If{$\exists$ abstractTask($i$,\algNormTextSub{State}{i},$decompoOf_i$) and State $=$ \algConst{PLANNED}}
-		\State abstractTask($i$,\algConst{PLANNED},$decompoOf_i$) $\coloneqq$ abstractTask($i$,\algConst{ONGOING},$decompoOf_i$)
-		\State \textsc{UpdateAbstractTasksToOngoing($decompoOf_i$)}
+		\If{$\exists$ abstractTask($i$,$state$,$decompoOf$) and $state=$ \algConst{PLANNED}}
+		\State abstractTask($i$,\algConst{PLANNED},$decompoOf$) $\coloneqq$ abstractTask($i$,\algConst{ONGOING},$decompoOf$)
+		\State \textsc{UpdateAbstractTasksToOngoing($decompoOf$)}
 		\EndIf
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}
 
+As we used Jason, a process can react to events (see Section~\ref{chap2:subsec:jason}). Every abstract or primitive task state update triggers an event. We represented what happened when a primitive task is updated to |todo| in Algorithm~\ref{chap2:algo:todo}. There are three possible cases, either an action is to be performed by the human, or the robot, or it is undefined which is represented by the AgentX. 
 
+When an action should be performed by the human and if the robot does not have an action to do at the same time, the robot has to monitor them, or rather the parameters of their action, in order to be aware of what they are doing. To monitor, robot can use several modalities when they exist. Indeed, it can monitor with the camera on its head but also with a (lidar) scanner for example. As the most important thing for the \acrshort{rpm} is to monitor parameters and not how to monitor them, it sends to a component in charge of the robot resources the objects of interest for the given action. For now, only one parameter among the parameter list is selected to be monitored. The function to select this object of interest among the action parameters is simple, we take the first of the list, but it could be refined. Or, as explained earlier, parameters can be in the form of SPARQL queries. If it is the case, the robot chose to monitor the human closest one among the ones returned by Ontologenius. Then, it waits an update on the action state -- which is updated by the \acrfull{hpm} and then sent to the \acrshort{rpm}.
+
+
+\begin{algorithm}[!htb]
+	\caption{Event action todo}
+	\label{chap2:algo:todo}
+	\begin{algorithmic}
+	\Function{On}{primTask($i$,\algConst{TODO},$name$,$agent$,$params$)}
+	\If{$agent \in$ Human and $name \in$ PhysicalAction}
+	\State $p \coloneqq$ \textsc{ChooseObjectToMonitor($params$)}
+	\State \textsc{SetMonitorObject($p$)}
+	\State \textsc{WaitForPrimTaskStateToChange($i$)}
+	\ElsIf{$agent \in$ Robot or $agent \in$ AgentX}
+		\If{$\exists p \in params, p$ is a SPARQL query}
+		\State $electedAgent,newParams\coloneqq$
+		\\\hfill \textsc{InstantiateParams}(primTask($i$,$state$,$name$,$agent$,$params$))
+		\State $params \coloneqq newParams$
+		\EndIf
+		\If{$electedAgent \neq \varnothing$}
+			\State primTask($i$,\algConst{TODO},$name$,$agent$,$params$) 
+			\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},$agents[0]$,$params$)\Comment{Triggers a new \textsc{On} function}
+		\Else
+			\State \textsc{AllocatePrimTask}(primTask($i$,$state$,$name$,$agent$,$params$))
+			\If{$agent \notin$ Human}
+			 \State \textsc{SendMessage}(ActionExecutionManager,primTask($i$,$name$,$agent$,$params$))
+			 \EndIf
+		\EndIf
+	\EndIf
+	\EndFunction
+	\Statex
+	\Function{InstantiateParams}{primTask($i$,$state$,$name$,$agent$,$params$)}
+	\ForEach{$p$}{$params$}
+	\If{$p$ is a SPARQL query}
+		\State $sparqlQ \coloneqq$ \textsc{SparqlToElementList($p$)} \Comment{$sparqlQ$ is a list of list. }
+		\State $electedAgent = \varnothing$
+		\If{$\exists a_i \in sparqlQ, a_i \in $Agent and  $a_i$ is unique}
+			\State $electedAgent \coloneqq a_i$
+		\EndIf
+		\State add $sparqlQ$ in $newParams$
+	\Else
+		\State add $p$ in $newParams$
+	\EndIf
+	\EndFor
+	\State \Return $electedAgent,newParams$
+	\EndFunction
+	\algstore{todo}
+\end{algorithmic}
+\end{algorithm}
+
+When an action should be performed by the robot or the AgentX, first it needs to check if all action parameters are already instantiated and not a SPARQL request. When a parameter is a SPARQL request, it queries Ontologenius to get all the objects matching it, and eventually, the agents, in the form of a list of list. For example, if the SPARQL request is |?0 isA Cube. ?0 hasColor green|, then the result could be |[[cube\_1],[cube\_2]]|. Or, in case where there is another element in addition to the object, such as an agent, \eg |?0 isA Cube. ?0 hasColor green. ?0 isReachableBy ?1|, the result could be |[[cube\_1,robot],[cube\_2,human]]|. Sometimes, an agent action is allocated to the AgentX but the environment may have changed since planning time. Then, there may be one agent only, either the human or the robot, returned in the object list. In this case, the agent action value is updated with this agent. Next, the action has to be allocated to an agent. If the agent value corresponds to the robot, the only thing to do is to select the parameters to execute the action in case some of them are object list. For now the function is simple, the robot choses the first one of the list. If the agent value corresponds to the AgentX, then the \acrshort{rpm} checks if another action exists with the same parameters and the |todo| state. Indeed, the human cannot perform two actions at the same time so the \acrshort{rpm} can allocated one to the robot. In case there is no other action, as we think the robot as a human helper, it should leave the choice to them if they want to perform the action or not. Devin showed that naive users preferred when the robot asked them what they wanted to do~\cite{devin_2017_decisions} but it has been shown that regular users preferred when a robot adapted to them\todo{add ref}. Therefore, we chose the adaptive option, where the robot waits a few seconds to see if the human starts to perform the action. If they do, the action is allocated to the human and if they do not, the \acrshort{rpm} allocates the action to the robot. Finally, when an action was allocated to the robot, it is sent to the \acrlong{aem} that will handle the action execution as indicated by its name.
+
+\begin{algorithm}[!htb]
+	\ContinuedFloat
+	\caption{Event action todo (continued)}
+	\begin{algorithmic}
+	\algrestore{todo}
+	\Function{AllocatePrimTask}{primTask($i$,$state$,$name$,$agent$,$params$)}
+		\If{$agent \in $Robot or 
+			\\\hfill $\exists$ primTask($j$,$state$,$name$,$agent$,$params$), $state=$ \algConst{TODO}, $j \neq i$,$agent \in$ AgentX)} 
+			\State \textsc{AllocatePrimTaskToRobot($i$,\algConst{TODO},$name$,$agent$,$params$)}
+		\Else
+			\While{$t_{current} < T_{max\_wait}$ or  (($state=$\algConst{ONGOING} or $state=$\algConst{EXECUTED}) \\\hfill and $agent \in$ Human)}\\\Comment{The Human Plan Manager can send a message to update the status of primTask($i$)}
+			\EndWhile
+			\If{$agent \notin$ Human}
+				\State \textsc{AllocatePrimTaskToRobot($i$,\algConst{TODO},$name$,$agent$,$params$)}
+			\EndIf
+		\EndIf
+	\EndFunction
+	\Statex
+	\Function{AllocatePrimTaskToRobot}{$i$,$state$,$name$,$agent$,$params$}
+	\ForEach{$p$}{$params$}
+		\State \textsc{SelectParams($params$)}
+		\State primTask($i$,\algConst{TODO},$name$,$agent$,$params$) 
+		\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},robot,$params$)
+	\EndFor
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+
+We represented what happened when a primitive task is updated to |executed| in Algorithm~\ref{chap2:algo:executed}. As explained above, the manipulated plans can be conditional plans. Thus, at the end of each action execution, the \acrshort{rpm} looks for if actions of other branches exist. First, it tries to find if the agent and predecessors of the action which just finished are the same than the one another action. If it is the case, all the abstract and primitive task descendant of this found action are set |unplanned|. 
+
+\begin{algorithm}[!htb]
+	\caption{Event action executed}
+	\label{chap2:algo:executed}
+	\begin{algorithmic}
+	\Function{On}{primTask($i$,\algConst{EXECUTED},$name$,$agent$,$params$,$preds$,$decompoOf$)}
+		\State \textsc{EndObjectMonitoring($params$)}
+		\State \textsc{RemoveParallelBranches($agent$,$preds$)}
+		\State \textsc{UpdateAbstractTasksToExecuted($decompoOf$,\algConst{EXECUTED})}
+		\State \textsc{UpdatePlan} \Comment{see Algorithm~\ref{chap2:algo:UP}}
+	\EndFunction
+	\Statex
+	\Function{RemoveParallelBranches}{$agent$,$preds$}
+		\State $primTasksToUnplan \coloneqq$ \textsc{FindAll}(primTask) 
+		\\\hfill with same $agent$ and $preds$, and ($state=$\algConst{TODO} or $state=$\algConst{SUSPENDED}) 
+		\State \textsc{removePrimTasks}($primTasksToUnplan$)
+	\EndFunction
+	\Statex
+	\Function{removePrimTasks}{$primTasksToUnplan$}
+		\ForEach{primTask}{$primTasksToUnplan$}
+			\State primTask($i$,$state$,$name$,$agent$,$params$,$preds$,$decompoOf$) 
+			\\\hfill $\coloneqq$ primTask($i$,\algConst{UNPLANNED},$name$,$agent$,$params$,$preds$,$decompoOf$)
+			\State \textsc{UpdateAbstractTasksToExecuted($decompoOf$,\algConst{UNPLANNED})}
+			\State \textsc{RemoveChild($i$)}
+		\EndFor
+	\EndFunction
+	\Statex
+	\Function{RemoveChild}{$i$}
+		\State $primTasksToUnplan \coloneqq$ \textsc{FindAll}(primTask($j$)) where $i \in preds_j$ 
+		\State \textsc{removePrimTasks}($primTasksToUnplan$)
+	\EndFunction
+	\Statex
+	\Function{UpdateAbstractTasksToExecuted}{$i$,$stateToSet$}
+		\If{$\exists$ (abstractTask($i$,$state$,$decompoOf$) or  primTask($i$,$state$,$decompoOf$)) and 
+			\\\hfill ($state=$ \algConst{EXECUTED} or $state=$ \algConst{UNPLANNED})}
+			\State abstractTask($i$,\algConst{PLANNED},$decompoOf$) $\coloneqq$ abstractTask($i$,$stateToSet$,$decompoOf$)
+			\State \textsc{UpdateAbstractTasksToExecuted($decompoOf$,$stateToSet$)}
+		\EndIf
+	\EndFunction	
+	\end{algorithmic}
+\end{algorithm}		
+
+\clearpage
 \subsubsection{Human Plan management}\label{chap2:subsubsec:human_plan}
 belief divergence before human action (human missed robot action)(sandra) -> com; 
 inaction whereas compute human should act -> com;
