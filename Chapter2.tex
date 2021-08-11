@@ -266,7 +266,7 @@ For each processes (in blue in Figure~\ref{chap2:fig:sup_overview}), we implemen
 Not all \acrshort{rja}s are active at each level of interaction defined in Section~\ref{chap2:sec:levels}. Indeed, as its name suggests, the \textit{Interaction Session Manager} handles interaction sessions. The \textit{Robot} and \textit{Human Plan Managers} handle the task level. And, the \textit{Action Execution Manager} and the \textit{\acrlong{ham}} are in charge of the action level. The \textit{QoI Evaluator} and the \textit{Communication Manager} are active at all levels. We can also make the distinction between the component dedicated to the assessment of the quality of interaction, \ie the QoI Evaluator, and the components dedicated to the decision-making and control, \ie all the components except the QoI Evaluator.
 
 
-\section{A robot controlling its contribution to a human-robot joint action}\label{chap2:sec:control}
+\section{A robot controlling its contribution to a human-robot joint action}\label{chap2:sec:control}\todo{related work}
 
 The objective of this section is to present the \acrshort{jahrvis} processes involved in the decision-making and the control of the robot when jointly interacting with a human. First, we present the knowledge representations used, then the Interaction Session Manager, the Human Actions Monitoring, the Shared Plans Handling composed of two processes, one for the robot and one for the human, the Action Execution Manager, and finally the Communication Manager.
 
@@ -279,7 +279,7 @@ Ontologenius allows to store common-sense knowledge (\eg a cube is an object), k
 
 To access to the knowledge stored in Ontologenius, \acrshort{jahrvis} can make a request to know if a given fact exists or ask an information about a class, a property or an object instantiation. Another way is to subscribe to updates (addition or deletion) for a given fact. It is useful to keep updates about the environment and avoid to be snowed under too much data (\eg to monitor human place actions, \acrshort{jahrvis} needs \textit{isOnTopOf} but not \textit{isUnder} so \acrlong{ham} can subscribe to updates about this first fact). It is possible to either specify the class or individual of the subjects/objects that should be concerned by the subscription, or to receive every facts (\eg it can subscribe to receive additions of the human looking at the robot |[add]human_0$\lvert$isLookingAt$\lvert$robot| or to receive all updates about every objects that the human looks at |[?]human_0$\lvert$isLookingAt$\lvert$?|).
 
-\subsubsection{Action Representations}
+\subsubsection{Action Representations}\label{chap2:subsubsec:action_rep}
 Action representations allow the robot to recognize actions, to execute actions, to monitor the human monitoring its actions and to communicate about them. We defined three of them. We chose to have one stored in Ontologenius to benefit from the reasoning features and to have the two others written in an ASL file to benefit from Jason reasoning features.
 
 \paragraph{External Representation}
@@ -365,7 +365,7 @@ actionModel(place(Robot,[Pickable,Support]),
 				isOnTopOf(Pickable,Support)]).
 \end{lstlisting}
 
-\subsubsection{Shared Plan Representation}
+\subsubsection{Shared Plan Representation}\label{chap2:subsubsec:shared_p}
 As explained in Section~\ref{chap2:sec:levels}, we represent Shared Plans using \acrfull{htn}. This formalism allows to deal with goal-based and situation-based activities at different levels of hierarchy such as task, subtasks -- abstract tasks using planning vocabulary -- and actions -- atomic primitive tasks -- and consequently to consider different level of granularity. For example, it may be useful to \acrshort{jahrvis} to be able to request a plan for a given abstract task which failed\footnote{This is future work.}. Another advantage is that it is easy then for the robot to communicate about subtasks and not only about actions without context. However, according to the task or the domain, the \acrshort{htn} expressiveness for this matter raises discussion. Indeed, \acrshort{htn} plans often make use of recursive abstract tasks which becomes useless for replanning because such abstract tasks have no semantic meaning (\eg an abstract task called DropAllObjects can be decomposed into a primitive task DropObject and the abstract task DropAllObjects which is itself decomposed into DropObject and DropAllObjects, etc., in this case, to say that the abstract task DropAllObjects has failed does not give a useful information). 
 
 Moreover, in the next section (see~\ref{chap2:subsec:feeding}), we show how \acrshort{jahrvis} feeds the episodic ontology, a timeline, with abstract and primitive task executions. It becomes humanly unreadable with recursive tasks. A concept such as the ``iterative task'' proposed by Martinie \etal{}~\cite{martinie_2011_structuring} would be interesting if used in a \acrshort{htn} plan for \acrshort{hri}. However, there is currently no such thing, so when manipulating such plans we have two modalities:
@@ -538,18 +538,88 @@ It is not shown on the Figure for clarity reasons, but each state, except Possib
 \restoregeometry
 
 \subsection{Shared Plans Handling}\label{chap2:subsec:plan_handling}
-All the developments concerning Shared Plans handling have been 
+In order to correctly perform collaborative tasks with humans, the robot needs to know to do them. One way is to have a planner with a domain, computing a plan at execution time based on its current knowledge about the environment and interaction. Then, the robot must be endowed with a way to manage the execution of this recipe. As we place ourselves in the context of joint action, plans manipulated by the robot are shared plans, as presented in Section~\ref{chap2:subsubsec:shared_p} (to differentiate from the ASL plans presented in Section~\ref{chap2:subsec:jason} which code all the \acrshort{rja}).
 
+We claim that the robot ability to handle and execute shared plan is enhanced when endowed with \acrfull{tom} (see Sections~\ref{chap1:subsec:tom} and~\ref{chap1:subsec:tom_hri}), as shown by Devin~\cite{devin_2016_implemented}. It allows the robot to be aware of false beliefs or belief divergences in the human's point of view. When such things happen, it can react appropriately, either by acting or communicating. We gave the robot such ability\footnote{The robot has a first-order \acrshort{tom}, it estimates the human knowledge about the task but it does not compute what the human thinks of the robot knowledge about the task (second-order \acrshort{tom})}, \textit{via} two processes: the \acrfull{rpm} and the \acrfull{hpm} (see Figure~\ref{chap2:fig:sup_overview}). Therefore, the first one handles the robot's beliefs about the plan and the action execution while the second handles the human's beliefs about the plan and the communication with the human. The \acrshort{rja}s implementing these processes are presented in Sections~\ref{chap2:subsubsec:robot_plan} and~\ref{chap2:subsubsec:human_plan}.
+
+As we designed \acrshort{jahrvis} to be as generic as possible, it can manage different kinds of human-robot shared plans as input: (1) classical shared plans, (2) shared plans for which actions might not be allocated to an agent at planning time and objects might be referred to with a semantic query, and (3) conditional shared plans which anticipate different possibilities for the human decision/action. What we call classical shared plans are as the ones returned by \acrfull{hatp}~\cite{lallement_2014_hatp}. 
+
+The second type of shared plans is an extension of the work of Devin about postponing some decisions from planning time to execution time about the actor of some actions and some parameters~\cite{devin_2017_decisions}. In works previous to Devin, all the actions of the computed plans were
+allocated and completely instantiated during plan elaboration. For example, the first action of the shared plan for a blocks building task could be: 
+\begin{lstlisting}[style=inline]
+primTask(7, "planned", "pick_place_cube", "robot", 
+["red_cube_1", "placement_1"], [4], 6).
+\end{lstlisting}
+We re-implemented her idea of \emph{Agent X} in our plan managers (with some modifications, for example we do not replan once an action is allocated), enabling the choice of the agent who should perform the action at execution time when the planner has computed that both agents could do it. So we can have the planner returning:
+\begin{lstlisting}[style=inline]
+primTask(7, "planned", "pick_place_cube", "AgentX", 
+["red_cube_1", "placement_1"], [4], 6).
+\end{lstlisting} 
+In this case, according to what the robot estimates the human wants to do, the robot can allocate the action to itself or to them. Moreover, she introduced the use of the notion of object similarity: two similar objects will have the same role in the task. With this modification, the first action of the shared plan becomes
+\begin{lstlisting}[style=inline]
+primTask(7, "planned", "pick_place_cube", "robot", 
+["red_cube", "placement"], [4], 6).
+\end{lstlisting}
+To have more expressiveness, we brought a new modification to the plan returned by \acrshort{hatp}, in collaboration with Guillaume Sarthou. Indeed, instead of returning an object generic name, it returns a SPARQL query with the constraints used in the domain. Thus, keeping the same example as previously, the action becomes
+\begin{lstlisting}[style=inline]
+primTask(7, "planned", "pick_place_cube", "robot", 
+["?0 isA Cube. ?0 hasColor red. ?0 isReachableBy ?1 
+NOT EXISTS { ?0 isOnTopOf ?2. ?2 isA Cube }", 
+"placement"], [4], 6).
+\end{lstlisting}
+This allows the \acrshort{rpm} to directly request Ontologenius to get an object list matching this query and to choose among it at execution time. And, when the human performs an action with a SPARQL query as parameter, the \acrshort{hpm} can check if the object on which the human is acting matches the query. We can see that this solution brings precision compared to the one presented by Devin. Indeed, |"red_cube"| doest not tell that it should be reachable by an agent and that it should not be on the top of another cube yet but |"?0 isA Cube. ?0 hasColor red. ?0 isReachableBy ?1| |NOT EXISTS { ?0 isOnTopOf ?2. ?2 isA Cube }"| does. For example, in Devin, the reachability test was added to the plan manager of the supervisor which is task specific. 
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\linewidth]{figures/chapter2/cond_plan_coffee.png}
+	\caption{A conditional plan computed by \acrshort{hatpehda}, a planner developed by Guilhem Buisan who also wrote the domain which served for this plan. The plan indicates that the robot has to ask for human help. Then, the human will either get the coffee or fill the water. Thus, at planning time, the choice of human actions is not made, but thanks to the conditional plan, both possible solutions are planned and it is up to \acrshort{jahrvis} to follow the proper one depending on the human action detected during execution.}
+	\label{chap2:fig:cond_plan_coffee}
+\end{figure}
+
+Finally, the last type of shared plans we manipulated is conditional plan, generated by \acrfull{hatpehda}~\cite{buisan_2021_human}. It is another mean to postpone decision at execution time about an agent actor or parameters. We focused on plans where branch junctions concern human decision. For example, in Figure~\ref{chap2:fig:cond_plan_coffee}, is shown a conditional plan computed by \acrshort{hatpehda}. The plan indicates that the robot has to ask for human help. Then, the human will either get the coffee or fill the water. Thus, at planning time, the choice of human actions is not made, but thanks to the conditional plan, both possible solutions are planned and it is up to \acrshort{jahrvis} to follow the proper one depending on the human action detected during execution.
+
+\acrshort{jahrvis} could be used to execute plans from other \acrshort{htn} planners than \acrshort{hatp} and \acrshort{hatpehda} by adding a Java class to format abstract and primitive tasks as presented in Section~\ref{chap2:subsubsec:action_rep} -- \acrshort{hatp} and \acrshort{hatpehda} have a dedicated Java class each, for action formatting, but their plans are handled with the same code in the plan managers.
+
+\todo{replan}
+
+\subsubsection{Robot Plan management}\label{chap2:subsubsec:robot_plan}
+
+
+\begin{algorithm}
+	\caption{Update of a plan}
+	\label{chap2:algo:UP}
+	\begin{algorithmic}
+		\Function{UpdatePlan}{}
+		\ForEach{primTask($i$, \algNormTextSub{State}{i},$preds_i$,$decompoOf_i$),\\\hfill State $=$ \algConst{PLANNED}$,i \in \mathbb{N}$}{planPrimTasks[]}
+		\State $preds$ $\coloneqq$\textsc{FindAll}($j$) 
+		\\\hfill such as primTask($j$,\algNormTextSub{State}{j},$preds_j$,$decompoOf_i$) $\in$ planPrimTasks[],\\ \hfill $j \in preds_i$, \algNormTextSub{State}{j} $\neq$ \algConst{EXECUTED}
+		\If{$preds = \emptyset$}
+		\State primTask($i$,\algConst{PLANNED},$preds_i$) 
+		\\\hfill $\coloneqq$ primTask($i$, \algConst{TODO},$preds_i$,$decompoOf_i$)
+		\State \textsc{UpdateAbstractTasksToOngoing($decompoOf_i$)}
+		\EndIf
+		\EndFor
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+	\caption{Update of abstract tasks on action update}
+	\label{chap2:algo:UATO}
+	\begin{algorithmic}
+		\Function{UpdateAbstractTasksToOngoing}{$i$}
+		\If{$\exists$ abstractTask($i$,\algNormTextSub{State}{i},$decompoOf_i$) and State $=$ \algConst{PLANNED}}
+		\State abstractTask($i$,\algConst{PLANNED},$decompoOf_i$) $\coloneqq$ abstractTask($i$,\algConst{ONGOING},$decompoOf_i$)
+		\State \textsc{UpdateAbstractTasksToOngoing($decompoOf_i$)}
+		\EndIf
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+
+\subsubsection{Human Plan management}\label{chap2:subsubsec:human_plan}
 belief divergence before human action (human missed robot action)(sandra) -> com; 
 inaction whereas compute human should act -> com;
-handle conditional plan (collaborative work with Guilhem Buisan) and handle agent X (two different ways);
-extension of Sandra work about agent X with generic object in sparql language (collaborative work with Guillaume Sarthou); 
-replan
-can work with different HTN-like planer (and others?) after formating with java class. Integration with two planers (tested and working)
-\subsubsection{Robot Plan management}
-a plan manager for the robot side; 
-present algo or state machine
-\subsubsection{Human Plan management}
 a plan manager for the human side according to human presence/visibilities/reachabilities;
 present algo or state machine
 
