@@ -9,7 +9,7 @@
 \faketableofcontents
 \fi
 
-\chapter{Human, Robot and Interaction Models: the Funding Principles of a Decision-Making System for Human-Robot Collaboration}
+\chapter{Human, Robot and Interaction Models: the Funding Principles of a Decision-Making System for Human-Robot Collaboration}\todo{liant entre parties}
 \label{chapter:chap1}
 \chaptermark{Human, Robot and Interaction Models}
 \minitoc
@@ -222,7 +222,7 @@ Tomasello \etal{} refer to shared intentionality (``we'' intentionality) and joi
 
 Cohen and Levesque took their inspiration from Bratman's definition of shared intention is their view of joint intention for artificial agents, considering joint intention as a future-directed \emph{joint commitment} to perform a collective action while in a joint (or shared) mental state.
 
-\subsubsection{Joint Commitment}
+\subsubsection{Joint Commitment}\label{chap1:subsubsec:joint_commit}
 Commitments can be understood as ``a triadic relation among two agents and an action, where one of the agents is obligated to perform the action as a result of having given an assurance to the other agent that she would do so, and of the other agent’s having acknowledged that assurance under conditions of common knowledge''~\cite[p.~756]{michael_2017_commitment}. Commitments are not necessarily established through promises or even explicit verbal communication~\cite{ledyard_1994_public, scanlon_2000_we, siposova_2018_communicative}, however, this basic definition allows us to see the fundamental component of a commitment. But why are commitments important for joint action?
 
 In philosophy and psychology, many authors have emphasized the importance of commitments for joint action such as Cohen and Levesque~\cite{cohen_1991_teamwork}, Clark~\cite{clark_2006_social}, Gilbert~\cite{gilbert_2009_shared}, Bratman~\cite{bratman_2014_shared}, Michael and Pacherie~\cite{michael_2015_commitments}, Roth~\cite{roth_2014_shared} or Siposova \etal~\cite{siposova_2018_communicative}. 
@@ -422,7 +422,7 @@ Finally, there is the architecture developed and implemented by Lemaignan and co
 \end{bulletList}
 
 
-\subsection{Supervision for Human-Robot Interactions}
+\subsection{Supervision for Human-Robot Interactions}\label{chap1:subsec:state_art_sup}
 The supervision component is the binder of a robotic architecture. Without it, there is no task, no interaction happening. Indeed, what we define by `supervision' is the higher level of the architecture, the process involving decision-making, eventually based on plans, and action execution and monitoring. When speaking about joint action, we think it is the component that should handle coordination, communication, monitoring, repair strategies and eventually joint attention and common ground alignment, based on shared representations.
 
 We can find in the literature multiple works proposing components with a part of these features. The ones that we will present have been a source of inspiration, from far or close, for the contributions of this manuscript. We will start with the oldest one, Shary, which has been developed in our laboratory. It is a component dedicated to supervision for human-robot interactions, with a strong emphasis on communication, allowing to execute shared plans and to monitor human and robot actions~\cite{clodic_2009_shary}. Chaski is a task-level executor, focusing on coordination and decision-making. It takes as input shared plans with deadlines and minimize the human idle time when executing of this plans~\cite{shah_2011_improved}. There is also Pike an online executive that unifies intention recognition and plan adaptation to deal with temporal uncertainties during Shared Plan execution~\cite{karpas_2015_robust}. G\"{o}r\"{u}r and colleagues developed a robot able to handle unexpected human behavior, the first one being the human doing an action irrelevant to the task and the second one being the human not wanted the robot assistance~\cite{gorur_2017_toward, gorur_2018_social}. For this, they developed a human model and have a monitoring of human's actions and endow the robot with the abilities to be reactive and proactive. Similarly, Baraglia \etal{} proposed a reactive and proactive robot, being able to help when requested by the human or when detected~\cite{baraglia_2017_efficient}. Iocchi \etal{} presented a framework which generate and execute robust plans for service robots~\cite{iocchi_2016_practical}. It allows to not explicitly represent all possible situations would face (\eg low battery means the robot should not navigate) and also to face unpredicted situations where an action failed with no alternative solutions. They implemented it by separating the state variables needed at both planning and execution and the one needed at execution time only. Finally, Devin \etal{} implemented a supervisor allowing the robot to estimate the human's mental state about the environment and the states of the goals, plans and actions, while executing shared plans~\cite{devin_2016_implemented}.
