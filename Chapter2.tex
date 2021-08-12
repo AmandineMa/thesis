@@ -64,7 +64,7 @@ The Situation Assessment has two roles:
 	\item estimate the human's perspective and build an estimation of their world representation; it is the first step allowing to implement the theory of mind principles \cite{baron_1985_does}
 \end{enumerate}
 
-Thus, the Situation Assessment outputs data, which we call \textit{symbolic facts}, such as \fact{isOnTopOf}{cube\_1}{cube\_3} or \fact{isReachableBy}{cube\_2}{human\_0}.
+Thus, the Situation Assessment outputs data, which we call \textit{symbolic facts}, such as \fact{isOnTopOf}{cube\_1}{cube\_3} or \fact{isReachableBy}{cube\_2}{human\_0}. The first element of this triplet is called the property, the second one is the subject and the last one is the object.
 
 \subsection{Knowledge Base}
 
@@ -450,7 +450,7 @@ This process handles the interaction sessions. An interaction session is trigger
 An interaction session stays open as long as the human and the robot perform activities together, \ie as long as the human is engaged in the interaction. This engagement is monitored by the robot in different ways: through the predicate \fact{isEngagedWith}{human\_i}{robot} during dialogue phases outside a task and through what is happening during a task. If at some point the human is not perceived for a while or the human says goodbye, then the manager ends the session. In the latter case, the robot replies with goodbyes. Finally, it returns to its home-base if it has one.
 
 \subsection{Human Actions Monitoring}\label{chap2:subsec:h_moni}
-In order to coordinate properly, humans monitor each others when they are in a joint action (see Section~\ref{chap1:subsubsec:monitoring}). The robot needs the same kind of process to be able to assess if the human is doing the action of the plan it expects or not. Existing solutions exist to monitor or recognize human actions but none of them matched all our criteria which are: \todo{faire un état de l'art rapide ?}
+In order to coordinate properly, humans monitor each others when they are in a joint action (see Section~\ref{chap1:subsubsec:monitoring}). The robot needs the same kind of process to be able to assess if the human is doing the action of the plan it expects or not. Existing solutions exist to monitor or recognize human actions but none of them matched all our criteria which are: \todo{faire un état de l'art rapide}
 \begin{bulletList}
 	\item it should be easy and quick to add a new action that the robot can monitor
 	\item the process should output the action parameters
@@ -472,7 +472,7 @@ Action states are updated according to received facts. When the state of an acti
 
 The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap2:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Each transition is triggered by the addition or the deletion of a fact. Using Jason rules -- they are quite similar to Prolog rules, facts are analyzed to see if they match a movement or an effect of a known action. For example, if we look at the Place action example presented in Section~\ref{chap2:par:act_rep}, it expects the fact \fact{rightHandMovingTowards}{Human}{Support} as a movement. Therefore, receiving \fact{rightHandMovingTowards}{human\_4}{table\_2} will match a Place action movement, however, receiving \fact{rightHandMovingTowards}{human\_4}{milk\_bottle\_2} will not, as the milk\_bottle\_2 does not belong to the Support class (but this fact may be useful for monitoring another action).
  
-It is not shown on the Figure for clarity reasons, but each state, except Possibly achieved, has a transition to the final state which is triggered by a timeout. All the other transitions of the state machine are described in Table~\ref{chap2:tab:action_monitoring}. 
+It is not shown on the Figure for clarity reasons, but each state, except Possibly achieved, has a transition to the final state which is triggered by a timeout. Currently, this timeout is the same for each action but as every action type might be of different lasting, a timeout could be specifically set for each one. All the other transitions of the state machine are described in Table~\ref{chap2:tab:action_monitoring}. 
  
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/action_sm.pdf}
@@ -560,6 +560,12 @@ It is not shown on the Figure for clarity reasons, but each state, except Possib
 \end{landscape}
 \restoregeometry
 
+When the software starts, the \acrshort{ham} extracts from the internal action representation presented in Section~\ref{chap2:subsubsec:action_rep}, all the types of facts that should be monitored. Then, it queries Ontologenius to send it each updates about these facts. Thus, when the robot designers decide that a new action should be recognized by the robot, the only thing to add is the action model in \acrshort{jahrvis} belief base.
+
+Moreover, sometimes new facts are actually effects of robot actions. In order to avoid that robot actions are mistaken for human ones, the \acrfull{aem} warns the \acrshort{ham} when the robot executes an action. 
+
+Finally, all the functions to check if a new fact update matches an action effect are Jason rules. They rely on Ontologenius as there is a need to compare the predicate object and subject expected classes of an action effect with the received ones.
+
 \subsection{Shared Plans Handling}\label{chap2:subsec:plan_handling}
 In order to correctly perform collaborative tasks with humans, the robot needs to know how to do them. One way is to have a planner with a domain, computing a plan at execution time based on its current knowledge about the environment and interaction. Then, the robot must be endowed with a way to manage the execution of this recipe. As we place ourselves in the context of joint action, plans manipulated by the robot are shared plans, as presented in Section~\ref{chap2:subsubsec:shared_p_rep} (to differentiate from the ASL plans presented in Section~\ref{chap2:subsec:jason} which code all the \acrshort{rja}).
 
@@ -604,9 +610,11 @@ Finally, the last type of shared plans we manipulated is conditional plan, gener
 
 \acrshort{jahrvis} could be used to execute plans from other \acrshort{htn} planners than \acrshort{hatp} and \acrshort{hatpehda} by adding a Java class to format abstract and primitive tasks as presented in Section~\ref{chap2:subsubsec:action_rep} -- \acrshort{hatp} and \acrshort{hatpehda} have a dedicated Java class each, for action formatting, but their plans are handled with the same code in the plan managers.
 
+Now, we will present the two processes in charge of the shared plan management, one to handle the plan on the robot side, \ie its updates and the action execution, and the other one to handle the estimated human mental states about the shared plan. When either the robot or the human starts and finishes an action execution, facts corresponding to these events, are added to Ontologenius and Mementar to keep track of what happened during the interaction. It also registers the data about the abstract task. Then, a component of the robotic architecture used to generate communication about elements, the \acrfull{reg}, can use such information when querying by \acrshort{jahrvis} to refer to the past (\eg ``the cube you took'').
+
 \todo{replan}
 
-\subsubsection{Robot Plan management}\label{chap2:subsubsec:robot_plan}
+\subsubsection{Robot Plan Management}\label{chap2:subsubsec:robot_plan}
 
 As explained earlier, there are two processes to manage the shared plans. One of them is the \acrfull{rpm}. It is in charge of the plan updates, maintaining the robot knowledge about the ongoing goal, and deciding which action should be performed by the robot and when. 
 
@@ -647,7 +655,7 @@ When an action should be performed by the human and if the robot does not have a
 
 
 \begin{algorithm}[!htb]
-	\caption{Event action todo}
+	\caption{Event action todo in \acrshort{rpm}}
 	\label{chap2:algo:todo}
 	\begin{algorithmic}
 	\Function{On}{primTask($i$,\algConst{TODO},$name$,$agent$,$params$)}
@@ -696,7 +704,7 @@ When an action should be performed by the robot or the AgentX, first it needs to
 
 \begin{algorithm}[!htb]
 	\ContinuedFloat
-	\caption{Event action todo (continued)}
+	\caption{Event action todo in \acrshort{rpm}(continued)}
 	\begin{algorithmic}
 	\algrestore{todo}
 	\Function{AllocatePrimTask}{primTask($i$,$state$,$name$,$agent$,$params$)}
@@ -726,7 +734,7 @@ When an action should be performed by the robot or the AgentX, first it needs to
 We represented what happened when a primitive task is updated to |executed| in Algorithm~\ref{chap2:algo:executed}. As explained above, the manipulated plans can be conditional plans. Thus, at the end of each action execution, the \acrshort{rpm} looks for if actions of other branches exist. First, it tries to find if the agent and predecessors of the action which just finished are the same than the one another action. If it is the case, all the abstract and primitive task descendant of this found action are set |unplanned|. 
 
 \begin{algorithm}[!htb]
-	\caption{Event action executed}
+	\caption{Event action executed in \acrshort{rpm}}
 	\label{chap2:algo:executed}
 	\begin{algorithmic}
 	\Function{On}{primTask($i$,\algConst{EXECUTED},$name$,$agent$,$params$,$preds$,$decompoOf$)}
@@ -753,7 +761,7 @@ We represented what happened when a primitive task is updated to |executed| in A
 	\Statex
 	\Function{RemoveChild}{$i$}
 		\State $primTasksToUnplan \coloneqq$ \textsc{FindAll}(primTask($j$)) where $i \in preds_j$ 
-		\State \textsc{removePrimTasks}($primTasksToUnplan$)
+		\State \textsc{RemovePrimTasks}($primTasksToUnplan$)
 	\EndFunction
 	\Statex
 	\Function{UpdateAbstractTasksToExecuted}{$i$,$stateToSet$}
@@ -767,16 +775,65 @@ We represented what happened when a primitive task is updated to |executed| in A
 \end{algorithm}		
 
 \clearpage
-\subsubsection{Human Plan management}\label{chap2:subsubsec:human_plan}
+\subsubsection{Human Plan Management}\label{chap2:subsubsec:human_plan}
+The \acrfull{hpm} keeps track of the estimated human mental state about the ongoing shared plan. The role of this process is central, as it receives the data about the human action monitoring, it deduces what the human might or might not know about the plan or action executed by the robot, and requests the communication to perform to the \acrfull{cm}. This component is closely link to Ontologenius 
+
+When a shared goal starts, it receives from the \acrshort{rpm} the list of primitive tasks composing the plan. The action states are updated with the same algorithm as the \acrshort{rpm}, the Algorithm~\ref{chap2:algo:UP} (with the function updating the abstract tasks being not used). We distinguish two cases of |todo| actions, the actions to be performed by the human and the ones to be performed by the robot.
+
+We present the Algorithm~\ref{chap2:algo:h_todo}, describing what happens in the~\acrshort{hpm} when it computes that the human has an action to perform. It only shows when everything goes well, \ie that the human perform the right action in the allocated time. The way the robot reacts if the human is not acting, by communicating, is described with Algorithm~\ref{chap2:algo:h_todo_conting}.
+
+\begin{algorithm}[!htb]
+	\caption{Event action todo by human in \acrshort{hpm}}
+	\label{chap2:algo:h_todo}
+	\begin{algorithmic}
+	\Function{On}{primTask($i$,\algConst{TODO},$name$,human,$params$,$preds$)}
+	\State $matchingAction \coloneqq false$
+	\While{$t_{current} < T_{timeout}$ and not $matchingAction$}
+		\If{\textsc{Match}(primTask,$monitoredAction_{\text{STARTED,PROG}}) = true$}
+		\State $matchingAction \coloneqq true$
+		\EndIf
+	\EndWhile
+	\If{$t_{current} > T_{timeout}$} \Return \EndIf
+	\State primTask($i$,\algConst{TODO},$name$,human,$params$,$preds$) 
+	\\\hfill $\coloneqq$ primTask($i$,\algConst{ONGOING},human,$params$,$preds$)
+	\State \textsc{SendMessage}(RobotPlanManager,primTask($i$,\algConst{ONGOING},human,$params$,$preds$))
+	\State $primTasksToSuspend \coloneqq$ \textsc{FindAll}(primTask($j$)) where $i \in preds_j$ 
+	\State \textsc{SuspendPrimTasks}($primTasksToSuspend$)
+	$matchingAction \coloneqq false$
+	\While{$t_{current} < T_{timeout}$ and not $matchingAction$}
+		\If{\textsc{Match}(primTask,$monitoredAction_{\text{ACHIEVED}}) = true$}
+		\State $matchingAction \coloneqq true$
+		\EndIf
+	\EndWhile
+	\If{$t_{current} > T_{timeout}$} \Return \EndIf
+	\State primTask($i$,\algConst{ONGOING},$name$,human,$params$,$preds$) 
+	\\\hfill $\coloneqq$ primTask($i$,\algConst{EXECUTED},human,$params$,$preds$)
+	\State \textsc{SendMessage}(RobotPlanManager,primTask($i$,\algConst{EXECUTED},human,$params$,$preds$))
+	\State \textsc{RemoveParallelBranches}(human,$preds$) \Comment{see Algorithm~\ref{chap2:algo:executed}}
+	\State \textsc{UpdatePlan} \Comment{see Algorithm~\ref{chap2:algo:UP}}
+	\EndFunction	
+	\end{algorithmic}
+\end{algorithm}		
+
+\begin{algorithm}[!htb]
+	\caption{Handling of action todo not performed by human in \acrshort{hpm}}
+	\label{chap2:algo:h_todo_conting}
+	\begin{algorithmic}
+		\Function{hey}{}
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}		
+			
+
 belief divergence before human action (human missed robot action)(sandra) -> com; 
 inaction whereas compute human should act -> com;
 a plan manager for the human side according to human presence/visibilities/reachabilities;
 present algo or state machine
-
+\clearpage
 \subsubsection{Robot Resource Management}
 joint attention
 depending on the robotic platform (pepper arms+head; pr2 needs planer for action manipulation so no arm manager, only head manager)
-head manager: when robot execute an action, look the action object; when the robot speaks, look at the human. Programmed through channels.\todo{deplacer presentation dans mummer ici?}
+head manager: when robot execute an action, look the action object; when the robot speaks, look at the human. Programmed through channels.\todo{deplacer presentation dans mummer ici ou trop task specific?}
 
 \subsection{Action Execution Management}
 action model;
