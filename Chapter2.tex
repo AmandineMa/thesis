@@ -776,11 +776,13 @@ We represented what happened when a primitive task is updated to |executed| in A
 
 \clearpage
 \subsubsection{Human Plan Management}\label{chap2:subsubsec:human_plan}
-The \acrfull{hpm} keeps track of the estimated human mental state about the ongoing shared plan. The role of this process is central, as it receives the data about the human action monitoring, it deduces what the human might or might not know about the plan or action executed by the robot, and requests the communication to perform to the \acrfull{cm}. This component is closely link to Ontologenius 
+The \acrfull{hpm} keeps track of the estimated human mental state about the ongoing shared plan, endowing the robot with \acrlong{tom} (see Section~\ref{chap1:subsec:tom}). The role of this process is central, as it receives the data about the human action monitoring, it deduces what the human might or might not know about the plan or action executed by the robot, and requests the communication to perform to the \acrfull{cm}. 
 
-When a shared goal starts, it receives from the \acrshort{rpm} the list of primitive tasks composing the plan. The action states are updated with the same algorithm as the \acrshort{rpm}, the Algorithm~\ref{chap2:algo:UP} (with the function updating the abstract tasks being not used). We distinguish two cases of |todo| actions, the actions to be performed by the human and the ones to be performed by the robot.
+When a shared goal starts, it receives from the \acrshort{rpm} the list of primitive tasks composing the plan. The action states are updated with the same algorithm as the \acrshort{rpm}, Algorithm~\ref{chap2:algo:UP} (with the function updating the abstract tasks being not used). We distinguish two cases of |todo| actions, the actions to be performed by the human and the ones to be performed by the robot.
 
-We present the Algorithm~\ref{chap2:algo:h_todo}, describing what happens in the~\acrshort{hpm} when it computes that the human has an action to perform. It only shows when everything goes well, \ie that the human perform the right action in the allocated time. The way the robot reacts if the human is not acting, by communicating, is described with Algorithm~\ref{chap2:algo:h_todo_conting}.
+\paragraph{Action to be performed by the human} We present Algorithm~\ref{chap2:algo:h_todo}, describing what happens in the~\acrshort{hpm} when it computes that the human has an action to perform, with effects that are VisualEffects (see Section~\ref{chap2:subsubsec:action_rep}). It only shows when everything goes well, \ie that the human perform the right action in the allocated time. The way the robot reacts if the human is not acting, by communicating, is described with Algorithm~\ref{chap2:algo:h_todo_conting_1} for the case where the action never started and with Algorithm~\ref{chap2:algo:h_todo_conting_2} for the case where the robot detected the start but cannot see the final action effects.
+
+As we can see in Algorithm~\ref{chap2:algo:h_todo}, the \acrshort{hpm} estimates the human is aware that they have an action to perform, it checks if action data received from the \acrlong{ham} matches it. The function comparing the |todo| action with monitored actions communicated by the \acrshort{ham} is a Jason rules, comparing the agent names, the action classes and the parameters. If the |todo| action has \sparql-like parameters, the rule allows to check if it can corresponds to the parameters of a given recognized action. Moreover, because \acrshort{jahrvis} enables the use of conditional plan where the branch choices are made by the human, when the human makes one of this choice, the other branches have to been |suspended| and then |unplanned|.
 
 \begin{algorithm}[!htb]
 	\caption{Event action todo by human in \acrshort{hpm}}
@@ -789,46 +791,94 @@ We present the Algorithm~\ref{chap2:algo:h_todo}, describing what happens in the
 	\Function{On}{primTask($i$,\algConst{TODO},$name$,human,$params$,$preds$)}
 	\State $matchingAction \coloneqq false$
 	\While{$t_{current} < T_{timeout}$ and not $matchingAction$}
-		\If{\textsc{Match}(primTask,$monitoredAction_{\text{STARTED,PROG}}) = true$}
+		\If{\textsc{Match}(primTask,$monitoredAction_{\text{STARTED,PROG,ACHIEV}})$}
 		\State $matchingAction \coloneqq true$
 		\EndIf
 	\EndWhile
 	\If{$t_{current} > T_{timeout}$} \Return \EndIf
+	\If{match with $monitoredAction_{\text{STARTED,PROG}}$)}
 	\State primTask($i$,\algConst{TODO},$name$,human,$params$,$preds$) 
 	\\\hfill $\coloneqq$ primTask($i$,\algConst{ONGOING},human,$params$,$preds$)
 	\State \textsc{SendMessage}(RobotPlanManager,primTask($i$,\algConst{ONGOING},human,$params$,$preds$))
+	\State $matchingAction \coloneqq false$
+	\EndIf
 	\State $primTasksToSuspend \coloneqq$ \textsc{FindAll}(primTask($j$)) where $i \in preds_j$ 
 	\State \textsc{SuspendPrimTasks}($primTasksToSuspend$)
-	$matchingAction \coloneqq false$
 	\While{$t_{current} < T_{timeout}$ and not $matchingAction$}
-		\If{\textsc{Match}(primTask,$monitoredAction_{\text{ACHIEVED}}) = true$}
+		\If{\textsc{Match}(primTask,$monitoredAction_{\text{ACHIEVED}})$}
 		\State $matchingAction \coloneqq true$
 		\EndIf
 	\EndWhile
 	\If{$t_{current} > T_{timeout}$} \Return \EndIf
-	\State primTask($i$,\algConst{ONGOING},$name$,human,$params$,$preds$) 
+	\State primTask($i$,$state$,$name$,human,$params$,$preds$) 
 	\\\hfill $\coloneqq$ primTask($i$,\algConst{EXECUTED},human,$params$,$preds$)
 	\State \textsc{SendMessage}(RobotPlanManager,primTask($i$,\algConst{EXECUTED},human,$params$,$preds$))
 	\State \textsc{RemoveParallelBranches}(human,$preds$) \Comment{see Algorithm~\ref{chap2:algo:executed}}
 	\State \textsc{UpdatePlan} \Comment{see Algorithm~\ref{chap2:algo:UP}}
 	\EndFunction	
 	\end{algorithmic}
-\end{algorithm}		
+\end{algorithm}	
+
+When the robot estimates that the human knows they should perform an action but this does not happen, it initiates a communication through the \acrlong{cm} in order to indicate to the human that they have this given action to do. Thus, it updates once again its estimation of the human mental state about the action, setting it to |todo| since it informed them. It is described by Algorithm~\ref{chap2:algo:h_todo_conting_1}.
 
 \begin{algorithm}[!htb]
-	\caption{Handling of action todo not performed by human in \acrshort{hpm}}
-	\label{chap2:algo:h_todo_conting}
+	\caption{Handling of action todo timed out on wait for started/progressing action by human in \acrshort{hpm}}
+	\label{chap2:algo:h_todo_conting_1}
 	\begin{algorithmic}
-		\Function{hey}{}
+		\Function{NotDoing}{List of primTask($i$,\algConst{TODO},$name$,human,$params$)}
+		\If{first time for these actions}
+			\ForEach{primTask}{List of primTask}
+			\State primTask($i$,\algConst{TODO},$name$,human,$params$) 
+			\\\hfill $\coloneqq$ primTask($i$,\algConst{NOT\_STARTING},human,$params$)
+			\EndFor
+			\State \textsc{SendMessage}(CommManager,List of primTask)
+			\ForEach{primTask}{List of primTask}
+			\State primTask($i$,\algConst{NOT\_STARTING},$name$,human,$params$) 
+			\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},human,$params$)
+			\EndFor
+		\Else
+			\State \textsc{Negociation} or \textsc{StopGoal}
+		\EndIf
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}		
-			
 
-belief divergence before human action (human missed robot action)(sandra) -> com; 
-inaction whereas compute human should act -> com;
-a plan manager for the human side according to human presence/visibilities/reachabilities;
-present algo or state machine
+A bit similarly, when the robot observed the beginning of an action, it asks the human if they did it, as it might have missed the end of the action execution and/or for some reason might not be seeing the action necessary effect.\todo{pas codé} If the human answers yes, the robot updates the action state as well as the actions effects in Ontologenius. In the other case, the robot set the action to |todo| as the human knows they should do it. This function could be enhanced with a more sophisticated dialog. 
+			
+\begin{algorithm}[!htb]
+	\caption{Handling of action todo timed out on wait for achieved action by human in \acrshort{hpm}}
+	\label{chap2:algo:h_todo_conting_2}
+	\begin{algorithmic}
+		\Function{NotDoing}{primTask($i$,\algConst{TODO},$name$,human,$params$)}
+		\If{first time for this actions}
+			\State primTask($i$,\algConst{TODO},$name$,human,$params$) 
+			\\\hfill $\coloneqq$ primTask($i$,\algConst{NOT\_ACHIEVED},human,$params$)
+			\State $answer \coloneqq$ \textsc{SendMessage}(CommManager,primTask)
+			\If{$answer=$ no}
+				\State primTask($i$,\algConst{NOT\_ACHIEVED},$name$,human,$params$) 
+				\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},human,$params$)
+			\Else
+				\State primTask($i$,\algConst{NOT\_ACHIEVED},$name$,human,$params$) 
+				\\\hfill $\coloneqq$ primTask($i$,\algConst{EXECUTED},human,$params$)
+				\State \textsc{UpdateOntologenius($actionEffects$)}
+			\EndIf
+		\Else
+			\State \textsc{Negociation} or \textsc{StopGoal}
+		\EndIf
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}		
+
+\paragraph{Action to be performed by the robot} Now, the \acrshort{hpm} should also handle when an action is to be performed by the robot. Thanks to the class action we defined (see Section~\ref{chap2:subsubsec:action_rep}), actions on the environment and communication actions can be process differently. For the latter, human attention is monitored by the \acrlong{cm}. 
+
+The handling of an action performed by the robot depends on the estimated establishment of a (simple) joint attention (see Section~\ref{chap1:subsubsec:joint_att}) between the human and the robot. An activity diagram presented in Figure~\ref{chap2:fig:robot_action_hpm} shows that when the \acrshort{hpm} is informed by the \acrfull{aem} of a robot ongoing action, it monitors, if the human is in its field of view, their attention towards the action parameters or the robot. When the \acrshort{hpm} estimates that the human sees what is going on, then it updates the human's mental state about this action. When it estimates that they have not seen the action, then it considers that the human has a false belief about the action, as in the robot's belief base the action is executed but not in the human's one, there is a belief divergence (see Section~\ref{chap1:subsec:tom}). Thus, it communicates to realign the human's beliefs. Moreover, even if the robot was in the human's field of view (FoV), sometimes some action effects are non observable (see Section~\ref{chap2:subsubsec:action_rep}), so this is another case where the robot will communicate about an action it executed. Then, when an action is set as |executed| in the human's mental state, it updates the plan with the function presented in Algorithm~\ref{chap2:algo:UP}.
+
+\begin{figure}[!ht]
+	\includegraphics[width=\linewidth]{figures/chapter2/robot_action_hpm.pdf}
+	\caption{Activity diagram representing what happens when the \acrfull{aem} sends to the \acrshort{hpm} that the robot started to execute an action. We represent in blue the nodes receiving data from the \acrshort{aem}, in green the ones receiving data from Ontologenius and in orange the ones updating the action state in the \acrshort{hpm} belief base.}
+	\label{chap2:fig:robot_action_hpm}
+\end{figure}
+
 \clearpage
 \subsubsection{Robot Resource Management}
 joint attention
