@@ -449,6 +449,7 @@ This process handles the interaction sessions. An interaction session is trigger
 
 An interaction session stays open as long as the human and the robot perform activities together, \ie as long as the human is engaged in the interaction. This engagement is monitored by the robot in different ways: through the predicate \fact{isEngagedWith}{human\_i}{robot} during dialogue phases outside a task and through what is happening during a task. If at some point the human is not perceived for a while or the human says goodbye, then the manager ends the session. In the latter case, the robot replies with goodbyes. Finally, it returns to its home-base if it has one.
 
+
 \subsection{Human Actions Monitoring}\label{chap2:subsec:h_moni}
 In order to coordinate properly, humans monitor each others when they are in a joint action (see Section~\ref{chap1:subsubsec:monitoring}). The robot needs the same kind of process to be able to assess if the human is doing the action of the plan it expects or not. Existing solutions exist to monitor or recognize human actions but none of them matched all our criteria which are: \todo{faire un état de l'art rapide}
 \begin{bulletList}
@@ -612,7 +613,9 @@ Finally, the last type of shared plans we manipulated is conditional plan, gener
 
 Now, we will present the two processes in charge of the shared plan management, one to handle the plan on the robot side, \ie its updates and the action execution, and the other one to handle the estimated human mental states about the shared plan. When either the robot or the human starts and finishes an action execution, facts corresponding to these events, are added to Ontologenius and Mementar to keep track of what happened during the interaction. It also registers the data about the abstract task. Then, a component of the robotic architecture used to generate communication about elements, the \acrfull{reg}, can use such information when querying by \acrshort{jahrvis} to refer to the past (\eg ``the cube you took'').
 
-\todo{replan}
+When we will mention the robot monitoring with its head, it is done through a component described in Section~\ref{chap2:par:act_rep}.
+
+\todo{replan,contingencies?}
 
 \subsubsection{Robot Plan Management}\label{chap2:subsubsec:robot_plan}
 
@@ -880,14 +883,57 @@ The handling of an action performed by the robot depends on the estimated establ
 \end{figure}
 
 \clearpage
-\subsubsection{Robot Resource Management}
-joint attention
-depending on the robotic platform (pepper arms+head; pr2 needs planer for action manipulation so no arm manager, only head manager)
-head manager: when robot execute an action, look the action object; when the robot speaks, look at the human. Programmed through channels.\todo{deplacer presentation dans mummer ici ou trop task specific?}
 
 \subsection{Action Execution Management}
-action model;
-generic algo, just task as input the action model;
+
+Deciding is not enough, the robot needs to be able to act. Thus, \acrshort{jahrvis} as an \acrfull{rja} called the \acrfull{aem}. It is composed of a generic part managing the general flow of an action execution, described in Algorithm~\ref{chap2:algo:exe_manage}, and of a task-specific part, specifying the distinctive characteristic of given actions which are instantiations of the \textsc{Execute} function in a separate ASL file, such as shown in Listing~\ref{chap2:lst:pick}. Moreover, all actions of the type PhysicalAction are realized based on action clients to communicate with the Motion Planner and Executor (see Figure~\ref{chap2:fig:archi}) which allows a fine management of the execution through feedbacks and error codes. For now, we do not treat specifically each error code. Finally, each instantiation of a PhysicalAction automatically starts and ends with the setting of the action parameters monitoring by the robot head, based on the head management presented in the next paragraph.
+
+\begin{algorithm}[!htb]
+	\caption{Action execution management}
+	\label{chap2:algo:exe_manage}
+	\begin{algorithmic}
+	\Function{ExecuteAction}{primTask($i$,$name$,robot,$params$)}
+	\If{$name \in$ PhysicalAction}
+		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm},\acrshort{ham}], primTask($i$,\algConst{ONGOING}))
+	\ElsIf{$name \in$ CommunicateAction}
+		\State \textsc{SendMessage}(CommManager, primTask($i$,\algConst{TODO}))\Comment{\algConst{ONGOING} state set \\\hfill by the \acrshort{cm}}
+	\EndIf
+	\State $action \coloneqq$ \textsc{ActionParsing($name$,$params$)}
+	\State \textsc{Execute($action$)}
+	\If{$name \in$ PhysicalAction}
+		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm},\acrshort{ham}], primTask($i$,\algConst{EXECUTED}))
+	\ElsIf{$name \in$ CommunicateAction}
+		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm}], primTask($i$,\algConst{EXECUTED}))
+	\EndIf
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}	
+
+\begin{lstlisting}[label={chap2:lst:pick},caption=Example of a PhysicalAction for execution by the Motion Planner and Executor.]
+	@pick[atomic]
+	+!pick(Params): true <-
+			+planPick("armUsed", right_arm);
+			planPick(Obj);
+			execute("pick").
+\end{lstlisting}
+
+As for CommunicateAction, their parameters are reorganized and then the action is sent to the \acrshort{cm} for execution. An example is given in Listing~\ref{chap2:lst:comm_act}.
+
+\begin{lstlisting}[label={chap2:lst:comm_act},caption=Example of a CommunicateAction for execution by the Communication Manager.]
+	+!robot_tell_human_to_tidy(Params): true <-
+			.nth(1, Params, Object);
+			.nth(2, Params, Table);
+			?action(ID,_,Name,_,Params);
+			.send(communication,askOne,askActionsTodo(
+				[action(ID,"PickAndPlaceAction",[Object,Table])],_),
+				Answer).
+\end{lstlisting}
+
+\paragraph{Robot Resource Management}\label{chap2:para:resource_m}
+
+The correct handling of the resources (head, arms, base...) of a robot is critical to perform a task, but it can be cumbersome for a deliberative component, such as \acrshort{jahrvis}, to do all the micro-management required. To tackle this issue, a physical resource management system has been designed by Guillaume Sarthou and Guilhem Buisan, inspired from Devin~\cite{devin_2017_decisional}. For each of the identified resources is instantiated a component called \emph{Resource Manager}, having two types of input: permanent channels, that can be preempted at any time (\eg look at the head of the human interacting with it) and finite state machines which are not preemptable (\eg set of commands to scan a table). A component called \emph{Resource Synchronizer} deals with actions requiring multiple resources such as the human-aware navigation which uses the head and the base. The synchronizer also reports the status of the ongoing coordination signal to \acrshort{jahrvis} to monitor the progress of the action. Finally, a priority scheme has been implemented to handle multiple active inputs at the same time for one resource. 
+
+Such component allows \acrshort{jahrvis} to be agnostic about the used robotic platform, as it offers the same interface for whichever one. Moreover, it enables joint attention with a nice head control as \acrshort{jahrvis} can switch priorities between three types of permanent channels that have been defined, depending on where we are in the task: environment monitoring, human head monitoring and human hand monitoring. The two latter are set with the head and hand of the human the robot is interacting with as point to follow, whereas the environment monitoring channel receives new point of focus according to the needs of the task (\eg the cube the robot should pick or the box in which the human has to put an object). Thus, when the agents are talking together, \acrshort{jahrvis} will set the human's head with the highest priority, but when the robot has to pick a cube, it will be the environment monitoring that will have priority. Finally, the head behavior can be controlled not only based on visual inputs but also on laser inputs for example if it has some. Indeed, according to the task context, it can be interesting for the robot to know what is going on around it. It this case, a channel can be instantiated so the robot can react when it detects moves with its laser and then looks in this direction.
 
 \subsection{Communication management}
 REG to communicate about actions and objects;
