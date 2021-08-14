@@ -245,6 +245,10 @@ urlcolor=linkcol %couleur des liens pour les url
 	 \setlength{\itemsep}{-0.5em}}}%
 { \end{list} }
 
+\newenvironment{inlineEnumerate}
+{\begin{enumerate*} [label={(\arabic*)}] }
+{\end{enumerate*}}
+
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 \renewcommand{\epsilon}{\varepsilon}

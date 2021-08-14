@@ -135,12 +135,12 @@ In our model, an agent (human or robot) is a contributor to the task and has a m
 
 \subsection{The Choice of the Framework}
 Restart from scratch or base oneself work on an existing software? This is the question which has been studied at the beginning of this thesis work about the implementation of the supervision software. It was possible 
-\begin{enumerate*}[label={(\arabic*)}]
+\begin{inlineEnumerate}
 	\item to develop the wanted features using the code\footnote{\url{https://github.com/laas/supervisor}} of the previous PhD student working on the supervision, Sandra Devin,\label{chap2:list:sandra}
 	\item to choose among existing software dedicated to decision and execution for Human-Robot Interaction,\label{chap2:list:soft_hri}
 	\item to choose among existing software dedicated to decision and execution for robotic platforms, and\label{chap2:list:robot}
 	\item to develop a new software from scratch.\label{chap2:list:new}
-\end{enumerate*}
+\end{inlineEnumerate}
 
 The obvious drawback of \ref{chap2:list:new} is that it takes a lot of time to start a new software from scratch and that it often leads to reinvent the wheel. Then, first we looked at existing solutions. Concerning the possibility \ref{chap2:list:sandra}, she had developed interesting features but the code is not modular and it was difficult to add new features or to modify the existing ones without breaking everything. Thus, there was the solutions \ref{chap2:list:soft_hri} and \ref{chap2:list:robot} left. When looking for existing software to manage human-robot interactions, we could not find any open-source one with a minimum of features, documentation and not entirely dedicated to a given task. Therefore, we turned ourselves toward robotic frameworks. We compared existing open-source decision-making and execution software for robots. To cite a few, there is the PetriNetPlans library introduced by Ziparo \etal~\cite{ziparo_2011_petri} which is a framework for planning and execution. Beetz \etal{} developed CRAM, a software implementing reasoning mechanisms that can infer control decisions~\cite{beetz_2010_cram}. A framework to implement hierarchical state machines is available among ROS libraries, SMACH\footnote{\url{http://wiki.ros.org/smach}}, defined as ``task-level architecture for rapidly creating complex robot behavior''. Finally, there are several implementations of the BDI model presented in Section~\ref{chap1:sec:archi} such as JAM~\cite{huber_1999_jam}, Jadex~\cite{braudach_2005_jadex}, SPARK~\cite{morley_2004_spark}, dMARS~\cite{dinverno_1998_formal}, OpenPRS~\cite{ingrand_1996_prs} or Jason~\cite{bordini_2007_jason}. 
 
@@ -272,7 +272,7 @@ action_servers:
 
 
 \section{The Architecture of JAHRVIS}\label{chap2:sec:jahrvis}
-The \acrfull{jahrvis} is implemented on top of our ROS-Jason framework. During the design of \acrshort{jahrvis}, we identified seven high-level features we needed and implemented their associated processes, based on the objectives presented in Section~\ref{chap2:sec:sup_features}\footnote{The design of \acrshort{jahrvis} was an iterative work, indeed the first version being the supervisor implemented for the task described in Chapter~\ref{chapter:chap3}, the second one was the supervisor of the task described in Chapter~\ref{chapter:chap4} and the final one was the supervisor of the task described in Chapter~\ref{chapter:chap5}}\todo{derniere tache existera???}. We present \acrshort{jahrvis} architecture in Figure~\ref{chap2:fig:sup_overview}, with the seven processes in blue, the QoI Evaluator dedicated to the interaction evaluation and the six others to the decision and control. 
+The \acrfull{jahrvis} is implemented on top of our ROS-Jason framework\footnote{\url{https://github.com/amdia/ld_rjs}}. During the design of \acrshort{jahrvis}, we identified seven high-level features we needed and implemented their associated processes, based on the objectives presented in Section~\ref{chap2:sec:sup_features}\footnote{The design of \acrshort{jahrvis} was an iterative work, indeed the first version being the supervisor implemented for the task described in Chapter~\ref{chapter:chap3}, the second one was the supervisor of the task described in Chapter~\ref{chapter:chap4} and the final one was the supervisor of the task described in Chapter~\ref{chapter:chap5}}\todo{derniere tache existera???}. We present \acrshort{jahrvis} architecture in Figure~\ref{chap2:fig:sup_overview}, with the seven processes in blue, the QoI Evaluator dedicated to the interaction evaluation and the six others to the decision and control. 
 
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/supervisor_modules.pdf}
@@ -931,16 +931,118 @@ As for CommunicateAction, their parameters are reorganized and then the action i
 
 \paragraph{Robot Resource Management}\label{chap2:para:resource_m}
 
-The correct handling of the resources (head, arms, base...) of a robot is critical to perform a task, but it can be cumbersome for a deliberative component, such as \acrshort{jahrvis}, to do all the micro-management required. To tackle this issue, a physical resource management system has been designed by Guillaume Sarthou and Guilhem Buisan, inspired from Devin~\cite{devin_2017_decisional}. For each of the identified resources is instantiated a component called \emph{Resource Manager}, having two types of input: permanent channels, that can be preempted at any time (\eg look at the head of the human interacting with it) and finite state machines which are not preemptable (\eg set of commands to scan a table). A component called \emph{Resource Synchronizer} deals with actions requiring multiple resources such as the human-aware navigation which uses the head and the base. The synchronizer also reports the status of the ongoing coordination signal to \acrshort{jahrvis} to monitor the progress of the action. Finally, a priority scheme has been implemented to handle multiple active inputs at the same time for one resource. 
+The correct handling of the resources (head, arms, base...) of a robot is critical to perform a task, but it can be cumbersome for a deliberative component, such as \acrshort{jahrvis}, to do all the micro-management required. To tackle this issue, a physical resource management system has been designed by Guillaume Sarthou and Guilhem Buisan, inspired by Devin~\cite{devin_2017_decisional}. For each of the identified resources is instantiated a component called \emph{Resource Manager}, having two types of input: permanent channels, that can be preempted at any time (\eg look at the head of the human interacting with it) and finite state machines which are not preemptable (\eg set of commands to scan a table). A component called \emph{Resource Synchronizer} deals with actions requiring multiple resources such as the human-aware navigation which uses the head and the base. The synchronizer also reports the status of the ongoing coordination signal to \acrshort{jahrvis} to monitor the progress of the action. Finally, a priority scheme has been implemented to handle multiple active inputs at the same time for one resource. 
 
 Such component allows \acrshort{jahrvis} to be agnostic about the used robotic platform, as it offers the same interface for whichever one. Moreover, it enables joint attention with a nice head control as \acrshort{jahrvis} can switch priorities between three types of permanent channels that have been defined, depending on where we are in the task: environment monitoring, human head monitoring and human hand monitoring. The two latter are set with the head and hand of the human the robot is interacting with as point to follow, whereas the environment monitoring channel receives new point of focus according to the needs of the task (\eg the cube the robot should pick or the box in which the human has to put an object). Thus, when the agents are talking together, \acrshort{jahrvis} will set the human's head with the highest priority, but when the robot has to pick a cube, it will be the environment monitoring that will have priority. Finally, the head behavior can be controlled not only based on visual inputs but also on laser inputs for example if it has some. Indeed, according to the task context, it can be interesting for the robot to know what is going on around it. It this case, a channel can be instantiated so the robot can react when it detects moves with its laser and then looks in this direction.
 
-\subsection{Communication management}
-REG to communicate about actions and objects;
-relevant communications;
-different communication types (inform executed action, ask to perform action, other informative sentence) (cite Clodic or others?);
-human attention
+\subsection{Communication Management}
+The last \acrshort{rja} involved in the robot decision and control is the \acrfull{cm}. It is not dedicated to complex talks with the human but to enable the robot to make and understand communication during collaborative tasks, because as shown in Section~\ref{chap1:subsec:comm}, it is important. This process is based on a software for Natural Language Processing (NLP) and closely linked to a domain-specific planner called \acrfull{reg}. This latter has been developed by Guillaume Sarthou and Guilhem Buisan~\cite{buisan_2020_efficient}. It aims, regarding the current symbolic state of the world, at finding the minimal set of relations to communicate and allow the listener to identify a given entity. For example, if the robot wants to talk about a given cube on a table but there are three of them, two (blue and red) on the table and one (blue) on a close furniture, how can it do? Well, it queries the \acrshort{reg} which answers with a nominal group such as ``the blue cube on the table''.
 
+
+\paragraph{To  Issue Communications}
+As shown above, three other processes, the \acrlong{ism}, the \acrlong{hpm} and \acrlong{aem}, can query the \acrshort{cm} to issue a communication to the human. We defined several types of communicative acts the robot can do:
+\begin{inlineEnumerate}
+	\item to do social chat for interaction session opening and closing (\eg ``hello''),
+	\item to give information about its abilities/role (\eg ``I'm here to help you find your way''),
+	\item to initiate a shared goal (\eg ``Let's do this package''),
+	\item to give information about the ongoing task (\eg ``I cleaned the table''),\label{chap2:emum:comm1}
+	\item to ask information about the ongoing task (\eg ``Have you cleaned the table?''),
+	\item to request the human to perform an action (\eg ``Can you clean the table?''), and\label{chap2:emum:comm2}
+	\item to give up the shared goal (\eg ``I'm sorry I give up, I'm failing'')
+\end{inlineEnumerate}
+
+We focused on the communicative acts described in \ref{chap2:emum:comm1} and \ref{chap2:emum:comm2} with the verbalization of actions presented in Algorithm~\ref{chap2:algo:action_verba}, developed in collaboration with Guillaume Sarthou. 
+
+As the communication is important, it is important to minimize the risk that it gets lost. Thus, when the \acrshort{cm} receives a communication to perform from another \acrshort{rja}, it ensures that it perceives the human before issuing the communication so it has more chance to get the human's attention. Therefore, it sets the monitoring channel of the Robot Resource Manager on the human head monitoring (see Section~\ref{chap2:para:resource_m}).
+
+Moreover, when the robot needs to communicate to the human that it has does a given action or to ask them to perform one, it needs to verbalize it properly. Still in the spirit of a generic system, the algorithm that we developed is not task or action specific. Action labels (presented in Section~\ref{chap2:subsubsec:action_rep} and verb conjugation (tense and persons) are stored in Ontologenius which can be manually fed with new ones when needed. Let's take an example with the robot informing the human it has performed a drop action called ``robot\_drop\_cube'' in the plan, with ``cube\_1'' and ``green\_box'' as parameters. First, the \acrshort{cm} queries Ontologenius to get the closest class in the hierarchy with labels. Here, it is ``DropAction''. There are three possible labels for this action, so the robot has the possibility to communicate about it with different action parameters: [{Agent} @Drop {Cube}, {Agent} @Drop in {Container}, {Agent} @Drop {Cube} in {Container}]. Thus, the \acrshort{cm} finds which label matches its parameters, based on the parameter number and on their class. Then, in our case, this is ``{Agent} @Drop {Cube} in {Container}]''. Next, for each parameter, it tries to find the right verbalization, either it will be a Referring Expression or the parameter label stored in Ontologenius, and replace them in the class action label. So, we would have something like ``{Agent} @Drop the blue cube on the table in the box''. Finally, it replaces ``{Agent}'' with the action actor and ``@Drop'' with the right conjugation. As the \acrshort{cm} wants to refer to an action the robot has done, it queries the Ontology with the conjugation of ``Drop'' at the past first singular person, which is ``dropped''. Then, the result of the action verbalization is ``I dropped the blue cube on the table in the box''. 
+
+When the \acrshort{cm} wants to ask the human to perform an action, it uses the same algorithm and turn the sentence into an interrogative form with the verb ``can''. As \acrshort{jahrvis} manipulates conditional plans, the \acrshort{cm} can take as input list of actions and separate them with ``or'' when communicating about them. And, when it wants to communicate about the human having to perform several actions in a row, it using ``and''.
+ 
+\begin{algorithm}[!htb]
+	\caption{Action verbalization}
+	\label{chap2:algo:action_verba}
+	\begin{algorithmic}
+	\Function{ActionVerbalization}{$agent$,$action$,$parameters$,$tense$}
+	\State $labelList \coloneqq$\textsc{GetClassActionLabels($action$)}\Comment{Query to Ontologenius}
+	\State $actionVerba \coloneqq$\textsc{LabelToWords}($labelList$,$parameters$)
+	\If{$agent \in$ robot}
+		\State $person \coloneqq$ FirstSingularPersonalForm
+		\State $pronoun \coloneqq$ I
+	\ElsIf{$agent \in$ human}
+		\State $person \coloneqq$ SecondSingularPersonalForm
+		\State $pronoun \coloneqq$ you
+	\EndIf
+	\State $verb \coloneqq$\textsc{GetVerb}($actionVerba$)
+	\State $conjugatedVerb \coloneqq$\textsc{GetConjug}($actionVerba$,$verb$,$person$,$tense$)\Comment{Query to \\\hfill Ontologenius}
+	\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}("\{Agent\}",$pronoun$)
+	\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}("@$verb$",$conjugatedVerb$)
+	\EndFunction
+	\Statex
+	\Function{LabelToWords}{$labelList$,$parameters$}
+	\State $actionVerba \coloneqq$""
+	\ForEach{$label$}{$labelList$}
+		\State $labelClassParams \coloneqq$\textsc{RegexMatch}("\{(?!Agent)(.*?)\}",$label$)
+		\If{\textsc{Length}($labelClassParams$)=\textsc{Length}($parameters$)}
+		\ForEach{$param$}{$parameters$}
+			\ForEach{$labelClassParam$}{$labelClassParams$}
+			\If{$param \in labelClassParam$} \Comment{Query to Ontologenius}
+				\If{$actionVerba=$""}
+					\State $actionVerba \coloneqq label$
+				\EndIf
+				\If{$param \in$ Pickable and \fact{isAbove}{$param$}{Support}}
+					\State $param \coloneqq$\textsc{GetReferringExpression($param$)}
+				\Else
+					\State $paramVerba \coloneqq$ \textsc{GetParamVerba($param$)}\Comment{Query to \\\hfill Ontologenius}
+				\EndIf
+				\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}("\{$labelClassParam$\}",$paramVerba$)
+				\State \textbf{break}
+			\EndIf
+			\EndFor
+		\EndFor
+		\EndIf
+	\EndFor
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}	
+	
+
+
+\paragraph{To Understand Communications}
+That the robot communicates to the human is important but that it would be able to receive communication from them is as well. The human should be allow to communicate about the plan such as to ask precision about a given action, to signal that something is not going well or to ask the robot to perform an action. We focused on the latter in collaboration with Guillaume Sarthou. 
+
+The Algorithm~\ref{chap2:algo:human_instruction} allows the \acrshort{cm} to translate a human instruction to give an action (with one parameter) to perform to the robot into an instruction understandable by the \acrlong{aem}. When the \acrshort{cm} receives a human sentence such as ``Take the blue cube'', it queries the ...\todo{nom? REG? NLP?} which returns the action name it isolated from the rest of the sentence, a \sparql query corresponding to the parameter and a comprehension score. Then, it requests Ontologenius for the list of objects corresponding to the \sparql query, from the human's perspective. Indeed, the robot could see a blue cube which is not visible by the human, it this case, it will not be part of the returned objects as it is not part of the human's knowledge. If the human has properly given their instruction, the list size should be 1 and the algorithm is over. However, for some reason, they made have been imprecise. For example, there might be two blue cubes on the table. In this case, the \acrshort{cm} gets from Ontologenius the \sparql query corresponding to each object, with elements allowing to discriminate between them. Then, it requests the \acrshort{reg} for the verbalization of these objects, based on their \sparql description. Thus, we could have the \acrshort{cm} to ask the human something like ``Do you mean the blue cube on the table or on the shelf?''. Finally the function starts over with the human answer which could be ``the blue cube on the table'' -- the \acrshort{cm} keeps the action of the initial instruction into memory.
+
+Finally, once the \acrshort{cm} isolated an action and a parameter, it sends them to the \acrlong{aem}.
+
+\begin{algorithm}[!htb]
+	\caption{Understanding of a human instruction}
+	\label{chap2:algo:human_instruction}
+	\begin{algorithmic}
+	\Function{GetActionToPerform}{$sentence$,$context$}
+	\State $\langle act, sparqlQ, score \rangle \coloneqq$ \textsc{GetSentenceSegmentation($sentence$)} \Comment{Query \\\hfill to REG}
+	\If{$score > Score_{min}$}
+		\State $merged \coloneqq$\textsc{MergeSparqlWithContext}($sparqlQ,context$)\Comment{Query \\\hfill to REG}
+		\State $matchingObjects \coloneqq$ \textsc{SparqlToObjects}($merged$)\Comment{Query \\\hfill to Ontologenius}
+		\If{\textsc{Length}($matchingObjects$)=1}
+			\State \Return $act,matchingObjects[0]$
+		\Else
+			\State $question \coloneqq$``do you mean ''
+			\ForEach{$object$}{$matchingObjects$}
+				\State $sparqlO \coloneqq$\textsc{GetSparql($object$)}\Comment{Query to Ontologenius}
+				\State $objectVerba \coloneqq$\textsc{GetObjectVerbalization($sparqlO$)}\Comment{Query \\\hfill to REG}
+				\State $question \coloneqq question + objectVerba$
+			\EndFor
+			\State $answer \coloneqq$\textsc{AskHuman}($question$)
+			\State \textsc{AnalyzeSentence}($answer$,$merged$)
+		\EndIf
+	\EndIf
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}		
+
+
+\clearpage
 \subsection{Future work}
 take preconditions into account to evaluate next action
 
@@ -968,13 +1070,13 @@ The section is organized as follows. First, we briefly discuss related work and 
 
 \subsection{Related work}\label{sec:rel}
 
-Inspired from the evaluation methods used in Human-Computer Interactions and User Experience fields, the field of Human-Robot Interaction (HRI) has elaborated its own methods to evaluate robotic systems when they interact with humans. There are various ways to evaluate a human-robot interaction from the human perspective. Bethel \textit{et al}.~\cite{bethel_2010_review} divided them into five categories: \begin{enumerate*}[label={(\arabic*)}]
+Inspired from the evaluation methods used in Human-Computer Interactions and User Experience fields, the field of Human-Robot Interaction (HRI) has elaborated its own methods to evaluate robotic systems when they interact with humans. There are various ways to evaluate a human-robot interaction from the human perspective. Bethel \textit{et al}.~\cite{bethel_2010_review} divided them into five categories: \begin{inlineEnumerate}
 	\item self-assessments,\label{list:m_self}
 	\item interviews,\label{list:m_inter}
 	\item behavioral measures,\label{list:m_beha}
 	\item psychophysiology measures, and\label{list:m_physio}
 	\item task performance metrics\label{list:m_task}
-\end{enumerate*}. They reviewed metrics used for each of the categories. They can be grouped into two types: \ref{list:m_self} and \ref{list:m_inter} are subjective metrics and, \ref{list:m_beha}, \ref{list:m_physio} and \ref{list:m_task} are objective ones. Since our aim is to have a robot able to evaluate interactions by itself, human subjective metrics are not usable. Then we focused on the study of existing objective metrics meant to measure how the interaction goes. Steinfeld \textit{et al}.~\cite{steinfeld_2006_common} proposed a set of metrics to be used in a wide range of tasks whose goal is to assess the system performance by measuring the task effectiveness (\ie how well the task is completed) and the task efficiency (\ie the time required to complete a task). Their work is very thorough and inspiring but does not target the evaluation of the quality of an on-going interaction. 
+\end{inlineEnumerate}. They reviewed metrics used for each of the categories. They can be grouped into two types: \ref{list:m_self} and \ref{list:m_inter} are subjective metrics and, \ref{list:m_beha}, \ref{list:m_physio} and \ref{list:m_task} are objective ones. Since our aim is to have a robot able to evaluate interactions by itself, human subjective metrics are not usable. Then we focused on the study of existing objective metrics meant to measure how the interaction goes. Steinfeld \textit{et al}.~\cite{steinfeld_2006_common} proposed a set of metrics to be used in a wide range of tasks whose goal is to assess the system performance by measuring the task effectiveness (\ie how well the task is completed) and the task efficiency (\ie the time required to complete a task). Their work is very thorough and inspiring but does not target the evaluation of the quality of an on-going interaction. 
 Hoffman~\cite{hoffman2019} defined a type of quality of interaction, the \textit{fluency}, pointing out that the notion is not well defined and somewhat vague but can still be assessed and recognized when compared to non-fluent scenario. To measure it, they propose a list of objective metrics, only based on duration measures, designed to be quite general: robot idle time, human idle time, concurrent activity (\ie active time of both the robot and the human), functional delay (\ie time difference between the end of one agent’s task and the beginning of the other agent’s task). It is an interesting way to measure the fluency and thus the quality of the human-robot interaction but it only applies to shared workspace tasks and is dedicated to an offline evaluation.
 
 Systems targeting real-time measurements during human-robot interactions, with the purpose to ``close the loop'' and use the information for decision-making, have been developed. Tanevska \textit{et al}.~\cite{tanevska:hal-01615491} proposed a framework allowing the robot to perceive with face detection and evaluate in real-time the affective state (\ie anger, happiness, sadness, surprise, etc) and the engagement state (\ie whether the person is interested or bored in the interaction) of the people it is interacting with. However, the human affective state measure might not be enough to assess an interaction or a task as an affective state is actually a facial expression which can be misinterpreted (\eg a smile can be a sign of happiness or embarrassment) and which might be not visible when one of the agent perform an action and looks somewhere else. Moreover, as the notion of engagement is very task specific, it needs further exploration. Real-time engagement measurement has also been investigated by Anzalone \textit{et al}.~\cite{anzalone_2015_evaluating} using metrics such as gaze, head pose, body pose and response times. Their work is interesting and could be an element among others to assess the interaction quality but, it is dedicated to face-to-face interactions. 
