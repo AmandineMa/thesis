@@ -1,0 +1,118 @@
+\ifdefined\included
+\else
+\documentclass[a4paper,11pt,twoside]{StyleThese}
+\include{formatAndDefs}
+\sloppy
+\begin{document}
+	\setcounter{chapter}{4} %% Numéro du chapitre précédent ;)
+	\dominitoc
+	\faketableofcontents
+	\fi
+
+\chapter{JAHRVIS by the menu}
+\label{chapter:chap2}
+\chaptermark{JAHRVIS}
+\minitoc
+
+%\chapter{Joint Action-based Human-Aware supeRVISor: JAHRVIS}
+%\label{chapter:chap2}
+%\chaptermark{JAHRVIS}
+%\minitoc
+
+In the previous chapter, we presented all the previous works we got our inspiration from, from psychology to robotics by way of philosophy, sociology and neuroscience. What is a social interaction? how can it be divided in steps? what is a joint action? how humans collaborate together? how do they take into account their partners? what happens when an agent makes a mistake? what has been done in computer science or robotics until now to make robots better collaborators? All these theories, ideas, questionings nourished our thoughts for the design and implementation of a supervision system dedicated to Human-Robot Joint Action. Supervision is key in the architecture as it is the robot decision kernel. And, as most components of a robotic architecture dedicated to \acrshort{hri}, one of the main issues of supervision is how to take the human into account, a more or less unpredictable agent with whom the robot has to collaborate. 
+
+We presented in Section~\ref{chap1:subsec:state_art_sup} a few works tackling supervision issues, \ie how to adapt to the human, how to monitor them, how to face unexpected human behavior, how to optimize the task efficiency, how to make the robot an good human helper... They were very inspiring but we thought it was missing a general architecture and a software that could be used in different types of collaborative tasks, available for the community and that could easily be enhanced with new features. These thoughts led to the development of the \acrfull{jahrvis} which is the central topic of this chapter. We also came up with a novel idea: to endow the robot with the ability to measure if an interaction is going well or not. Such ability can be used by the supervision to enhance its adaptation capacity.
+
+In the first section, we present the role and features we defined for \acrshort{jahrvis}. Then, in the three next sections, independent of each other, we lay the foundations for \acrshort{jahrvis} description. Indeed, in Section~\ref{chap2:sec:rob_archi}, we describe the robotic architecture in which \acrshort{jahrvis} is integrated. Next, in Section~\ref{chap2:sec:levels}, we present our representation of Human-Robot collaborative activity. And, as we made the choice to base \acrshort{jahrvis} on an existing BDI framework, we describe this latter in Section~\ref{chap2:sec:bdi}. Finally, we introduce \acrshort{jahrvis} architecture in Section~\ref{chap2:sec:jahrvis} whose role is to decide and control the robot during an interaction.
+
+\section{The Role and Features of JAHRVIS}\label{chap2:sec:sup_features}
+
+\acrshort{jahrvis} is a supervision system, \ie it embeds the robot high-level decisions, controls its behavior and tries to react to contingencies, whenever necessary considering the human it is interacting with. It is to differentiate from supervision systems dedicated to (multi-)robot control. It is able to do so by querying, managing and executing (shared) plans which are (partially) ordered set of actions to be performed by human and robot agents in order to achieve a (shared) goal. The plan management, described in Section~\ref{chap2:subsec:plan_handling}, is based on the estimation of the human's mental states, its knowledge about the current state of the environment, and recognized human actions. We explored the management of various kind of plans: 
+\begin{inlineEnumerate}
+	\item shared plans in which each action is allocated to an agent as well as action parameters are given objects,
+	\item shared plans in which actions might not be allocated to an agent at planning time and parameters might refer to objects with a semantic query, and
+	\item conditional plans which anticipate different possibilities for the human decision/action. 
+\end{inlineEnumerate} 
+
+As mentioned previously, the plan management relies on the recognition of human actions, among other things. \acrshort{jahrvis} integrates its own processes of action monitoring, \ie selecting the robot's point of interest and enabling joint attention, presented in Sections~\ref{chap2:subsubsec:robot_plan} and \ref{chap2:para:resource_m}, and of action recognition. This latter process, introduced in Section~\ref{chap2:subsec:h_moni}, is model-based and have been designed to be robust to a potentially unreliable perception of the human.
+
+As there are actions of the plan to execute by the robot, \acrshort{jahrvis} needs interfaces with the robot controllers. Moreover, actions can be of two types, physical and communicative actions, and so requires a differentiated management. The methods implemented to handle the action execution will be introduced in Section~\ref{chap2:subsec:aem}.
+
+Finally, an important feature is the ability to verbally communicate with the human. Indeed, during a collaborative task, communicate might be needed, among other things, to inform the partner of a performed action, or to ask them to perform one. Section~\ref{chap2:subsec:comm} describes the choices we made to endow the robot with a minimum set of communication abilities.
+
+%Not only \acrshort{jahrvis} controls the robot contribution to a collaborative task, it also tries to evaluate if the interaction is going well or not. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make its decision-making processes more pertinent. The evaluation of the \acrlong{qoi} relies on a model of interaction, considered at  three levels: the interaction session level, the tasks level and the actions level. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low \acrshort{qoi} is assessed. Indeed, for instance, a task can be of poor quality while the session can still be considered as going well. \acrshort{qoi} principles and metrics will be described in Section~\ref{chap2:sec:qoi}.
+
+
+\section{Representation of a Human-Robot collaborative activity}\label{chap2:sec:levels}
+It is possible to describe and decompose a Human-Robot collaborative/joint activity in various ways for (see Section~\ref{chap1:subsec:def_ja} for discussions related to joint or collaborative activities). What we define as collaborative activities or tasks are types of joint actions. For all the following definitions, we place ourselves in the context of one-to-one human-robot interactions, however we  believe that the scheme can be extended to multi-human multi-robot contexts. 
+We draw our inspiration from the literature of sociology and robotics, presented in Section~\ref{chap1:sec:soc_int} and Section~\ref{chap1:sec:soc_inter}, to define a model of interaction with three layered levels: interaction session, tasks and actions; as illustrated in Fig.~\ref{fig:levels}. We chose to represent collaborative tasks and their decomposition using the \acrfull{htn}~\cite{ghallab_2016_automated} representation which is often used in cognitive robotics~\cite{ingrand-2017,lallement_2014_hatp, buisan_2021_human} and because it allows to deal with goal-based and situation-based activities at different levels of hierarchy such as task, subtasks and actions and consequently to consider different levels of granularity. 
+
+%In the example of a task with an overall bad Quality of Interaction, it would be interesting to know that in fact it is only a particular action or subtask ruining it. Indeed, the other parts of the task can be ok, or on the opposite, a particular subtask or action can have performed very well among the others. We need and use this granularity also on the three levels defined (interaction session, tasks and actions) to finely evaluate the Quality of Interaction, as a task can be of poor quality but the session is globally going well, \eg if a given task was a complete failed for some reasons but the other tasks were performed correctly. 
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=\linewidth]{figures/chapter2/session_interaction.pdf}
+	\caption{The hierarchical structure of an interaction session. The highest level is the interaction session. The second level is composed of the tasks. They are included in the body of interaction of the interaction session and, two types of tasks are considered and may overlap, collaborative and conversational tasks. With this representation, a task can be recursively refined as subtasks until reaching the last level, the actions level, which is considered as atomic.
+%		Subtasks are not considered as a ``real'' level of the interaction session, specially to evaluate the \acrshort{qoi}, as it may exist or not according to the task.
+		}
+	\label{fig:levels}
+\end{figure}
+
+
+\subsection{Representation of a Human-Robot Interaction Session}
+We define an \textbf{interaction session} as the period during which the robot and a human interact together and are engaged. It is divided in three parts, following the structure proposed by Robinson~\cite{robinson_overall_2012} as presented in Section~\ref{chap1:sec:soc_inter}: the greetings, the body of the interaction and the goodbyes. First, \textit{the greetings} corresponds to the period where an agent starts an interaction by initiating it with another agent. The interaction session lasts as long as the interactants are maintaining the interaction through conversation and collaborative tasks performance which corresponds to the \textit{body of interaction}. Finally it ends when at least one of the interactants is disengaged, either by abruptly ending the interaction or by closing the interaction as described by Schegloff and Sacks~\cite{schegloff_1973_opening}, it corresponds to ``the goodbyes''. For example, for an entertainment robot in a mall, an \textit{interaction session} starts when a person signals to the robot that they want to engaged, by greeting it or by approaching it and looking at it. The body of interaction is composed of conversation and eventually direction-giving tasks and, the session lasts until the person says goodbye or leaves. This is the nominal case and, the duty of the robot is to contribute to maintain the session alive until the human decides to close it, because it is at the service of humans. However, in some (extreme) cases, the robot might decide to close the interaction by itself.
+
+Moreover, as seen in Section~\ref{chap1:subsubsec:joint_commit}, social interactions and joint activities (or actions) involve commitment, or rather engagement as we say in robotics -- this difference in the vocabulary as been highlighted in~\cite{castro_2019_commitments}. As explained in the previous chapter, there is no unique definition of what it means to be engaged. We chose one that is frequently used in robotics, proposed by Sidner and Lee~\cite{sidner_2003_engagement}: ``Engagement is the process by which two (or more) participants establish, maintain and end their perceived connection during interactions they jointly undertake''. The robot must be able to exhibit its engagement and disengagement and also to assess them with respect to its human partner.
+
+We defined three states for the body of interaction, corresponding to what can happen during the latter: 
+\begin{bulletList}
+	\item conversation: a social chit-chat or a goal negotiation, without any physical action performed except communicative gestures
+	\item collaborative task: both agents executing actions in order to achieve a shared goal
+	\item idle phases: the agents are not chatting or performing a collaborative task together but remain engaged in the interaction session, it happens in-between active interaction phases
+\end{bulletList}
+
+For each of these three states, the way to exhibit the engagement varies (\eg in a conversation, an agent looking at their partner displays their engagement; during a task, an agent correctly performing their action is a way to demonstrate their engagement). That is why there is a need to define what behavior the robot has to exhibit in each state and what behavior it should expect from the human in each state, as these behaviors are usually very specific (\eg in a direction-giving task, the robot keeps its head oriented toward its partner's face to demonstrate its engagement in conversation and idle contexts and when it gives a direction it expects the human to look at the direction it is showing; in a stack task, when the robot gives an instruction it expects the human to take a given cube).
+
+Transitions from one state to another can be managed by triggers more or less complex. For example, a collaborative task can be initiated when a human asks the robot that they achieve a goal together.
+
+
+\subsection{Collaborative Tasks, Substasks and Actions}
+\textbf{\textit{Tasks}} compose the body of the interaction of an interaction session as shown in Fig.~\ref{fig:levels}. We distinguish conversation (\ie agents engage in dialogue to exchange ideas, or to ask questions) from collaborative tasks (\ie agents work as partners, collaborating to perform tasks and to achieve common goals). We will not develop more on conversation since it is not the main focus of this work.
+
+In joint or collaborative activities (see Section~\ref{chap1:subsec:def_ja}), humans are committed to achieve a goal together, involving collaboration and shared plans as shown in Section~\ref{chap1:sec:ja}. And, when interaction with a robot, the same mechanisms are also triggered as they are essential to a successful collaboration. When a human and a robot perform a task together, as described by Bauer \textit{et al}.~\cite{bauer_2008_collab}, we could say that the robot has the intent to help the human, so the human's intention becomes its own intention. Then, they have the joint intention to reach a common goal and, as shown by Michael and Salice~\cite{michael_2017_commitment}, they have a commitment to the joint activity, leading to perform joint actions. Therefore, during its evaluation and decision-making processes, the robot has to take into account that the human and itself should remain engaged all along an interaction session for the tasks to be successful and both have to manage and contribute to maintain expectations about what the other is doing. 
+
+The elements composing a \textit{task} are: a goal, a plan and involved agents. A plan is needed to achieve a goal. There are many ways to generate a plan. But no matter the way (using a planner to anticipate execution or relying on a reactive planning scheme), we defined a plan as a sequence of actions in the end, even when it is hierarchical such as \acrshort{htn} plans. Sometimes, an abstraction higher than actions but lower than plan. So, we also define \emph{subtasks} or \emph{abstract tasks} which are sequences of actions, high level actions. 
+
+\textbf{\textit{Actions}} are the elementary items of tasks, primitive tasks, manipulated by the high-level robot supervision controller. They cannot be decomposed further by it (\eg placement and motion planning are achieved by a lower control system not described here). It is usual to describe an action with its preconditions, its effects and, the agents and entities implied in its execution (\eg in plans written in PDDL (Planning Domain Definition Language)~\cite{ghallab_98_pddl}). We add to this description the notion of expected reactions (which can themselves be actions) from the other agents once the action is executed.
+
+In our model, an agent (human or robot) is a contributor to the task and has a mental state as described by Devin \textit{et al}.~\cite{devin_2016_implemented}. The mental state is a set of facts representing, from the agent point of view, the current world state, the state of the goal and the current task state. Since we are interested here in the robot situation assessment and decisional processes, the mental state of the human is built and managed by the robot as an estimation of the beliefs of the human~\cite{milliez_2014_framework, hiatt_2017_modeling,tabrez_2020}.
+
+\section{The Structure of JAHRVIS}\label{chap2:sec:jahrvis}
+%\section{The Architecture of JAHRVIS}\label{chap2:sec:jahrvis}
+The \acrfull{jahrvis} is implemented on top of our ROS-Jason framework\footnote{\url{https://github.com/amdia/ld_rjs}}. During the design of \acrshort{jahrvis}, we identified seven high-level features we needed and implemented their associated processes, based on the objectives presented in Section~\ref{chap2:sec:sup_features}\footnote{The design of \acrshort{jahrvis} was an iterative work, indeed the first version being the supervisor implemented for the task described in Chapter~\ref{chapter:chap3}, the second one was the supervisor of the task described in Chapter~\ref{chapter:chap4} and the final one was the supervisor of the task described in Chapter~\ref{}}\todo{to update later}. We present \acrshort{jahrvis} architecture in Figure~\ref{chap2:fig:sup_overview}, with the seven processes in blue, the \acrshort{qoi} Evaluator dedicated to the interaction evaluation and the six others to the decision and control. All the next developments of this chapter will be about the description of these processes.
+
+\begin{figure}[!ht]
+	\includegraphics[width=\linewidth]{figures/chapter2/supervisor_modules.pdf}
+	\caption{The \acrshort{jahrvis} processes (in blue) and their interactions between themselves and with the other components of the robotic architecture presented in Section~\ref{chap2:sec:rob_archi}.}
+	\label{chap2:fig:sup_overview}
+\end{figure}
+
+For each process (in blue in Figure~\ref{chap2:fig:sup_overview}), we implemented an \acrshort{rja}, with the desired behavior coded in ASL and the needed customizations added in Java. Thus, internal communications between the \acrshort{jahrvis} processes, and so \acrshort{rja}s, use Jason messages (see Section~\ref{chap2:subsec:jason}). External communication with the other components of the robotic architecture is based on either ROS messages, services or action clients.
+
+Not all \acrshort{rja}s are active at each level of interaction defined in Section~\ref{chap2:sec:levels}. Indeed, as its name suggests, the \textit{Interaction Session Manager} handles interaction sessions. The \textit{Robot} and \textit{Human Plan Managers} handle the task level. And, the \textit{Action Execution Manager} and the \textit{\acrlong{ham}} are in charge of the action level. The \textit{\acrshort{qoi} Evaluator} and the \textit{Communication Manager} are active at all levels. We can also make the distinction between the component dedicated to the assessment of the quality of interaction, \ie the \acrshort{qoi} Evaluator, and the components dedicated to the decision-making and control, \ie all the components except the \acrshort{qoi} Evaluator.
+
+In the Sections~\ref{chap2:sec:control} and \ref{chap2:sec:qoi} will be presented these processes. Section~\ref{chap2:sec:control} introduces the ones related to the decision-making and robot control while Section~\ref{chap2:sec:qoi} describe the evaluation process of the \acrlong{qoi}. Section~\ref{chap2:sec:control} will start by laying the foundations for the \acrshort{rja} functioning: the knowledge representations and management. Then, each \acrshort{rja} will be thoroughly described. The \acrfull{ism} is dedicated to in-between tasks, \ie the opening and closing of interactions and all the dialog which can happen between two collaborative tasks. When a shared goal is established, the shared plan is handled by the \acrfull{rpm} and the \acrfull{hpm}, \ie to follow the plan progression, to make sure that the observed human actions match the ones of the plan and to decide when the robot should act. Robot actions to perform are sent to the \acrfull{aem} that interfaces with the motion planer and executor. As for human actions, they are monitored and recognized by the \acrfull{ham}. Finally, the \acrfull{cm} is in charge of producing the communication for the human when requested by another \acrshort{rja} along with the human communication reception.
+
+
+\ifdefined\included
+\else
+\bibliographystyle{acm}
+\bibliography{These}
+\end{document}
+\fi
+
+
+
+
+
+
