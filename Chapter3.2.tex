@@ -9,46 +9,99 @@
 	\faketableofcontents
 	\fi
 
-\chapter{How JAHRVIS works}\label{chap2:sec:control}\todo{related work}
+\chapter{How JAHRVIS works}\label{chap2:sec:control}
 %\chapter{A robot controlling its contribution to a human-robot joint action}\label{chap2:sec:control}\todo{related work}
+\minitoc
 
-The objective of this section is to present the \acrshort{jahrvis} processes involved in the decision-making and the control of the robot when jointly interacting with a human. First, we present the knowledge representations used, then the \acrlong{ism}, the \acrlong{ham}, the Shared Plans Handling composed of two processes, one for the robot (\acrlong{rpm}) and one for the human (\acrlong{hpm}), the \acrlong{aem}, and finally the \acrlong{cm}.
+The objective of this chapter is to present the \acrshort{jahrvis} processes involved in the decision-making and the control of the robot when jointly interacting with a human. First, we present the knowledge representations used, then the \acrlong{ism}, the \acrlong{ham}, the Shared Plans Handling composed of two processes, one for the robot (\acrlong{rpm}) and one for the human (\acrlong{hpm}), the \acrlong{aem}, and finally the \acrlong{cm}.
+
+Most examples given in this chapter will base themselves on a collaborative task, the \textit{BuildingTask}, that we are going to present now. It has been inspired by~\cite{devin_2017_decisions}. A human and a robot have to build a block construction together as represented in Figure~\ref{chap6:subfig:task_goal}. At the beginning of the task, the robot and the human have several colored blocks they can access as in a set-up like the one illustrated in Figure~\ref{chap6:subfig:task_setup}. Two identical placements are set on the table to indicate where to put the two red cubes.
+
+\begin{figure}[!htb]
+%	\centering
+	\hspace*{\fill}%
+	\subfloat[Goal of the task (side view)]{\label{chap6:subfig:task_goal}\includegraphics[width=0.25\linewidth]{figures/chapter2/task_goal.png}}\hfill
+	\subfloat[Initial set-up (top view)]{\label{chap6:subfig:task_setup}\includegraphics[width=0.4\linewidth]{figures/chapter2/task_setup.png}}
+	\hspace*{\fill}
+	\caption{Description of the blocks building task. The human and the robot have to build the stack together. We assume that the robot and the human know where all the available blocks are. We would like the robot to adapt as much as possible to the human actions and decisions while avoiding useless or tiresome verbal interactions.}
+	\label{chap6:fig:task_blocks}
+\end{figure}
+
+Each agent has 3 available actions: Pick, Place and Wait. They can only access to the cube on their side of the table.
 
 \section{Knowledge Representations and Management}\label{chap2:subsec:know}
 As shown in Section~\ref{chap1:subsubsec:shared_rep} and Section~\ref{chap1:subsubsec:common_g}, when involved in joint actions, humans have shared representations of tasks, actions, goals and have a common ground. Thus, it is important that the robot has such internal representations.
 
-During an interaction, \acrshort{jahrvis} processes use knowledge bases (KB) of two types: external and internal ones. The external knowledge bases with which we interfaced \acrshort{jahrvis} are Ontologenius\footnote{\url{https://github.com/sarthou/ontologenius}}~\cite{sarthou_2019_ontologenius} for the semantic knowledge and Mementar\footnote{\url{https://github.com/sarthou/mementar}} for the episodic one. They have been developed by Guillaume Sarthou with whom we collaborated closely. A reason for this choice is that it is fully adapted to HRI applications by representing the robot's knowledge and the estimation of the partners' knowledge separately, which refers to the psychological concept of the ``self-other distinction'' as coined in joint action studies~\cite{pacherie_2012_agency}. 
+During an interaction, \acrshort{jahrvis} processes use knowledge bases (KB) of two types: internal and external ones. Concerning the first type, each \acrshort{rja} has its own knowledge base that we call belief base in Jason vocabulary. It is used for knowledge which serves to \acrshort{jahrvis} internal computations only. As for the external knowledge bases, there are the ones presented in Section~\ref{chap3:subsubsec:kb} as part of the robotic architecture, Ontologenius and Mementar. Updates from subscription to Ontologenius facts are received through ROS topics and converted as Jason percepts to be added to the subscribing \acrshort{rja} belief base. 
 
-Moreover, each \acrshort{rja} has its own knowledge base that we call belief base in Jason vocabulary. It is used for knowledge which serves to \acrshort{jahrvis} internal computations only.
+Table~\ref{chap6:tab:data} shows a description of the data circulating between the \acrshort{jahrvis} \acrshort{rja}s and the 2 \acrlong{kb}s, Ontologenius and Mementar.
 
-Ontologenius allows to store common-sense knowledge (\eg a cube is an object), knowledge about the environment (\eg object\_1245 is a Cube and is on top of table\_2) and knowledge about activities grounded in space and time (\eg object\_1245 has been put on the table\_2 by robot (action ID 475)). Mementar allows to store facts and actions in a timeline (\eg action ID 475 started at 3286 seconds and was over at 3290 seconds). As stated in Section~\ref{chap2:sec:rob_archi}, it receives and stores facts about the current state from the Situation Assessment component. It reasons on it, making some deductions and links between facts, creating new ones (\eg after receiving \fact{isOnTof}{cube\_2}{table\_1} and it computes \fact{isUnder}{table\_1}{cube\_2}). 
-
-The knowledge representation in Ontologenius is based on three concepts: (1) classes representing the possible types of entities known by the agent (\eg Cube is a class inheriting from the class Pickable), (2) properties which can denote both the attributes of objects (\eg the color) and the relations between the objects (\eg which object is on which other one), and (3) object instantiations also called individuals (\eg cube\_3 is an object present in the environment, of the class Cube).
-
-To access to the knowledge stored in Ontologenius, \acrshort{jahrvis} can make a request to know if a given fact exists or ask an information about a class, a property or an object instantiation. Another way is to subscribe to updates (addition or deletion) for a given fact. It is useful for keeping updates about the environment and avoid to be snowed under too much data (\eg to monitor human place actions, \acrshort{jahrvis} needs \textit{isOnTopOf} but not \textit{isUnder} so \acrlong{ham} can subscribe to updates about this first fact). It is possible to either specify the class or individual of the subjects/objects that should be concerned by the subscription, or to receive every facts (\eg it can subscribe to receive additions of the human looking at the robot |[add]human_0$\lvert$isLookingAt$\lvert$robot| or to receive all updates about every objects that the human looks at |[?]human_0$\lvert$isLookingAt$\lvert$?|).
+\begin{landscape}
+\begin{table}[]
+	\centering
+	\begin{tabular}{p{0.34\textwidth}||p{0.39\textwidth}|p{0.43\textwidth}|p{0.2\textwidth}|}
+		
+		&
+		\acrshort{rja} subscription to \acrshort{kb}&
+		\acrshort{rja} request/\acrshort{kb} response &
+		\acrshort{rja} feeding \acrshort{kb} \\ \hline\hline
+		\acrlong{rpm} &
+		\textit{isLookingAt(Human,Robot)} &
+		Class of actions\newline SPARQL $\rightarrow$ Object &
+		Start and end of abstract tasks \\ \hline
+		\acrlong{hpm} &
+		\textit{isPerceiving(Human,Robot)}\newline \textit{isPerceiving(Robot,Human)}\newline \textit{isLookingAt(Human,Robot)}\newline \textit{isLookingAt(Human,}Object) &
+		Class of actions\newline Existence of action effects\newline SPARQL $\rightarrow$ Object &
+		Start and end of primitive tasks \\ \hline
+		\acrlong{cm} &
+		\textit{isPerceiving(Robot,Human)} &
+		Verb conjugation\newline Class of actions and objects\newline Labels of actions and objects\newline Existence of verbalization contexts &
+		\\ \hline
+		\acrlong{ham} &
+		Movements of the human action model\newline Progression effects of the human action model\newline Necessary effects of the human action model &
+		Class of Objects\newline Existence of preconditions\newline Existence of isReachable(Object) &
+		\\ \hline
+		\acrlong{aem} &
+		&
+		Class of actions &
+		Start and end of primitive tasks \\ \hline
+	\end{tabular}
+	\caption{Data circulating between the Knowledge Bases (Ontologenius and Mementar) and the \acrshort{jahrvis} \acrshort{rja}s. Data in italics are not task-dependent, the other ones are. The types of the latter are loaded from the action models described in Paragraph:~\nameref{chap2:par:act_rep}. For example, the \acrlong{ham} gets from the internal action model that \fact{handMovingToward}{Human}{Pickable} is a movement of the Pick action. Then, it can subscribe to the updates about this fact type to Ontologenius when a task where the human has a Pick action is ongoing.}
+	\label{chap6:tab:data}
+\end{table}
+\end{landscape}
 
 \subsection{Action Representations}\label{chap2:subsubsec:action_rep}
-Action representations allow the robot to recognize actions, to execute actions, to monitor the human monitoring its actions and to communicate about them. We defined three action representations according to their use. We chose to have one stored in Ontologenius to benefit from the reasoning features and to have the two others written in an ASL file to benefit from Jason reasoning features.
+Action representations allow 
+\begin{bulletList}
+	\item the robot to recognize human actions
+	\item to execute actions
+	\item to monitor the human's attention towards its actions and to communicate about them
+\end{bulletList} 
+
+We defined three action representations according to these three uses. Actions should be written and loaded by the programmer according to the task they need the robot to perform, following the defined formats in the dedicated files. This allow \acrshort{jahrvis} core to be task-independent.
+
+Human actions to recognize and robot actions to execute are written in an ASL file to benefit from Jason reasoning features. And, the same robot actions but with other information allowing \acrshort{jahrvis} to communicate about them and to monitor the human's attention towards them are stored in Ontologenius to benefit from the reasoning features. This latter representation is described in the next paragraph.
 
 \paragraph{External Action Representation}
-For the needs of \acrshort{jahrvis}, we represented actions, their verbal labels and their effects in a semantic \acrshort{kb} in the form of an ontology\footnote{An ontology is a way to represent knowledge} managed by Ontologenius. We show in Figure~\ref{chap2:fig:class_actions} a representation of some actions we stored in Ontologenius using the Web Ontology Language (OWL) (see Listing~\ref{chap2:lst:classes}) and in Figure~\ref{chap2:fig:class_effects} a representation of possible action effects.
+For the needs of \acrshort{jahrvis}, we represented actions, their verbal labels and their effects in the semantic \acrshort{kb} managed by Ontologenius. We show in Figure~\ref{chap2:fig:class_actions} a representation of some actions we stored in Ontologenius using the Web Ontology Language (OWL) (see Listing~\ref{chap2:lst:classes}) and in Figure~\ref{chap2:fig:class_effects} a representation of possible action effects.
 
 \begin{lstlisting}[style=OwlTurtle, label={chap2:lst:classes}, caption={Description of ontology classes in the OWL language using the Turle syntax.} ]
 :PhysicalAction	rdf:type owl:Class ;
 				rdfs:subClassOf :HtnAction .
 
-:ScanAction	rdf:type owl:Class ;
+:PlaceAction	rdf:type owl:Class ;
 			rdfs:subClassOf :PhysicalAction ;
-			htn_actions:hasEffect :IsScannedEffect ;
-			rdfs:label ``{Agent} @Scan {Pickable}'' .
+			htn_actions:hasEffect :IsOnTopOfEffect ;
+			rdfs:label ``{Agent} @Place {Pickable}'' .
 
 \end{lstlisting}
 
-One of the advantages of using action model stored in Ontologenius is the class inheritance. It allows to define properties for one class that will be transmitted to its child classes (\eg if it exists multiple class representing a drop action, let's say |human_drop_cube| and |robot_drop_cube|, both inherit from the properties of |DropAction| such as the label used for the action verbalization). Another advantage is to be able to link classes through properties and to easily query the \acrshort{kb} about it (\eg what are the effects of the |PickAction| and then what types of effects are they?).
+One of the advantages of using action model stored in Ontologenius is the class inheritance. It allows to define properties for one class that will be transmitted to its child classes (\eg if it exists multiple class representing a Place action, let's say |human_place_cube| and |robot_place_cube|, both inherit from the properties of |PlaceAction| such as the label used for the action verbalization). Another advantage is to be able to link classes through properties and to easily query the \acrshort{kb} about it (\eg what are the effects of the |PickAction| and then what types of effects are they?).
 
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/class_actions.pdf}
-	\caption{The representation of an extract of the ontology class hierarchy graph of \acrshort{htn} actions. Taking the class PhysicalAction, the arrow \circledtext{1} has to be read	as \textit{``A DropAction is a kind of PhysicalAction''}.}
+	\caption{The representation of an extract of the ontology class hierarchy graph of \acrshort{htn} actions. Taking the class PhysicalAction, the arrow \circledtext{1} has to be read	as \textit{``A PlaceAction is a kind of PhysicalAction''}.}
 	\label{chap2:fig:class_actions}
 \end{figure}
 
@@ -58,7 +111,7 @@ One of the advantages of using action model stored in Ontologenius is the class 
 	\label{chap2:fig:class_effects}
 \end{figure}
 
-As we know, when an agent performs an action, the other agent may monitor it, in order to follow the task progress and to know when the action is over. A way to know that an action is over is to check if the action effects exist or not in the current worldstate. However, effects may be perceived differently according to the agent type as humans and robots does not have the same perception modalities (and even in one given type it can differ). In Figure~\ref{chap2:fig:class_effects}, we represented a possible way to model and classify action effects. And so, because Ontologenius is designed for \acrshort{hri}, it is possible to have different representations for robot agents and human agents. We present now a use case with its illustration in Figure~\ref{chap2:fig:kettle}. An agent may have to perform |HeatWaterInKettleAction|. If it is performed by the human, the robot has to monitor the action effects to know if the action is over or not. However, a robot is not able to observe that a kettle has finished to boil water, thus the action has a non-observable effect for the robot. Then, probably the robot will ask the human if the action is over or will see that the human performs its next action of the plan. Now, if we place ourselves in the case where the robot is the one performing the action -- with a smart kettle --, it wants to check if the human could be aware of the action end (because if they are not aware, it needs to communicate about it). The criteria \acrshort{jahrvis} takes into account is, was the effect observable by the human partner? To answer this question, it first needs to know what the observable effects of |HeatWaterInKettleAction| for the human (if there are). Then, it can query the human's belief base in Ontologenius and get the knowledge that for them, the effect of |HeatWaterInKettleAction| belongs to the class |ThudEffect| (when the kettle stops, it produces a thud) and |TactileEffect| (when the kettle boils water, it becomes hot).
+As we know, when an agent performs an action, the other agent may monitor it, if present, in order to follow the task progress and to know when the action is over. A way to know that an action is over is to check if the action effects has been added to the current worldstate or not. However, effects may be perceived differently according to the agent type as humans and robots does not have the same perception modalities (and even in one given type it can differ). In Figure~\ref{chap2:fig:class_effects}, we represented a possible way to model and classify action effects. And so, because Ontologenius is designed for \acrshort{hri}, it is possible to have different representations for robot agents and human agents. We present now a use case with its illustration in Figure~\ref{chap2:fig:kettle}. An agent may have to perform |HeatWaterInKettleAction|. If it is performed by the human, the robot has to monitor the action effects to know if the action is over or not. However, a robot is not able to observe that a kettle has finished to boil water, thus the action has a non-observable effect for the robot. Then, probably the robot will ask the human if the action is over or will see that the human performs its next action of the plan. Now, if we place ourselves in the case where the robot is the one performing the action -- with a smart kettle --, it wants to check if the human could be aware of the action end (because if they are not aware, it should to inform them). The criteria \acrshort{jahrvis} takes into account is, was the effect observable by the human partner? To answer this question, it first needs to know what the observable effects of |HeatWaterInKettleAction| for the human (if there are). Then, it can query the human's belief base in Ontologenius and get the knowledge that for them, the effect of |HeatWaterInKettleAction| belongs to the class |ThudEffect| (when the kettle stops, it produces a thud) and |TactileEffect| (when the kettle boils water, it becomes hot).
 	
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/kettle.pdf}
@@ -66,7 +119,7 @@ As we know, when an agent performs an action, the other agent may monitor it, in
 	\label{chap2:fig:kettle}
 \end{figure}
 
-Finally, as mentioned earlier and as visible in Listing~\ref{chap2:lst:classes}, Ontologenius allows to define label classes and so label for actions. These labels are then used by \acrshort{jahrvis} to communicate about the plan actions and based on a simple grammar we defined. For example, in ``\{Agent\} @Scan \{Pickable\}'', elements between braces are to be instantiated at execution time by \acrshort{jahrvis} communication process when needed. Then, the @ symbol indicates that the word is a verb that should be conjugated. Verb conjugations can also be found in the \acrshort{kb} as shown in Listing~\ref{chap2:lst:verb}. Thus, the communication manager could process it leading to ``I scanned the blue cube''.
+Finally, as mentioned earlier and as visible in Listing~\ref{chap2:lst:classes}, Ontologenius allows to define label classes and so label for actions. These labels are then used by \acrshort{jahrvis} to verbalize the plan actions and based on a simple grammar we defined. For example, in ``\{Agent\} @Scan \{Pickable\}'', elements between braces are to be instantiated at execution time by \acrshort{jahrvis} communication process when needed. Then, the @ symbol indicates that the word is a verb that should be conjugated. Verb conjugations can also be found in the \acrshort{kb} as shown in Listing~\ref{chap2:lst:verb}. Thus, the communication manager could process it leading to ``I scanned the blue cube''.
 
 \begin{lstlisting}[style=OwlTurtle, label={chap2:lst:verb}, caption={Description of the class describing the verb Drop in the third-person present-tense, in the OWL language using the Turle syntax.} ]
 :DropTSPSimplePresent	rdf:type owl:Class ;
@@ -76,21 +129,12 @@ Finally, as mentioned earlier and as visible in Listing~\ref{chap2:lst:classes},
 						rdfs:label ``drops''@en .
 \end{lstlisting}
 
-We have seen the possibilities offered by Ontologenius to \acrshort{jahrvis}. Now, we present the two internal action representations, one of the human actions in order to monitor them and the other one is of the robot actions, to allow the robot to monitor the human monitoring of its actions. 
+We have seen the possibilities offered by Ontologenius to \acrshort{jahrvis}. Now, we present the two internal action representations, one of the human actions in order to monitor them and the other one is of the robot actions, to allow the robot to estimate the human monitoring activity of its actions. 
 
 \paragraph{Internal Action Representation}\label{chap2:par:act_rep}
-What does \acrshort{jahrvis} need to monitor a human action? We defined a human action |Act| as: a predicate in the form of a triplet |ActPred| with its name |ActName|, the agent |AgentName| performing it and parameters |Params|; a list of preconditions |PrecondL|, a list of distinctive movements |MoveL| that the human could do when performing the action; a list of effects that we coined \textit{progression effects} |ProgEffectL| which are action effects, not enough to rule the action end but allowing the plan managers that an action is progressing towards its end; and a list of effects that we coined \textit{necessary effects} |NecessEffectL| which are action effects existing iff the action is over. Our action model takes the form of Jason beliefs written in an ASL file, added as input of the \acrshort{rja} Human Action Monitoring. A human action |Act| is represented as:
-\begin{lstlisting}[style=aslDef]
-actionModel(ActPred,PrecondL,MoveL,ProgEffectL,NecessEffectL).
-\end{lstlisting}
+What does \acrshort{jahrvis} need to \textbf{monitor a human action}? We defined a human action as $Act_H=\langle Action,PrecondL,MoveL,ProgEffectL,NecessEffectL\rangle$ where $Action$ is a predicate in the form of a triplet $ActName(Agent,Params)$ with $ActName$ the action name, $Agent$ the class of the agent performing it (\eg Human or Worker) and $Params$ a list of the action parameter classes; $PrecondL$ the list of the action preconditions; $MoveL$ the list of distinctive movements that the human could do when performing the action; $ProgEffectL$ the list of effects that we coined \textit{progression effects} which are action effects, not enough to rule the action end but allowing the plan managers to estimate that an action is progressing towards its end; and $NecessEffectL$ the list of effects that we coined \textit{necessary effects} which are action effects existing iff the action is over.
 
-\noindent
-with |ActPred| being:
-\begin{lstlisting}[style=aslDef]
-			ActName(AgentName,Params).
-\end{lstlisting}
-
-For example, the action Place for a human is represented as:
+Our action model takes the form of Jason beliefs written in an ASL file, added as input of the \acrshort{rja} Human Action Monitoring. For example, the action Place for a human is represented as:
 \begin{lstlisting}[style=aslDef]
 actionModel(place(Human,[Pickable,Support]),
 			[hasInRightHand(Human,Pickable)],
@@ -101,20 +145,42 @@ actionModel(place(Human,[Pickable,Support]),
 
 The choice to have two kinds of effects has been made in order to allow the Human Action Monitoring to be robust to a potentially unreliable perception. Indeed, for example in the case of a Place action, the perception of an object hold by a human can be jumpy, and receiving the fact that the object is not in the human's hand anymore. It could reappear a few instant later. On the other, if the robot perceives that the object has been placed on top of a support, it can assume that the action is really over. The algorithm of Human Action Monitoring will be more detailed in Section~\ref{chap2:subsec:h_moni}.
 
-We designed a similar model for the robot actions but simpler as the preconditions are handle by the Motion Planner and the action progressing is followed through the ROS action client feedbacks. So, there is only the action triplet predicate and the necessary effects, which gives:
-\begin{lstlisting}[style=aslDef]
-			actionModel(ActPred,NecessEffectL).
+\bigskip
+
+The action representation for \textbf{robot action execution} allows to match, for a given action, its name and the motion planner and executor needed to execute it. It is possible to specify how the action parameter should be fed to the motion planner and the reaction the robot should have in case of execution failure. The example given in Listing~\ref{chap6:listing:int_rep_act_exec} shows what functions of the motion planner and executor call and how the system should react in case of failure.
+\begin{lstlisting}[label=chap6:listing:int_rep_act_exec,style=aslDef, frame=single, caption={Example of an internal action definition for a robot action. The first Jason plan specifies what function to call to execute the Place action. The second plan describes what should be done in case of action planning or execution failure. The third plan is triggered when the first plan has already been tried twice and was requested for a third time. In this case, the failure is signaled at the plan level.}]
+// execution limited to 2 trials in a raw
+@place[max_attempts(2)] 
++!place(Params) : planPick("armUsed", Arm) <-
+			.nth(1, Params, Obj);
+			headManager(Obj,environment_monitoring,urgent);
+			planPlace(Obj, Arm);
+			execute("place").
+		
+// in case of failure, we try again if did not already
+-!place(Params)[error_msg(Msg)] : 
+	not .substring(max_attempts,Msg) <-
+			+error_msg(Msg);
+			!place(Params).
+
+// if we tried to execute the plan three times in a raw,
+// the action is dropped	 
+-!place(Params)[error_msg(Msg)] : 
+	.substring(max_attempts,Msg) <-
+			?error_msg(Msg);
+			.fail_goal(executeAction,[error_msg(Msg)]).
 \end{lstlisting}
 
-For example, the action Place for a robot is represented as:
-\begin{lstlisting}[style=aslDef]
-actionModel(place(Robot,[Pickable,Support]),
-				[~isHolding(Robot,Pickable), 
-				isOnTopOf(Pickable,Support)]).
-\end{lstlisting}
 
 \subsection{Shared Plan Representation}\label{chap2:subsubsec:shared_p_rep}
-As explained in Section~\ref{chap2:sec:levels}, we represent Shared Plans using \acrfull{htn}. This formalism allows to deal with goal-based and situation-based activities at different levels of hierarchy such as task, subtasks -- abstract tasks using planning vocabulary -- and actions -- atomic, primitive tasks -- and consequently to consider different levels of granularity. For example, it may be useful to \acrshort{jahrvis} to be able to request a plan for a given abstract task which failed\footnote{This is future work.}. Another advantage is that it is easy then for the robot to communicate about subtasks and not only about actions without context. However, according to the task or the domain, the \acrshort{htn} expressiveness for this matter raises discussion. Indeed, \acrshort{htn} plans often make use of recursive abstract tasks which becomes useless for replanning because such abstract tasks have no semantic meaning (\eg an abstract task called DropAllObjects can be decomposed into a primitive task DropObject and the abstract task DropAllObjects which is itself decomposed into DropObject and DropAllObjects, etc., in this case, to say that the abstract task DropAllObjects has failed does not give a useful information). 
+As explained in Section~\ref{chap2:sec:levels}, we represent shared plans using \acrfull{htn} as \acrshort{hatp} and \acrshort{hatpehda}, the planners we used generate \acrshort{htn}-based plans. This formalism allows to deal with goal-based and situation-based activities at different levels of hierarchy such as task, subtasks -- abstract tasks using planning vocabulary -- and actions -- atomic, primitive tasks -- and consequently to consider different levels of granularity. For example, it may be useful to \acrshort{jahrvis} to be able to request a plan for a given abstract task which failed\footnote{This is future work.}. Another advantage is that it is easy then for the robot to communicate about subtasks and not only about actions without context. However, according to the task or the domain, the \acrshort{htn} expressiveness for this matter raises discussion. Indeed, \acrshort{htn} plans often make use of recursive abstract tasks which becomes useless for replanning because such abstract tasks have no semantic meaning. Indeed, if we take the piece of plan presented in Figure~\ref{chap6:fig:recursive_task}, to communicate to the human that the abstract task DropAllObjects has failed does not give a information precise enough since there are several of them.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.6\linewidth]{figures/chapter2/recursive_task.pdf}
+	\caption{Example of a recursive abstract task. The white ellipses correspond to primitive tasks while gray rectangles represent abstract ones.}
+	\label{chap6:fig:recursive_task}
+\end{figure}
 
 Moreover, in the next section (see~\ref{chap2:subsec:feeding}), we show how \acrshort{jahrvis} feeds the episodic ontology, a timeline, with abstract and primitive task executions. It becomes humanly unreadable with recursive tasks. A concept such as the ``iterative task'' proposed by Martinie \etal{}~\cite{martinie_2011_structuring} would be interesting if used in a \acrshort{htn} plan for \acrshort{hri}. However, there is currently no such thing, so when manipulating such plans we have two modalities:
 \begin{enumerate}
@@ -122,21 +188,34 @@ Moreover, in the next section (see~\ref{chap2:subsec:feeding}), we show how \acr
 	\item the domain is written with recursive abstract tasks and thus, \acrshort{jahrvis} only selects primitive tasks as tasks being part of the plan (\ie in the current work, plans generated by \acrshort{hatp}\footnote{Reuse of domains written by Sandra Devin.})
 \end{enumerate}
 
-We define a shared plan as a sequence of primitive tasks having to be performed by an agent and, abstract tasks. An abstract is defined as follows: 
-\begin{lstlisting}[style=aslDef]
-	abstractTask(ID,State,Name,DecompoOf).
-\end{lstlisting}
-\noindent
-where |ID| is an identification number proper to the given task, |State| is the task state estimation by the robot, |Name| is the name of the task and |DecompoOf| is the identification number (|ID|) of the abstract task that has been decomposed into other tasks, including the given task.
-\noindent
-And, a primitive task is defined as:
-\begin{lstlisting}[style=aslDef]
-	primTask(ID,State,Name,Agent,Params,Predecessors,DecompoOf).
-\end{lstlisting}
-\noindent
-where |ID| is an identification number proper to the given task, |State| is the task state estimation by the robot, |Name| is the name of the task, |Agent| is the name of the agent that should perform the task, |Params| is the list of parameters required for the task execution, |Predecessors| is a list of task ids which correspond to tasks needing to be achieved before the given task can start, and |DecompoOf| is the ID of the abstract task that has been decomposed into other tasks, including the given task.
+We define a shared plan as a sequence of primitive tasks having to be performed by an agent and, abstract tasks. An abstract task $\lambda$ is defined as: 
+\[\lambda=\langle id_\lambda,state_\lambda,name_\lambda,\Delta_\lambda\rangle\] 
+where $id_\lambda$ is an identification number (id) proper to $\lambda$, $state_\lambda$ is the task state estimated by the robot, $name_\lambda$ is the name of the task and the decomposition id $\Delta_\lambda=id_{\lambda\prime}$ with $id_{\lambda\prime}$ the id of the abstract task $\lambda\prime$ that has been decomposed into other tasks, including $\lambda$.
 
-We defined nine possible values for a task |State|: |planned| (needs to be done later), |todo| (needs to be done now), |ongoing| (is in progress), |executed| (is achieved), |unplanned| (is not part of the plan anymore -- used with conditional plans (see Section~\ref{chap2:subsec:plan_handling})), |not_starting| (was to do but took to much time before starting), |not_finished| (started but has not been achieved), |not_seen| (executed but not observed by the other agent), |suspended| (needs to be set |unplanned|).
+And, a primitive task $\Pi$ is defined as:
+\[\Pi=\langle id_\Pi,state_\Pi,name_\Pi,agent_\Pi,params_\Pi,preds_\Pi,\Delta_\Pi\rangle\]
+
+where $id_\Pi$ is an id proper to $\Pi$, $state_\Pi$ is the task state estimation by the robot, $name_\Pi$ is the name of the task, $agent_\Pi$ is the name of the agent that should perform the task, $,params_\Pi$ is the list of parameters required for the task execution, $preds_\Pi={id_{\Pi\prime},...,id_{\Pi\prime\prime}}$ the list of ids of the tasks $\Pi\prime,...,\Pi\prime\prime$ needing to be achieved before the task $\Pi$ can start, and the decomposition id $\Delta_\Pi=id_{\lambda}$ with $id_{\lambda}$ the id of the abstract task $\lambda$ that has been decomposed into other tasks, including $\Pi$.
+
+We defined nine possible values for an abstract or primitive task $state$ which are shown in Table~\ref{chap6:tab:task_states}. 
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{l|l}
+		State            & Description         \\\hline\hline
+		\textsc{planned} & needs to be done later        \\
+		\textsc{todo}            & needs to be done now   \\
+		\textsc{ongoing}          & is in progress       \\
+		\textsc{executed}         & is achieved               \\
+		\textsc{unplanned} & is not part of the plan anymore (used with conditional plans) \\
+		\textsc{not\_starting}    & was \textsc{todo} but took to much time before starting \\
+		\textsc{not\_finished}     & was started but has not been achieved    \\
+		\textsc{not\_seen}         & was achieved but has not been observed by the other agent    \\
+		\textsc{suspended}        & needs to be set to \textsc{unplanned} 
+	\end{tabular}
+	\caption{The nine possible state values of an abstract or primitive task.}
+	\label{chap6:tab:task_states}
+\end{table}
 
 So, for example, an example of plan for a task where the robot gives instructions to the human in order to remove one cube from a shelf is:
 \begin{lstlisting}[style=aslDef]
@@ -159,11 +238,11 @@ primTask(11, "planned", "idle", "Helmet_2", [], [3], 0).
 \end{lstlisting}
 
 \subsection{Feeding the Knowledge Base}\label{chap2:subsec:feeding}
-Until know, we stayed focused on semantic knowledge going from the external \acrshort{kb} to \acrshort{jahrvis}. But, as mentioned earlier, one of the external \acrshort{kb} is dedicated to episodic knowledge. This \acrshort{kb} takes the form of a timeline, managed by Mementar. Whereas Ontologius feeds \acrshort{jahrvis} with knowledge, the flow is inverted for the episodic data, as Mementar is fed by \acrshort{jahrvis} among other components. Indeed, when an abstract or primitive task is started or achieved, this information is sent to Mementar for storage with the associated ID and time stamp. The objective is to have a history of the task proceeding. One of the possible use of such a history is for the robot to refer to past events during a task when communicating. We illustrate the timeline in Figure~\ref{chap2:fig:timeline} with the same example as the one above for the plan, one cube had to be removed by the human.
+Until now, we stayed focused on semantic knowledge going from the external \acrshort{kb} to \acrshort{jahrvis}. But, as mentioned earlier, one of the external \acrshort{kb} is dedicated to episodic knowledge. This \acrshort{kb} takes the form of a timeline, managed by Mementar. Whereas Ontologius feeds \acrshort{jahrvis} with knowledge, the flow is inverted for the episodic data, as Mementar is fed by \acrshort{jahrvis} among other components. Indeed, when an abstract or primitive task is started or achieved, this information is sent to Mementar for storage with the associated ID and time stamp. The objective is to have a history of the task proceeding. One of the possible use of such a history is for the robot to refer to past events during a task when communicating. We illustrate the timeline in Figure~\ref{chap2:fig:timeline} with the same example as the one above for the plan, one cube had to be removed by the human.
 
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/timeline.png}
-	\caption{Example of timeline a task where one cube had to be removed from the shelf by the human. It has been automatically generated by Mementar after having received data from \acrshort{jahrvis}.}
+	\caption{Example of timeline a task where one cube had to be removed from the shelf by the human. It has been generated by Mementar after having received data from \acrshort{jahrvis}.}
 	\label{chap2:fig:timeline}
 \end{figure}
 
@@ -180,29 +259,31 @@ In order to coordinate properly, humans monitor each others when they are in a j
 \begin{bulletList}
 	\item it should be easy and quick to add a new action that the robot can monitor
 	\item the process should output the action parameters
-	\item the process should give information about the action progress, \ie model the action start and progression when possible and not only the end
+	\item the process should give information about the action progress, \ie modeling the action start and progression when possible and not only the end
 	\item it needs to be robust to a potentially unreliable perception
 	\item an available open-source code 
 \end{bulletList}
 
-Thus, we implemented our own model-based solution with an \acrshort{rja} dedicated to \acrfull{ham}. It relies on the action model presented in Section~\ref{chap2:par:act_rep} which it loads at initiation. We chose to base our action monitoring process on human movements and action effects that the robot can observe. As it needs to monitor them, it extracts the predicate types corresponding to those and subscribes to updates about these facts to Ontologenius as explained in Section~\ref{chap2:subsec:know}. 
+Thus, we implemented our own model-based solution with an \acrshort{rja} dedicated to \acrfull{ham}. It could be replaced later with a more complex solution meeting the needs, but even though the current one is quite simple it has interested properties, matching the criteria presented above.
 
-Continuously, the \acrshort{ham} \acrshort{rja} monitors facts and human movements that are present in the action model, and sends to the \acrfull{hpm} \acrshort{rja} three types of lists of facts: 
+The \acrshort{ham} relies on the action model presented in Section~\ref{chap2:par:act_rep} which it loads at initiation. We chose to base our action monitoring process on human movements and action effects that the robot can observe. As it needs to monitor them, it extracts the predicate types corresponding to those and subscribes to updates about these facts to Ontologenius as explained in Section~\ref{chap2:subsec:know}. 
+
+Continuously, the \acrshort{ham} \acrshort{rja} receives facts and human movements that are present in the action model, and sends to the \acrfull{hpm} \acrshort{rja} three types of lists of facts: 
 \begin{bulletList}
 	\item list of actions that may have started that we coined \emph{possibly started actions}
 	\item list of actions that may be progressing that we coined \emph{possibly progressing actions}
 	\item list of actions that are estimated as finished that we coined \emph{possibly achieved actions} 
 \end{bulletList}
 
-Action states are updated according to received facts. When the state of an action changed to \emph{possibly started}, \emph{possibly progressing} or \emph{possibly achieved}, the affected list is updated and sent to the \acrshort{hpm}. 
+Action states are updated according to received facts. When the state of an action changes to \emph{possibly started}, \emph{possibly progressing} or \emph{possibly achieved}, the affected list is updated and sent to the \acrshort{hpm}. 
 
-The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap2:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Each transition is triggered by the addition or the deletion of a fact. Using Jason rules -- they are quite similar to Prolog rules, facts are analyzed to see if they match a movement or an effect of a known action. For example, if we look at the Place action example presented in Section~\ref{chap2:par:act_rep}, it expects the fact \fact{rightHandMovingTowards}{Human}{Support} as a movement. Therefore, receiving \fact{rightHandMovingTowards}{human\_4}{table\_2} will match a Place action movement, however, receiving \fact{rightHandMovingTowards}{human\_4}{milk\_bottle\_2} will not, as the milk\_bottle\_2 does not belong to the Support class (but this fact may be useful for monitoring another action).
+The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap2:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Each transition is triggered by the addition or the deletion of a fact. Using Jason rules\footnote{They are quite similar to Prolog rules.}, facts are analyzed to see if they match a movement or an effect of a known action. For example, if we look at the Place action (when performed by a human) example presented in Section~\ref{chap2:par:act_rep}, it expects the fact \fact{rightHandMovingTowards}{Human}{Support} as a movement. Therefore, receiving \fact{rightHandMovingTowards}{human\_4}{table\_2} will match a Place action movement, however, receiving \fact{rightHandMovingTowards}{human\_4}{milk\_bottle\_2} will not, as the milk\_bottle\_2 does not belong to the Support class (but this fact may be useful for monitoring another action).
  
-It is not shown on the Figure for clarity reasons, but each state, except Possibly achieved, has a transition to the final state which is triggered by a timeout. Currently, this timeout is the same for each action but as every action type might be of different lasting, a timeout could be specifically set for each one. All the other transitions of the state machine are described in Table~\ref{chap2:tab:action_monitoring}. 
+It is not shown on the Figure for clarity reasons, but each state, except Possibly achieved, has a transition to the final state which is triggered by a time deadline. Currently, this timeout is the same for each action but as every action type might be of different lasting, a deadline could be specifically set for each one. All the other transitions of the state machine are described in Table~\ref{chap2:tab:action_monitoring}. 
  
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/action_sm.pdf}
-	\caption{Representation of the \acrfull{ham} \acrshort{rja} in the form of a Finite State Machine representing the state of one action.}
+	\caption{Representation of the \acrfull{ham} \acrshort{rja} in the form of a Finite State Machine representing the state of one action. Transitions are composed of a triggering event (+Fact or -Fact) and a condition between square brackets. Variable names ending with a ``L'' are list of effects, either the necessary effect list of a given action in the model (actionNecessEffectL) or the list of facts in the current worldstate corresponding to the effects of a given action (matchedNecessEffectL).}
 	\label{chap2:fig:action_monitoring}
 \end{figure}
 
@@ -210,16 +291,16 @@ It is not shown on the Figure for clarity reasons, but each state, except Possib
 \begin{landscape}
 	\vspace*{\fill}
 	\begin{table}[htb!]
-	\caption{Description of the Finite State Machine shown in Figure~\ref{chap2:fig:action_monitoring}.}
+	\caption{Description of the Finite State Machine shown in Figure~\ref{chap2:fig:action_monitoring}. Inputs are triggering events (+Fact or -Fact) and conditions are between square brackets. Variable names ending with a ``L'' are list of effects, either the necessary effect list of a given action in the model (actionNecessEffectL) or the list of facts in the current worldstate corresponding to the effects of a given action (matchedNecessEffectL).}
 	\label{chap2:tab:action_monitoring}
 	\begin{tabularx}{\linewidth}{| c | c | c | X |}
 		Current State & Input and Condition & Next State & Explanation\\ 
 		\hline \hline
-	\multirow{4}{*}{Initial State}  & +Fact [matchActionMovement(Fact)] & Possibly Started & When a fact matching a movement for a given action is received, \acrshort{ham} computes that the human may have initiated an action\\  
+	\multirow{4}{*}{Initial State}  & +Fact [matchActionMovement(Fact)] & Possibly Started & When a fact matching a movement and filling the preconditions for a given action is received, \acrshort{ham} computes that the human may have initiated an action. \\  
 		\cline{2-4}
 		&  \makecell{+Fact [matchNecessEffect(Fact) 
 			\\ \&\& length(actionNecessEffectL)	== 1
-			\\ \&\& possibleActorExists]} & Possibly Achieved & The robot may have missed the movement or the progression effect of an action because it was not looking or the perception did not detect it. Then when a necessary effect is received and that only one exists for the action, the action is estimated as achieved if it is possible to find an agent who may have performed it.\\  
+			\\ \&\& possibleActorExists]} & Possibly Achieved & The robot may have missed the movement or the progression effect of an action because it was not looking or the perception did not detect it. Then when a necessary effect is received and that only one exists for the action, the action is estimated as achieved if it is possible to find an agent who may have performed it. For now, the finding function is looking for humans in the vicinity of the effect objects, and if there are several humans, it selects the closest one.\\  
 		\cline{2-4}
 		&  \makecell{+Fact [matchNecessEffect(Fact) 
 		\\ \&\& length(matchedNecessEffectL)
@@ -247,7 +328,7 @@ It is not shown on the Figure for clarity reasons, but each state, except Possib
 			\\ \&\& length(matchedNecessEffectL) == 1]} & Possibly Achieved 
 		& When a fact corresponding to a necessary effect is received and that there is only one for the started action, the action is considered as achieved as the robot is able to observe its effect and that it had observed the human starting it.\\  
 		\cline{2-4}
-		& -Fact	[matchActionMovement(Fact)] & On Probation & When a movement fact is removed from the belief base without having observed an effect, it might mean that it was a false estimation and that the action is not starting. However, it might also be the robot perception being sporadic and so the action goes in this temporary state waiting for a potential coming effect.\\  
+		& -Fact	[matchActionMovement(Fact)] & On Probation & When a movement fact is removed from the belief base without having observed an effect, it might mean that it was a human hesitation or a false estimation and that the action is not starting. However, it might also be the robot perception being sporadic and so the action goes in this temporary state waiting for a potential coming effect.\\  
 		\hline
 	\end{tabularx}
 \end{table}
@@ -288,16 +369,20 @@ It is not shown on the Figure for clarity reasons, but each state, except Possib
 
 When the software starts, the \acrshort{ham} extracts from the internal action representation presented in Section~\ref{chap2:subsubsec:action_rep}, all the types of facts that should be monitored. Then, it queries Ontologenius to send it each updates about these facts. Thus, when the robot designers decide that a new action should be recognized by the robot, the only thing to add is the action model in \acrshort{jahrvis} belief base.
 
-Moreover, sometimes new facts are actually effects of robot actions. In order to avoid that robot actions are mistaken for human ones, the \acrfull{aem} warns the \acrshort{ham} when the robot executes an action. 
+Moreover, sometimes new facts are actually effects of robot actions. In order to avoid that robot actions are mistaken for human ones, the \acrfull{aem} signals to the \acrshort{ham} when the robot executes a given action of the plan. 
 
-Finally, all the functions to check if a new fact update matches an action effect are Jason rules. They rely on Ontologenius as there is a need to compare the predicate object and subject expected classes of an action effect with the received ones.
+Finally, all the functions to check if a new fact update matches an action effect are Jason rules. They rely on the external knowledge base, here Ontologenius, as there is a need to compare the predicate object and subject expected classes of an action effect with the received ones.
 
 \section{Shared Plans Handling}\label{chap2:subsec:plan_handling}
-In order to correctly perform collaborative tasks with humans, the robot needs to know how to do them. One way is to have a planner with a domain, computing a plan at execution time based on its current knowledge about the environment and interaction. Then, the robot must be endowed with a way to manage the execution of this recipe. As we place ourselves in the context of joint action, plans manipulated by the robot are shared plans, as presented in Section~\ref{chap2:subsubsec:shared_p_rep} (to differentiate from the ASL plans presented in Section~\ref{chap2:subsec:jason} which code all the \acrshort{rja}).
+In order to correctly perform collaborative tasks with humans, the robot needs to know how to perform them. One way is to have a planner with a domain, computing a plan at execution time based on its current knowledge about the environment and interaction. Then, the robot must be endowed with a way to manage the execution of this ``recipe''. As we place ourselves in the context of joint action, plans manipulated by the robot are shared plans, as presented in Section~\ref{chap2:subsubsec:shared_p_rep} (to differentiate from the ASL plans presented in Section~\ref{chap2:subsec:jason} which code all the \acrshort{rja}).
 
-We claim that the robot ability to handle and execute shared plan is enhanced when endowed with \acrfull{tom} (see Sections~\ref{chap1:subsec:tom} and~\ref{chap1:subsec:tom_hri}), as shown by Devin~\cite{devin_2016_implemented}. It allows the robot to be aware of false beliefs or belief divergences in the human's point of view. When such things happen, it can react appropriately, either by acting or communicating. We gave the robot such an ability\footnote{The robot has a first-order \acrshort{tom}, it estimates the human knowledge about the task but it does not compute what the human thinks of the robot knowledge about the task (second-order \acrshort{tom})}, \textit{via} two processes: the \acrfull{rpm} and the \acrfull{hpm} (see Figure~\ref{chap2:fig:sup_overview}). Therefore, the first one handles the robot's beliefs about the plan and the action execution while the second handles the human's beliefs about the plan and the communication with the human. The \acrshort{rja}s implementing these processes are presented in Sections~\ref{chap2:subsubsec:robot_plan} and~\ref{chap2:subsubsec:human_plan}.
+We claim that the robot ability to handle and execute shared plan is enhanced when endowed with \acrfull{tom} (see Sections~\ref{chap1:subsec:tom} and~\ref{chap1:subsec:tom_hri}), as shown by Devin~\cite{devin_2016_implemented}. It allows the robot to be aware of false beliefs or belief divergences in the human's point of view. When such things happen, it can react appropriately, either by acting or communicating. We gave the robot such an ability\footnote{The robot has a first-order \acrshort{tom}, it estimates the human knowledge about the task but it does not compute what the human thinks of the robot knowledge about the task (second-order \acrshort{tom})}, \textit{via} two processes: the \acrfull{rpm} and the \acrfull{hpm} (see Figure~\ref{chap2:fig:sup_overview}). Therefore, the first one handles the robot's beliefs about the plan and the action execution while the second handles the estimation of the human's beliefs about the plan and the communication with the human. The \acrshort{rja}s implementing these processes are presented in Sections~\ref{chap2:subsubsec:robot_plan} and~\ref{chap2:subsubsec:human_plan}.
 
-As we designed \acrshort{jahrvis} to be as generic as possible, it can manage different kinds of human-robot shared plans as input: (1) classical shared plans, (2) shared plans for which actions might not be allocated to an agent at planning time and objects might be referred to with a semantic query, and (3) conditional shared plans which anticipate different possibilities for the human decision/action. What we call classical shared plans are as the ones returned by \acrfull{hatp}~\cite{lallement_2014_hatp}. 
+As we designed \acrshort{jahrvis} to be as generic as possible, it can manage different kinds of human-robot plans as input: \begin{inlineEnumerate}
+	\item shared plans in which each action is allocated to an agent as well as action parameters are given objects,
+	\item shared plans in which actions might not be allocated to an agent at planning time and parameters might refer to objects with a semantic query, and
+	\item conditional plans which anticipate different possibilities for the human decision/action. 
+\end{inlineEnumerate} 
 
 The second type of shared plans is an extension of the work of Devin about postponing some decisions from planning time to execution time about the actor of some actions and some parameters~\cite{devin_2017_decisions}. In works previous to Devin, all the actions\footnote{We use the term action interchangeably with primitive task in this section.} of the computed plans were
 allocated and completely instantiated during plan elaboration. For example, the first action of the shared plan for a blocks building task could be: 
@@ -310,7 +395,7 @@ We re-implemented her idea of \emph{Agent X} in our plan managers (with some mod
 primTask(7, "planned", "pick_place_cube", "AgentX", 
 ["red_cube_1", "placement_1"], [4], 6).
 \end{lstlisting} 
-In this case, according to what the robot estimates the human wants to do, the robot can allocate the action to itself or to them. Moreover, she introduced the use of the notion of object similarity: two similar objects will have the same role in the task. With this modification, the first action of the shared plan becomes
+In this case, according to what the robot estimates the human wants to do, the robot can allocate the action to itself or to them. Moreover, she introduced the use of the notion of object similarity: two \emph{similar} objects will have the same role in the task, they are functionally equivalent. With this modification, the first action of the shared plan becomes
 \begin{lstlisting}[style=inline]
 primTask(7, "planned", "pick_place_cube", "robot", 
 ["red_cube", "placement"], [4], 6).
@@ -323,7 +408,7 @@ primTask(7, "planned", "pick_place_cube", "robot",
 NOT EXISTS { ?0 isOnTopOf ?2. ?2 isA Cube }", 
 "placement"], [4], 6).
 \end{lstlisting}
-This allows the \acrshort{rpm} to directly request Ontologenius to get an object list matching this query and to choose among it at execution time. And, when the human performs an action with a \sparql{} query as parameter, the \acrshort{hpm} can check if the object on which the human is acting matches the query. We can see that this solution brings precision compared to the one presented by Devin. Indeed, |"red_cube"| does not tell that it should be reachable by an agent and that it should not be on the top of another cube yet but |"?0 isA Cube. ?0 hasColor red. ?0 isReachableBy ?1| |NOT EXISTS { ?0 isOnTopOf ?2. ?2 isA Cube }"| does. For example, in Devin, the reachability test was added to the plan manager of the supervisor which is task specific. 
+This allows the \acrshort{rpm} to directly request Ontologenius to get an object list matching this query and to select an object among it at execution time. And, when the human performs an action with a \sparql{} query as parameter, the \acrshort{hpm} can check if the object on which the human is acting matches the query. We can see that this solution is enhanced compared to the one presented by Devin. Indeed, |"red_cube"| does not tell that it should be reachable by an agent and that it should not be on the top of another cube yet but |"?0 isA Cube. ?0 hasColor red. ?0 isReachableBy ?1| |NOT EXISTS { ?0 isOnTopOf ?2. ?2 isA Cube }"| does. For example, in Devin, the reachability test was written in the plan manager of the supervisor, in a hard-coded manner. 
 
 \begin{figure}[!htb]]
 	\centering
