@@ -130,8 +130,11 @@ A faire en dernier :-)
 
 
 \mainmatter
-
+\fancyhead[RE, LO]{\bfseries\nouppercase{Introduction}}
 \include{Introduction}
+\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+
 \part{Human, Robot and Interaction Models: the Funding Principles of a Decision-Making System for Human-Robot Collaboration}
 \include{Chapter1.1}
 \include{Chapter1.2}
@@ -145,8 +148,8 @@ A faire en dernier :-)
 \include{Chapter3.3}
 
 \part{Deploying and Evaluating an Interactive Robot}
-\include{Chapter4.2}
 \include{Chapter4.1}
+\include{Chapter4.2}
 \include{Conclusion}
 
 \newpage

@@ -4,303 +4,723 @@
 \include{formatAndDefs}
 \sloppy
 \begin{document}
-	\setcounter{chapter}{8} %% Numéro du chapitre précédent ;)
+	\setcounter{chapter}{7} %% Numéro du chapitre précédent ;)
 	\dominitoc
 	\faketableofcontents
 	\fi
 
-\chapter{The Director Task: a Psychology-Inspired Task to Assess Cognitive and Interactive Robot Architectures}
-\chaptermark{The director task}
-\label{chapter:chap4}
+\chapter{A direction-giving robot in a mall}
+\label{chapter:chap8}
 \minitoc
 
-In this chapter, we propose a new psychology-inspired task, gathering perspective-taking, planning, knowledge representation with theory of mind, manipulation, and communication. Along with a precise description of the task allowing its replication, we present a cognitive robot architecture able to perform it in its nominal cases. In addition, we suggest some challenges and evaluations for the Human-Robot Interaction research community, all derived from this easy-to-replicate task.
-
-The contribution presented in this chapter is excerpted from our work, published in the proceedings of the RO-MAN 2021 conference~\cite{sarthou_2021_director}. This contribution has been achieved in collaboration with other PhD students of the \acrshort{hri} teams, our mutual thinking leading to the formulation of this new task for \acrshort{hri}. Then, more specifically in relation to the software implementation, Guilhem Buisan was concerned about the task planning part. Guillaume Sarthou worked on the knowledge management. Kathleen Belhassein has designed the presented task with us giving her psychologist point of view to create a task on which user studies could be performed. The engineer Yannick Riou worked on the motion planning component allowing us to develop a task where the robot acts on its environment. My involvement in this task was on the supervision component. It was an evolved version of the one which ran for the direction-giving task presented in the previous chapter, \ie the \acrshort{jahrvis} as described in Chapter~\ref{chapter:chap2}. It has also been the opportunity to refine the architecture developed for the \acrshort{mummer} project, leading to the one presented in this paper.
-
+This chapter is from an article submitted to the  User Modeling and User-Adapted Interaction (UMUAI) Journal. This work has been achieved in collaboration with Guillaume Sarthou, Guilhem Buisan, Phani-Teja Singamaneni, Yoan Sallami, Kathleen Belhassein, and Jules Waldhart. In this chapter, we first give an overview of the European H2020 Project \acrfull{mummer}\footnote{\url{http://mummer-project.eu/}}. We then present the components developed by the LAAS-RIS team. My technical contributions are related to the Supervisor component, the component integration, the overall system debugging, the real-world deployment and the user study.
 
 \section{Introduction}
 
-Developing robotic architectures adapted to Human-Robot Interaction and thus able to carry out interactions in an acceptable way is still today a real challenge. The complexity comes, among other things, from the number of capabilities that the robot must be endowed with and therefore from the number of software components which must be integrated in a consistent manner. Such architectures should provide the robot with the capability to perceive its environment and its partners, to merge and interpret this perceptual information, to communicate about it, to plan tasks with its partner, to estimate the others' perspective and mental state, etc. Once developed, the evaluation of these architectures can be difficult because all these components grouped into a single system. The tasks we usually want the robot to handle must highlight a maximum of abilities, while still being simple enough to be reproduced by the community. Moreover, we should be able to conduct user studies with it to validate choices regarding naive users.
+In large scale indoor environments, like museums, shopping malls, or airports, the presence of large interactive screens, maps, or signs underline the importance of providing information on itineraries. However, orienting and reading maps to find one's own way may be challenging. As for signs, the wanted written information may not be within sight. People also look for information not available on visual media such as the location of a given product. That is where the robot has a role to play, bringing a new way to help people to get their bearings in large indoor environments such as shopping malls.
 
-Since a long term goal of the robotic field is to see robots evolving in our daily life, many tasks and scenarios have been inspired by everyday activities. Even if these tasks offer a large variety of situation to be handle, since the human partner is not limited in his actions, they have the disadvantage of not highlighting some subtle abilities which are nevertheless necessary for good interaction.
-The robot guide task \cite{satake_2015_should} in mall, museum, or airport, requires high communication skills to understand free queries (possibly involving chatting) and respond to them, whether to indicate a direction or to give advice. However, the perception needs can be limited due to the vast environments, as well as the perspective-taking needs due to the same perception of the environment by the robot and the human\footnote{For sure we can find some tricky cases where it could help but they do not reflect common situations.}. Finally, with such a task the human partner is not an actor of the task and just has to listen to the robot once their question is asked. Even if being in more constrained environments, bartender-like tasks~\cite{petrick_2012_social} have the same disadvantages. Indeed, the human is considered as a customer, and as such, the interaction with the robot is limited. The robot will never ask the human to help it for performing a task and their actions do not require coordination either full collaboration.
+Therefore, in the context of the European H2020 Project \acrshort{mummer}\footnote{http://mummer-project.eu/}, we developed and deployed a social service robot in one of the largest malls of Finland, Ideapark in the city of Lemp\"a\"al\"a. This social robot is able to engage, chat with people, and guide them. We will not talk about the two first mentioned behaviors, developed by our project partners, but focus in this paper on the direction-giving.
 
-To involve the human partner in the task and requiring him to act with the robot, assembly-like tasks~\cite{tellex_2014_asking} can be used. Nevertheless, in most cases, the human acts as an assistant rather than as a partner as full collaboration can be challenging to perform. The robot thus elaborates a plan and performs the assemble, then asks for help when detecting errors during the execution (\eg when it cannot reach some pieces). Here the task leads to unidirectional communication. Moreover, because in such a task both the robot and the human have equivalent knowledge about the environment, it can be hard to design situations where belief divergence appears and thus perspective-taking would be required.
+As the mall has approximately 1.2 kilometers of shopping and pedestrian streets and more than 150 shops, people get easily lost. In such a large environment, having a robot guiding customers to their wanted destination would be time-consuming for the robot and would prevent this resource to be available for as many customers as possible. Inspired by the manner in which the mall employees perform this activity, we chose the solution to have a robot not accompanying people to their desired destination but rather verbally describing the route while grounding it with pointing gestures. If necessary, it moves a few meters inside its dedicated area (Figure~\ref{fig:chap3_pepper_mall}) to improve the perspective sharing with the human when pointing at a landmark, and therefore to improve the human understanding of the route. These features are unique to a robot and cannot be found on a map or an interactive screen. To endow the robot with such abilities, we built a complete implementation of a robotic architecture that has been deployed in a real-world environment, the Finnish mall. There, it ran for three months, three days a week. Here is a sum-up of the project steps:
+\begin{enumerate}
+	\item March 2018: beginning of the design and implementation of the direction-giving task
+	\item September 2018: First tests of the task on the field, \ie in a Finnish mall
+	\item June 2019 and September 2019: New tests of the direction-giving task on the field
+	\item From September to December 2019 (project formal end): The robot autonomously ran three days a week in the mall (with only remote monitoring of the robot performance by our team for debugging and tuning)
+	\begin{enumerate}
+		\item November 2019: Integration in the \emph{Supervisor} of a preliminary version of Quality of Interaction Evaluator implementing the model described in Chapter~\ref{chapter:chap2} \\ $\Longrightarrow$ version 1 of the QoI Evaluator
+		\item From November 2019 to December 2019: Around 350 direction-giving tasks were performed with usual mall customers. Bug corrections and tuning of the direction-giving task. This allowed us to improve the QoI Evaluator thanks to: \begin{inlineEnumerate}
+%			[label=(\roman*)] 
+			\item data collection of task failures and standard durations of the subtasks executions \item lessons drawn about metric definitions and choices. \end{inlineEnumerate} \\ $\Longrightarrow$ version 2 of the QoI Evaluator\label{list:mall}
+	\end{enumerate}
+	\item January 2020: User study with 35 participants to compare three direction-giving task robot behaviors, allowing to log interactions at the same time we could monitor them\footnote{The QoI Evaluator was running in background, it was not the purpose of the study.}. End of the project.\label{list:tests}
+	\item March 2020: Refinement of the QoI Evaluator, \ie improvement of the metric functions and tuning of their parameters. In the lab, with the same direction-giving task than the one used in the mall, comparison of the QoI computed by the robot when it is dealing with an ``ideal'' human, a ``confused'' human and a ``non-compliant'' human. \\ $\Longrightarrow$ version 3 of the QoI Evaluator\label{list:refin}
+\end{enumerate}
 
-Scaling down an everyday task to transform it into a toy task around a table can reduce the task complexity and allow easy reproducibility. Moreover, it allows the robot and the human to work in the vicinity of each other, with smaller robots for example. With the toy version of the assembly task presented in~\cite{brawer_2018_situated}, the human is more involved in the task. They ask the robot to take pieces and to hold them to help them assemble a chair. Even if the communication is unidirectional, we could imagine inverting the roles to test different abilities. Moreover, communication implies objects referring with the use of various visual features about the entities. Even if both agents have the same knowledge about the environment, the communication is grounded according to the current state of the world. In this task, no decision has to be made by the robot but once again, inverting the roles could open other challenges.
+All along the process, we elaborated and built the system based on the main principles and ingredients which have been identified and are investigated by the Human-Human Joint Action community. We also conducted preliminary studies and used the Joint Action perspective to analyze how human guides would achieve such an activity at the place where the robot was intended to be deployed. This was possible essentially because we were able to combine the results of the JointAction4HRI\footnote{It is a multi-disciplinary project which gathers philosophers, developmental psychologists and roboticists. \url{https://jointaction4hri.laas.fr/}} project with the \acrshort{mummer} project.
 
-To focus studies around perspective-taking and belief management, the Sally and Anne scenario, coming from a psychology test, has been studied in robotic~\cite{milliez_2014_framework}. In this scenario, the robot is an observer of a situation where two humans come and go from a room, and move an object from a box to another. Since a human is in the room when the other is acting, a belief divergence appears between the two humans and the robot has to understand it. While the task highlights the belief management, it is first limited regarding the perspective-taking since the human presence or not could be sufficient to estimate the humans beliefs\footnote{When both humans are in the room they have the same perception of the scene but have different beliefs about hidden objects. Perspective-taking would be required if the humans could lean over the boxes to check what is inside.}. Moreover, the humans do not act with the robot since it is just an observer of the scene. In addition, no goal is formulated and the human neither interacts with one another. Finally, no communication is needed in the task. The scenario is thus focussed on the analysis of a situation.
+Our claim is that such an approach is relevant in the way the joint action principles provide pertinent guidelines and it is possible to effectively elaborate models and implement systems based on them. 
+The output is a complete robot architecture that integrates a number of components implementing the main decisions and behaviors which have been identified. Each of them makes use of various models and decisional algorithms, all integrating explicitly human models and joint action principles and mechanisms.
 
-In this chapter, we first propose a new psychology-inspired task that we think to be challenging for the Human-Robot Interaction community and rich enough to be extended: the Director Task. Inter alia, it requires perspective-taking, planning, knowledge representation with theory of mind, manipulation, communication, and decision-making. Then, we present the robotic cognitive architecture that we develop to perform the task in its nominal cases. Finally, on the basis of the presented task and what has been developed, we present a discussion about the possible future challenges and evaluations for the research community, with possible extensions of the task.
 
-\section{The Director Task: From psychology to Human-Robot Interaction}
+The chapter is constructed as follows. In Section~\ref{sec:related-work} we provide background information about robot guides and direction-giving task and discuss about how the human partner has been considered. In Section~\ref{sec:rationale} we discuss how we model the direction-giving task as a human-robot joint action. We analyse the task based on human-human exploratory studies and decompose it into a succession of precise subtasks in Section\ref{sec:modeling}. An overview of the resulting architecture and a description of its components are presented in Section~\ref{sec:globalarchi}. Then, we present in Section~\ref{subsec:archi-integration}, the integration of the overall architecture into a physical robot and the steps until its final deployment ``into the wild''. In Section~\ref{sec:qoi_integration}, we show how we used this task to implement the QoI Evaluator presented in Chapter~\ref{chapter:chap2}. Finally, we present the user study we performed with 35 participants and its results.
 
-In this section, we present the origins of the Director Task and the needs it aims to respond to regarding other tasks from the psychology. Then, we detail the setup we have designed in terms of objects characteristics and organization in the environment. We end this section with our adaptation and the required abilities we have identified.
 
-\subsection{The original task}\label{chap4:subsec:psycho}
 
-The Director Task has been mainly used in psychology as a test of the \acrfull{tom} usage in referential communication. This task originates from a referential communication game from Krauss and Glucksberg~\cite{krauss_1977_social}. In this game, two participants are one in front of the other with an opaque panel between them. A speaker has to describe odd designs to a listener, either to number them for the adults or create a stack of cubes for the children. To refer to the odd figures, participants have to use images (\eg ``it looks like a plane'').
+\section{Related work}
+\label{sec:related-work}
 
-This game was then adapted by Keysar \etal~\cite{keysar_2000_taking} and became the Director Task. It has been used to study the influence of mutual knowledge in language comprehension. In this task, two people are placed one in front of the other but instead of an opaque panel between them, they place a vertical grid composed of different cells and objects in some of them. The \textbf{director}, a participant or in most cases an accomplice, instructs the \textbf{receiver}, a participant, about objects to move in the grid. The receiver thus follows the director's instructions about objects to move. The particularity of the task is that some cells are hidden from the director, meaning that the receiver, being on the other side of this grid, does not have the same perspective as the director. They thus know the content of more cells than the director and consequently sees more objects. When the director instructs the receiver to move an object, for a successful performance, participants must take the perspective of the director to move the right one. Because the configuration evolves all along with the task, they have to update their estimated perspective all along with the interaction.
+A number of contributions have proposed robot guides, from the first museum guides \cite{burgard_1999_museum, thrun_99, siegwart_2003_robox, clodic_2006_rackham} to more recent robot guides in large areas \cite{bauer_2009_autonomous, triebel_2016_spencer}. For example, Chen \etal{} presented a guiding robot in a shopping mall where it accompanied the customer to the desired location and pointed at the shop~\cite{chen_2017_robots}. Another example is a shopping robot helping people to find products among the aisles of a store \cite{gross_2009_toomas}. 
+However, the focus in these contributions is mainly the fact that the robot is challenged to navigate until the goal destination with the presence of humans. Efficient mapping and localisation in large areas, social navigation are the main concerns. This is different from our needs where the robot is voluntarily constrained for its motion to a limited area with a focus on conveying to the human the pertinent information to reach by herself the desired place.
 
-\begin{figure}[ht!]
+Direction-giving tasks have been investigated in the human-robot interaction community. Kopp \etal{} describes an embodied conversational agent giving route directions using deictic gestures~\cite{kopp_2007}. A number of key contributions have been developed over the years by ATR-IRC within the Robovie robot and project. First, Okuno \etal{} developed a model for a robot providing route directions, integrating utterances, gestures, and timing~\cite{okuno_2009_providing}. The experiments explored the influence of gestures and highlighted the importance of timing in the directions-giving task. Then, Kanda and colleagues implemented a guiding behavior as part of a wider system with the robot pointing toward the first direction to take and saying ``please go that way'' and then, continuing its explanation by saying ``After that, you will see the shop on your right.''~\cite{kanda_2009_affective, kanda_2010_communication}. Their robot also gave recommendations for restaurants and shops based on customer tastes. In their following work, they presented a route perspective model attempting to represent humans' concept of route and visibility of landmarks, which they believed to match people's perception of the environment~\cite{morales_2011}. Then, Matsumoto \etal{} developed a robot able to follow a user while inferring their memory recall of shops in the visited route~\cite{matsumoto_2012_you}. When the user asked the location of other shops, it gave the route description with references to the known locations inferred with the model of the user's memory recall. Finally, Satake \etal{} showed a complete architecture of an information-providing robot able to move around a square in a mall composed of: a map, an ontology, a speech recognition system (operated), a dialog manager, a localization module, and a people tracker. As in their previous works, the robot verbalized utterances and used deictic gestures to give route directions~\cite{satake_2015_should}. 
+
+Let us also mention the work of Bohus \etal{}, a robot providing verbal directions to people using deictic gestures coupled with spoken references~\cite{bohus_directions_2014}. For example, the robot said ``Go to the end of this hallway'', executing a pointing gesture at the same time, and then continued the explanation with sentences such as ``Turn right and keep walking down the hallway''. Iocchi \etal{} mentioned both guiding and direction providing as use cases of their system~\cite{iocchi_2015_personalized}.
+
+Numerous other contributions can be found but,  only a few of them propose full architectures for an autonomous direction-providing robot, the most complete one being the Robovie robot presented above. 
+
+Still, to the best of our knowledge, no system tackles the overall guiding-task with flexibility. Indeed we claim that it is important for the robot
+to reason about the current and desired perspectives of the human and the robot and to be able to pro-actively propose to the human a pertinent placement. This is one of the basic bricks of our system and it is strongly linked to the key principles of Joint Action which involve the ability to establish and monitor joint attention,  and to conduct a multi-step task achievement involving contributions of both agents. Besides, it is the duty of the robot to permanently adapt to human needs and preferences and to synthesize acceptable behaviours.
+
+\section{Rationale}\label{sec:rationale}
+
+In Section~\ref{chap1:sec:ja}, we presented the concepts around joint action. In this section, we bring some new inputs specific to the direction-giving task. 
+
+The design of our system has taken into account the results of several user studies involving human guides of the mall (see Section~\ref{sec:modeling}). Indeed, it could be of interest to have a robot performing in the same way as a human guide does. ``If robots could display predictable behaviours that are in line with human's expectations based on their models of human joint action, the resulting interaction would achieve greater naturalness''~\cite[p.~17]{curioni_2017_joint} and ``human agents would then be able to apply predictive and adaptive processes acquired in human interactions to the interaction with robots''~\cite[p.17]{curioni_2017_joint}. In the context of the direction-giving task with a Pepper robot, we take advantage of the fact that the robot is a humanoid and the human anthropomorphizes the robot behaviour (whatever we do).
+However, it is not always possible or desirable for a robot to imitate what a human would do at its place. It could let people think that the robot has more capabilities than it really has. In that way, besides the imitation, it could be desirable for the robot to exhibit its limitations, \eg saying that it is able to provide you direction into the mall (and nothing else).
+%
+%Participating agents in a joint action need to represent not only what they will do but also what will be performed by the others. Doing so, they also need to be able to consider the combined effects of their respective actions~\cite{pacherie_2012_agency}. Joint action involves representations of the other agents who are actually and potentially involved. Shared task representations provide control structures that allow agents to flexibly engage in joint action~\cite{knoblich_2011_joint}.
+%
+
+In our task, the robot has a role, it is a guide and the human is a customer with a need to find a direction. The joint action is not symmetric, there is a difference of knowledge and skills between the two agents. Curioni \etal{} raises the point that ``task asymmetry is an important factor to consider when investigating complex joint action settings because it drives the systemic emergence of communication and coordination dynamics (for example in the form of task distribution)''~\cite[p.~11]{curioni_2017_joint}. At the supervision level (see Section~\ref{subsec:supervision}), we modeled which part of the task falls to the robot and which part of the task falls to the human. We can also infer that knowing the robot role as guide, the human would be able to infer what it is entitled to do. This way, we consider that they share the route description task representation. 
+Another important point is that ``shared task representations not only specify in advance the individual parts each agent is going to perform but they also govern monitoring and prediction processes that enable interpersonal coordination in real time.''~\cite[p.~65]{knoblich_2011_joint}. Our system handles that monitoring and prediction in its supervision component(see Section~\ref{subsec:supervision}).
+%
+%
+%Joint attention provides a mechanism to form shared perceptual representations of the situation. ``The phenomenon of joint attention involves more than just two people attending to the same object or event. At least two additional conditions must be obtained. First, there must be some causal connection between the two subjects’ acts of attending (causal coordination). Second, each subject must be aware, in some sense, of the object as an object that is present to both; in other words, the fact that both are attending to the same object or event should be open or mutually manifest (mutual manifestness)''~\cite[p.~355]{pacherie_2012_agency}.
+%
+%As explained above, joint attention comes with two requirements: causal coordination and mutual manifestness. We can consider that the engagement in the interaction session represents the causal coordination. Then, at least on the robot side, we could argue for mutual manifestness. Indeed, as we will explain, we give the robot perspective-taking abilities, and abilities to find out where and how the human and itself should be placed to share a joint attention relative to a landmark. With those requirements fulfilled, ``by attending jointly, co-actors establish perceptual common-ground and become aware of each other's action opportunities and constraints''~\cite{curioni_2017_joint} (they also use the expression ``spatio-temporal common ground''). Joint attention and in fact in our case, the overall interaction process by itself (aka its unfolding), could be seen as an continuous process sustaining under-construction common-ground.
+%
+
+And, in our system, the situation assessment component provides visual perspective-taking. It computes, from the robot point of view, a number of facts regarding what the robot is looking at, which landmark is visible to it, what is present at its proximity, etc. It also computes the same information from the perspective of the person interacting with it. This way the robot is able to infer, based on its own models, which information is shared (or not) with the person it interacts with.
+
+
+\section{Designing direction-giving behavior in a shopping mall}
+\label{sec:modeling}
+
+\begin{figure}[!t]
 	\centering
-	\includegraphics[scale=0.25]{figures/chapter4/dt_apple.png}
-	\caption{\label{chap4:fig:dt_apple} Sample display from the director's and the receiver's perspectives. The asterisk indicates the target object. Giving the sentence ``the smallest apple'' the receiver should find the good one even if he can see a smallest one in its perspective. }
+	\includegraphics[scale=0.7]{figures/chapter3/human_guide.png}
+	\caption{\label{fig:chap3_human_guide} Picture from the second Human-Human study~\cite{belhassein_2017_human}. Here, the guide is giving the route description to reach a given shop by pointing at it. Positions regarding the target and the customer, as well as gazes and pointing gestures, were analyzed.}
 \end{figure}
 
-For example in Figure~\ref{chap4:fig:dt_apple}, if the director asks for the smallest apple (*), the proper smallest (called competitor) is only visible by the participant and not by the director. The participant then must understand the director's perspective to take the target apple and not the competitor one. Some studies showed that for their first attempt, participants considered or took the smallest apple from their own point of view and only after, the target one. These results were interpreted in various works as the participants understanding language in an egocentric way~\cite{keysar_1994_illusory, keysar_1998_egocentric, keysar_2002_self, keysar_2003_limits}. 
-Some social cognition studies used a computer-version of the Director Task whose results are consistent with the ones mentioned previously, namely that participants do not use \acrshort{tom} inferences in language interpretation~\cite{dumontheil_2010_online}.
+\subsection{What we learnt from humans}\label{sec:methodology}
+In order to inform the design and implementation of the pertinent functions and their articulation, two human-human exploratory studies were conducted in collaboration with VTT Technical Research Centre of Finland. It allowed us, in addition to the study of the existing literature, to enrich our knowledge on effective route descriptions and how they can be used in the very context of the actual robot deployment environment. 
 
-Although they require the attribution of mental states to others, some authors have distinguished \acrshort{tom} tasks and perspective-taking tasks reporting distinct although related mechanisms. Santiesteban \etal{}~\cite{santiesteban_2012_training} considered in their study that perspective-taking abilities were measured by the Director Task whereas \acrshort{tom} usage was investigated through another task called ``strange stories''~\cite{happe_1994_advanced}. However, this \acrshort{tom} task requires the attribution of mental states to a story protagonist (to have knowledge of others' mental states), whereas the Director Task asks for adopting the perspective of the director in order to follow their instructions (to use this knowledge in order to execute the task properly). Thus, the authors estimated that the Director Task requires a higher degree of self-other distinction by continuously isolating our own perspective from the director one. In addition to perspective-taking abilities, the Director Task makes use of executive functions~\cite{rubio_2017_director} and attentional resources~\cite{lin_2010_reflexively}.
+The first pilot study consisted in a human guide providing route information. It was carried out close to the future location of the robot in order to avoid biases linked to the location or the environment. Based on preliminary interviews with guides working at Ideapark, a list of 15 shops often requested by customers was selected. The preliminary experiment consisted of one participant asking for shop directions to a guide working at the mall information booth. Two researchers, as participants, and two guides took part in the experiment. The two guides were instructed to give guidance as they would normally do. The situations were video recorded and the guides were briefly interviewed after the sessions. The video analysis focused on non-verbal communication, and in particular the different types of gestures used to give guidance, the positions of the two protagonists in relation to the target shop and their interlocutor, and the gazes alternation. Belhassein \etal{} gave the first indications to consider for the robot guidance to be effective and understood by customers, resulting from this pilot study~\cite{belhassein_2017_human}. For example, this pilot study allowed us to notice a preferential use of the ipsilateral hand to the visual field of the target. In line with the existing literature on gestures studies, we also noticed that deictic gestures were naturally more frequent than iconic gestures or beats, while metaphorical gestures were rare. As shown by Allen, the hand used to point a referent was oriented vertically in the case of stores (vertical referents) or directed actions such as a path to take or turns, whereas in the case of horizontal referents (\eg escalators), the hand was oriented horizontally (palm facing the ground)~\cite{allen_2003}.
 
-The Director Task has thus been particularly used in psychology studies of referential communication, language comprehension, and perspective-taking abilities. However, to date it has never been exploited in the context of a HRI although this task presents interesting challenges for this field. It would not only bring technical challenges but also provide a way to investigate the different cognitive and behavioral processes involved in such a cooperative Human-Robot task.
+A second exploratory study was then carried out adding complex situations (\eg two customers requesting directions at the same time, two different shops in the same request, or someone who interrupts the conversation between the guide and the customer). Again, social signals were analyzed (see Figure~\ref{fig:chap3_human_guide} for an example). The protocol used and the results have been published~\cite{heikkilae_2018_where,heikkilae_2019_should}. By analyzing the sequencing of the whole interaction, this second study showed the guide pointing the general location of the target first, before explaining and pointing the different stages of the path to take to get there. Then, the sequencing of the route description itself showed that a first deictic gesture on a visible passage (corridor, or if the shop requested is on the second floor, the escalator) preceded the explanations about the directions to take. The most interesting results concerned situations of confusion and misunderstandings. Indeed, several elements might be sources of confusion for the customer, such as using only one transmission channel (\eg gesture without speech), the choice of landmarks which are not always appropriate, if there are several route descriptions in the same explanation, or when the distance is not specified. 
 
-\subsection{The Director Task setup}\label{chap4:subsec:material}
+\subsection{Design of the collaborative task for a direction-giving robot}\label{sec:guiding}
 
-The material used in this task has been chosen to be easily acquired and can be hand-built. It is composed of blocks, compartments, and a storage area. Each element is equipped with AR-tags allowing the robot to perceive them without advanced perception algorithms.
+From the analysis of human-human direction-giving and through an iterative design process, we designed and implemented our directions providing robot. Our model of the collaborative task can be represented as a succession of subtasks, as shown in Figure~\ref{fig:chap3_HTN}. This figure also exhibits the incremental refinement of the task into a sequence of human-robot interactive actions. The aforementioned subtasks are:
 
-\begin{figure}[ht!]
+\begin{figure}[!t]
 	\centering
-	\includegraphics[width=\textwidth]{figures/chapter4/setup.png}
-	\caption{\label{chap4:fig:setup} A director task setup adapted to the \acrshort{hri} with the director's and receiver's perspectives. For the material, each element (blocks and compartment) is equipped with AR-tags allowing their detection by the robot. Each block has four visual characteristics: a main color, a border color, a geometric figure, and a figure color. Compartments can be hidden for the director or the receiver. For the director to designate the block marked with a red circle, estimating the receiver's perspective, he can refer to it by its main color (blue) because he estimates the other blue block is not visible by the receiver. For the receiver, by taking into account the director's perspective, he can understand the referred block as he estimates the other blue block to not be visible by the director.}
-\end{figure}
-
-As shown in Figure~\ref{chap4:fig:setup}, the blocks have a primary color covering them all. On two opposite faces, additional visual features are drawn. The top part of these faces is dedicated to the robot's perception with unique AR-tag on each face\footnote{because the tags are different on each side, the director can not refer to them as the receiver does not see the same ones}. The bottom part is the same on both faces and is dedicated to the human perception with a main color, a border, and a geometric figure. Every visual feature (the colors and the forms) has exactly two variants. The colors are either blue or green and the figures are either a triangle or a circle.
-The figures and colors have been chosen in such a way to allow the emergence of ``coded words'' between the participant to identify a block. With a bit of imagination, some could refer to the left-most block through the sentence ``the mountain in the sea'' or the second leftmost by ``the puddle''.
-The number of features has been chosen to have sixteen block variants from which we remove the four uni-color variants (all the elements having the same color) to avoid too easy description of the kind ``the fully green block''.
-Regarding their description complexity, while the main color is directly related to a block, the other colors are respectively related to the border and the figure. This means that for two blocks whose only difference is the color of one of these elements, the said element has to be referred to by its color. A description of a block involving all its features would be ``the [color] block with the [color] border and the [color] [figure]''. Such complete descriptions are hard for the human to process. In this way we expect the participants to minimize the complexity of their communication by referring to the blocks only using the features distinguishing them from other blocks.
-
-Three types of compartment exist. Some are open on two of their opposite sides allowing both the receiver and director to see the content and to manipulate it. Some are open only on one of their sides meaning that only one of the participants can see and take what is inside. The other participant can thus neither know if a block is inside or not. The last compartment type has an open side and the opposite one equipped with a wire mesh. Because of the side with the wire mesh, both participants can see what is inside but only one of them can take it. With these three types, we will be able to test the impact of the awareness of the blocks (\eg a block is known to be present but not necessarily visible), the visibility of the blocks, and their reachability (\eg a block can be visible but not reachable).
-
-Finally, one storage area, corresponding to the place where the receiver has to store the blocks, is delimited by a rectangle on a shelf.
-
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[scale=0.15]{figures/chapter4/positions.png}
-	\caption{\label{chap4:fig:positions} The Director Task setup with the robot and the human partner one in front of the other and a piece of furniture between them. Compartments are placed on top of the furniture and blocks are placed in the compartments. Next to the agent having the receiver role, here the human, a storage area is placed to drop the removed blocks. }
-\end{figure}
-
-Regarding the disposition, the compartments are stacked on a piece of furniture to create a kind of grid. The blocks can be put in a compartment. As illustrated in Figure~\ref{chap4:fig:positions}, the two agents are placed one in front of the other with the furniture and thus the compartments between them. Finally, one storage area, corresponding to the place where the receiver has to store the blocks, is delimited by a rectangle on a shelf next to the receiver. In the figure, the human would be the receiver since he has the storage area on his right.
-
-\subsection{The Director Task adaptation for HRI}
-
-In this section, we present the DT-HRI, the Director Task as we designed it for HRI, keeping the principle of two participants with a vertical grid between them. The high-level goal of the task is known by both agents: to put a set of blocks away. The precise goal is given by the experimenter to the director, either the robot or the human, i.e., the set of blocks that the receiver should remove from the compartments (see Figure~\ref{chap4:fig:setup}).
-
-As mentioned in the previous section, the Director Task characteristics bring a number of interesting  challenges for a collaborative robot to solve. Because this is a task with two roles, one of the first challenges is to build a robotic architecture that gives the robot the ability to play both roles. Then, each role brings some problems to solve from a robotic point of view. 
-
-In the original task, the director knows they have a subset of the receiver's perspective, they can consider all the objects when communicating. Thus, only the receiver has to reason about the other's perspective, taking into account that some objects are not visible by the director. In order to enrich the task for HRI application, we propose to also have compartments hidden from the receiver and visible by the director (see Figure~\ref{chap4:fig:setup}). Therefore, both roles have to perform perspective-taking, whether to give instructions or to understand them.
-On one hand, this challenging task allows to demonstrate the abilities of a robotic system. On the other hand, it is an easily reproducible scenario to perform user studies on human-robot interactions in a controlled environment. 
-
-To be able to study more specifically some skills, such as verbal communication, perspective-taking and adaptation, we defined a set of rules for both the robot and the participant. First, to focus the task on verbal communication, the agents are \textbf{not allowed to point} to objects, either with their hand or gaze. Then, to strengthen the perspective-taking aspect and not fall into a simple referential communication task, participants are \textbf{not allowed to use geometrical relations} in the verbal communications. They cannot, for example, say ``the leftmost block'' or ``the block to the right of the green one''. In this way they are limited to few visual features, with high ambiguity, therefore requiring to take into account the other perspective. Finally, to enable an evolution of the situation over time and thus requiring a constant adaptation during the interaction, the objects are not moved from one compartment to another but removed from the compartments. The \textbf{order of the instructions is free}, enabling the director to elaborate a strategy if needed.
-
-\subsection{A task to demonstrate the abilities of a robotic system}\label{subsec:abilities}
-
-More than being an easily reproducible scenario to perform user studies on human-robot interactions in a controlled environment, the Director Task allows to demonstrate abilities of a robotic system. We detail here some abilities for which the task has been designed for.
-
-paragraph{Perspective-taking abilities} When working on the ToM in the HRI context, the Sally-Anne test has been used multiple times and allowed to demonstrate some systems~\cite{milliez_2014_framework}. But, one of the benefits of the Director Task compared to the Sally-Anne test is that the agents (human or robot/director and receiver) have not only to infer knowledge using the other's point of view but also to act so it is possible to acknowledge that they use it in decision-making. 
-
-\paragraph{Communication abilities} Moreover, the task 
-requires to put a focus on communications which is widely studied in HRI. Indeed, the communication about an object can be more or less efficient, depending on the number of characteristics given about the object or the pertinence of these characteristics (\eg in Figure~\ref{chap4:fig:dt_apple}, the director does not need to add ``red'' to ``take the small apple'' as there is no apple of a different color). The robot needs to be able to give proper instructions but also to understand the human ones.
-
-\paragraph{Planning abilities} When a large number of blocks has to be taken in the task goal, it quickly becomes complicated to communicate about some of them as the director would have to add a lot of adjectives to be able to refer to one block. Therefore when the robot is the director, it becomes interesting to integrate the communication and the task planning together. Indeed, depending on the order in which the blocks are designated, the complexity of instructions can decrease or increase. Then, the planner can return an optimal order in which the robot has to give the instructions to the human.
-
-\paragraph{Contingencies handling abilities} While performing the Director Task, errors can happen. Either because the director gives a wrong instruction or the receiver misunderstands the instruction and takes the wrong block. In both cases, it can be because of a wrong consideration of the other agent's perspective. In the latter case, the instruction might be right but hard to interpret by the receiver leading to an error from them. Finally, errors can happen because of a failed action execution (\eg a block falls on the floor), a system failure for the robot, inattention from the human, etc. A robot with a robust decision-making system will be able to analyze, try to determine their origin, and handle a number of these contingencies. For example, if the human takes the wrong block, the robot can react in different ways, \eg asking the human to put it back or saying nothing and re-planning if this block was among the ones to take. If errors happen repeatedly, the robot can react differently than for a punctual error.
-
-
-\section{The cognitive robot architecture}
-\label{chap4:sec:archi}
-
-In this section, we present the architecture developed to handle the Director Task in its nominal case but also to allow for future extensions, endowing the robot with the abilities described in section~\ref{subsec:abilities}. The architecture is basically the one presented in Section~\ref{chap2:sec:rob_archi}.
-The seven identified modules are represented in Figure~\ref{chap4:fig:architecture} with their respective communication links. In the rest of the section, we detail each module and how we have refined them in terms of functionality and linking.
-
-\subsection{Storing and reasoning on symbolic statements}
-
-As seen in the previous chapters, knowledge allows the robot to understand the environment it evolves in. Moreover, this same knowledge makes the robot able to communicate with its human partner about the current state of the world and ground the partner's utterance regarding this same world state.
-
-Some have chosen to propagate their knowledge all along their architecture~\cite{hawes_2007_balt}, each component enriching this knowledge at each stage. Others have preferred to see their knowledge base as an active server activating perception process regarding the searched information when needed~\cite{beetz_2018_know}.
-
-As the architecture on which we based ours, we chose a central, server-based, knowledge base. We however refined it into two distinct sub-modules, the semantic knowledge base and the episodic one, as presented in Chapter~\ref{chapter:chap2}, managed by Ontologenius.
-
-\begin{figure}[t!]
-	\centering
-	\includegraphics[scale=0.40]{figures/chapter4/architecture.png}
-	\caption{\label{chap4:fig:architecture} An overview of the architecture developed to handle the Director Task. Each block does not necessarily represent one software component but rather an architectural module (in terms of the features it implements). The arrows represent the type of information exchanged between the modules.}
+	\includegraphics[width=\linewidth]{figures/chapter3/HTN-guiding_task.pdf}
+	\caption{The representation of the direction-giving task as a hierarchical task network with task, substasks and actions levels. All the horizontal arrows are sequential links and the rest are decomposition ones.}
+	\label{fig:chap3_HTN}
 \end{figure}
 
 
-\subsection{Assessing the world: from geometry to symbolism}
-
-The role of the geometrical Situation Assessment module is first to gather different perceptual information and build an internal geometric representation of the world. From this world representation, the module then runs reasoners to interpret it in terms of symbolic statements between the objects themselves and between the involved agents and the objects. Doing so, the module only builds the robot's representation that does not necessarily reflect what the human partner believes about the world. This is the case with the occluded compartments. If a block is present in a compartment occluded from the human perspective, this block is not visible and thus unknown to the human and should not exist in their representation of the world. Here is the second role of our Situation Assessment module, estimating the human's perspective and building an estimation of their world representation. It is the first step allowing to implement the \acrshort{tom} principles (see Section~\ref{chap1:subsec:tom}).
-
-To implement this module, we have chosen the Underworld framework~\cite{lemaignan_2018_underworlds}. It has the advantage to not be monolithic. Its principle is to create a set of worlds, each working at a different granularity and integrating specific features. It allows easy reuse of existing modules and makes the core reasoning capabilities independent of the used perception modalities. The worlds' structure we use is represented in Figure~\ref{chap4:fig:uwds}. At the top, there are the perception modalities, here AR-tags~\cite{fiala_2005_artag} for the objects and motion capture (mocap) system for the human detection. For each perception system, we define a world. In these worlds, we can filter the perception data depending on the system used. For the mocap, the data is clean enough. For the AR-tags we apply first a motion filter to discard data acquired when the robot moves and a field of view (FOV) filter to discard data from the border of the camera because of distortions. Moreover, both perception worlds can use the knowledge base presented previously to get the entities' CAD models and unique identifiers (UIDs) shared across all the components of the architecture. When the AR-tags world receives an AR id, it can query the semantic knowledge base to get the UID related to this tag and get its CAD model. As the output of these worlds, we ensure to have clean data with UID related to the knowledge base.
-
-\begin{figure}[b!]
-	\centering
-	\includegraphics[scale=0.12]{figures/chapter4/uwds/uwds.png}
-	\caption{\label{chap4:fig:uwds} The world cascading structure of the geometrical situation assessment system. The two worlds at the top are build from the perception systems and filtered. The world of the middle merges the different perception information and computes symbolic facts on it. The world at the bottom is the estimation of the human world representation and is computed based on perspective-taking in the robot's world. Like for the world of the middle, symbolic facts are computed and sent to the semantic knowledge base.}
-\end{figure}
-
-
-The world of the middle in Figure~\ref{chap4:fig:uwds} is the robot's world representation. Information from the perception worlds is merged along with the static elements (the building walls) and the robot model.
-%From this world, additional perception reasoning processes are applied for the objects that are no more visible in the way of~\cite{milliez_2014_framework}. If an entity is no more perceived in one of the previous worlds, the algorithm first tests if it should be in the robot's FOV. If so, the robot should see it. It thus tests if another entity could hide it. If not, the object is removed from the world representation and kept otherwise. 
-From there, geometric reasoners are applied to extract symbolic facts. In the current version of the system, the computed facts are \textit{isOnTopOf}, for an object put on top of another, \textit{isInside}, for a block in a compartment, \textit{isVisibleBy}, assessing if an agent could see the object or not, and \textit{isReachableBy}, assessing if an object can be taken by an agent. All these facts are sent to the robot's semantic knowledge base, where reasoners will deduce further facts. For example, if a block is in a compartment, the compartment has the block inside (inverse property), and if this compartment is on top of the table, the block inside is also above the table (chain axiom).
-
-While the previous world corresponds to the robot's representation, the one below aims at representing the partner's one. From the previous world, we compute a segmentation image from the human point of view and use it as a filtered perception world. This allows us to instantiate the same kind of world management process we used for the robot but this time for the human. In this way, we emulate their perception capability and the geometric reasoners can be run in the same way as previously. Symbolic facts are thus computed and sent to the human's semantic knowledge base. In the world of the bottom on Figure~\ref{chap4:fig:uwds}, we can see that the two blocks in the occluded compartments are not present in the human world. Here we make explicit the difference between an object that is unknown and an object that is known but not visible.
-
-
-\subsection{Planning with symbolic facts}
-
-The symbolic planners are divided into two categories: the domain-independent, planning high-level tasks, and the domain-dependant, specialized in solving precise problems. We first introduce the domain-specific ones and the domain-independent in a second time.% as it takes advantage of the previous ones.
-
-\subsubsection{Solving precise problems}
-
-Building a single monolithic planner could be an intractable challenge. Thus, we chose to consider a set of dedicated planners which could be reused from one system to another. In the current version of the system, only one specific planner has been identified. This planner is a \acrfull{reg} solver. Regarding the current symbolic state of the world, it aims at finding the minimal set of relations to communicate and allow the listener to identify a given entity. For example, wanting to refer to a block being the only one with a green triangle on it among the other, this planner can find that the only relations to communicate are the block's figure and the figure's color. With this information, the listener should be able to identify the referred block without ambiguity.
-
-This planner is presented in~\cite{buisan_2020_efficient} which is based on a Uniform Cost Search algorithm and which is to the date the most efficient one in term of computation time. It works with an ontology, being the semantic knowledge base presented previously. Because the communication information it generates will be interpreted by the robot's partner, we chose to give the estimated human knowledge base as input to the planner. Thanks to this, the blocks unknown from the human --- i.e., hidden from them --- are not taken into account as they cannot lead to any ambiguity for the listener. Moreover, this planner can take some constraints as input, related to the property usability and the context of the communication. The usable properties constraint prevents some properties to be used in a referring expression. Indeed, the input ontology is not dedicated to the specific referring expression generation problem and contains additional knowledge used by other modules as the objects' CAD models or tag UIDs, that does not aim to be communicated. The communication context aims at representing relations assumed to be already known by the listener. For the Director Task, when the robot asks the human to take a block, it assumes they know it is only talking about objects above the table around which the robot and the human are interacting. The already stored blocks --- not on the table anymore --- are thus not taken into account in the communication. If needed the communication context can be refined, for example by defining that the robot --- and thus should the human as well --- will only consider visible blocks and reachable blocks.
-
-\subsubsection{Planning for self and others}
-
-In the context of a Human-Robot interaction, when planning how to perform a high-level task, one has to take into account the human's contribution. Our current task planner is \acrshort{hatpehda} mentioned in Section~\ref{chap2:subsec:plan_handling}. This planner allows the robot to plan by emulating the human decision, action, and reaction processes. For the Director Task, emulating the human reaction to a given instruction enables the comparison between multiple blocks order, the communication of higher-level instructions to the human (\eg ask to withdraw rather than take then put down) and the balance between multiple communication modalities.
-
-As at execution time the supervision uses the \acrshort{reg}, a domain-specific planner, and because the task planner uses the same type of knowledge representation, thus \acrshort{hatpehda} can use this planner during its planning process. In the current architecture, it can thus estimate the cost and the feasibility of referring communication by calling the \acrshort{reg}.
-
-\subsection{Managing the interaction}
-
-Based on the components presented above, \acrshort{jahrvis} manages the execution of Director Tasks, based on its processes presented in Chapter~\ref{chapter:chap2}.
-
-
-\section{Experiments}\todo{modifs pour axer supervision-texte de guillaume}
-
-The architecture has been successfully implemented on a PR2 robotic platform. The robot is thus able to play both roles, the director and the receiver. In this section, we comment and analyze a video\footnote{\url{https://youtu.be/jtSyZeqBkp0}} of two experiments. For both experiments, the initial state is the same and are represented in Figure~\ref{chap4:fig:expe_config}. The only emulated element is the human action recognition to trigger the next actions of the robot when it holds the director role as at the time, the \acrfull{ham} process presented in Section~\ref{chap2:subsec:h_moni} was not developed yet.
-
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=\textwidth]{figures/chapter4/expe/config.png}
-	\caption{\label{chap4:fig:expe_config} Initial configuration for both case studies. The top-right block is not visible, and thus unknown, by the human partner. The robot can not know if there is a block in the bottom-left compartment. All others blocks are known by both the robot and the human.}
-\end{figure}
-
-\subsection{PR2 as the director}
-
-We start this section with a PR2 in the role of the director (0:21 in the video). The setup is composed of six compartments including two compartments with a hidden face. One of these compartments is hidden from the human (the receiver) and one from the robot (the director). One block has been placed in each compartment. Consequently, only four blocks are known by both the human and the robot. Figure~\ref{chap4:fig:robot_view} is a visualization of the estimated geometric world of the human, maintained by the situation assessment component. Even if a block is present in each compartment, the leftmost one is not present in the estimation of the human's world. This absence comes from the fact that the human can not see what is in the compartment and thus can not know this block.
-
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[scale=0.5]{figures/chapter4/robot_view.png}
-	\caption{\label{chap4:fig:robot_view} A visualization of the human's estimated geometric world from a third-person view. Even if a block is present in each compartment, the right most one is not present in this worls since the human can not see this block. }
-\end{figure}
-
-Figure~\ref{chap4:fig:director} represents the entire interaction when the robot is the director. At the initial state, four blocks are visible from both agents. Describing them with all their visual features, they are:
-
-\begin{itemize}
-	\item A blue block with a blue border and a green triangle
-	\item A blue block with a blue border and a green circle
-	\item A blue block with a green border and a blue triangle
-	\item A green block with a green border and a blue circle
-\end{itemize}
-
-Thanks to the estimation of the communication cost at task planning using the results of the \acrshort{reg}, the robot is able to find the optimal sequence of blocks to instruct. The overall communication is thus minimized and the RE is unambiguous in each situation. In the initial state (a to b), the robot asks for the green block as only one of the visible blocks is green. Since the green block has a circle on it, removing it, only one of the remaining blocks has a circle on it. The robot can thus use this feature to refer to the next block (b to c). Without communication cost estimation during the task planning, such a simple situation would not necessarily appear.
-
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=\textwidth]{figures/chapter4/director.png}
-	\caption{\label{chap4:fig:director} The director task handled by an autonomous PR2 robot in the role of the director. Each picture represents a step toward the achievement of the task. The estimated human perspective is displayed in the top left-hand corner of each picture. On top of the arrows leading to a new state are the sentences said by the robot to the human. The block outlined in red are the blocks referred to at each step. }
-\end{figure}
-
-\subsection{PR2 as the receiver}
-
-While in its previous role the robot just had to instruct the human, when the robot is the receiver (1:33 in the video) more reasoning is needed. A retranscription of part of the interaction is represented in Figure~\ref{chap4:fig:receiver}. In the initial state, the same four blocks as previously are visible by both the agents. The robot is able to understand three actions: take, drop, and remove. The latter action is a combination of the two others.
-
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[width=\textwidth]{figures/chapter4/receiver.png}
-	\caption{\label{chap4:fig:receiver} The director task is handled by an autonomous PR2 robot in the role of the receiver. Each picture represents a step toward the achievement of the task. The estimated human perspective is displayed in the top left-hand corner of each picture. On top of the arrows leading to a new state are the sentences said by the human to the robot and for the last situation the refinement query from the robot to the human, followed by the answer of the human. }
-\end{figure}
-
-For the first block (a to b on the figure), the human instructs the robot for the green block. The natural language understanding module returns the \sparql{} query:
-
-\begin{quote} 
-	\centering 
-	(?0, isA, Block), (?0, hasColor, green)
-\end{quote}
-
-Since the robot assumes the human to speak about objects on the table, the understood query is merged with another one representing the context of the task: (?0, isAbove, table\_1). Querying the human estimated ontology with the merged query, only one entity match. There is no ambiguity in human instruction. The robot takes the instructed block then drop it. If the query was applied to the robot ontology, two blocks would have matched since the block unknown by the human is also green. It goes the same for, the second instruction. There is no ambiguity. The \sparql{} query related to this second block is:
-
-\begin{quote} 
-	\centering 
-	(?0, isA, Block), (?0, hasFigure, ?1), (?1, isA, Circle)
-\end{quote}
-
-The third instruction given by the human as the director is the most interesting for us. The human asks for \textit{``The block with a triangle''}. However, the speech to text returns \textit{``take is about to whip a triangle''}. With this sentence, the NLU module can only extract two known concepts being ``take'' and ``triangle''. Due to the limited amount of words understood, it does not try to generate a \sparql{} query. The robot thus informs the human about its incapacity and repeat the heard sentence as a back loop for the human. At the second try, the sentence is understood and gives the query:
-
-\begin{quote} 
-	\centering 
-	(?0, isA, Block), (?0, hasFigure, ?1), (?1, isA, Triangle)
-\end{quote}
-
-However, matching this query to the human's estimated ontology, we get two results. Once again, matching it to the robot's ontology would give three results but the third one is not visible from the human. Since all the concepts of the sentence have been understood and linked together to create the query, the human should have made a mistake, providing an ambiguous referring expression.
-
-To be proactive, we want the robot to ask precision about the block to take by proposing visual features to distinguish them. To do so, we use the \acrshort{reg} algorithm on each ambiguous block. As a context for the \acrshort{reg}, we pass the previously merged \sparql{} query. It represents what has already been understood by the robot. In the current situation, the robot thus performs two \acrshort{reg} and their results are used to generate the disambiguation sentence:
-
-\begin{quote} 
-	\centering 
-	\textit{``Do you mean the block with a green triangle or the block with a blue triangle?''}
-\end{quote}
-
-When the human responds, for sure it does not generate a complete description f the block to be taken. It rather answers the question. The query extracted from his answer is thus combined with the previously understood one in case some information is missing. Matching this last query to the human's estimated ontology, the robot finally get the block to remove.
-
-With this latter case, we saw how the robot can react to a human's mistake and use the \acrshort{reg} to help the progress of the task, even if it is the receiver.
-
-\section{Open challenges for the community }
-\label{sec:challenges}
-
-So far, we proposed a cognitive robot architecture handling the Director Task in its simplest form, both 
-%for the director and receiver 
-roles. In this section, we now present some open challenges for the community around the task. Moreover, because the task can be performed in a controlled environment, we also present in a second part some user studies to investigate ways of sharing information.
-
-\subsection{Some challenges to take up}
-
-\begin{center}
-	\begin{tabular}{||l | l ||} 
-		\hline
-		Challenged abilities / components & Challenges \\ [0.5ex]
-		\hline\hline
-		Perspective-taking & \ref{chal:cont_analysis}  \\ 
-		\hline
-		Communication & \ref{chal:change}, \ref{chal:understand}, \ref{chal:words}\\
-		\hline
-		Task planning & \ref{chal:cont_not_errors}, \ref{chal:cont_errors},  \ref{chal:change} \\
-		\hline
-		Reference generation & \ref{chal:change}, \ref{chal:spatial_ref}, \ref{chal:past}, \ref{chal:multi} \\
-		\hline
-		Contingencies handling & \ref{chal:cont_analysis}, \ref{chal:cont_not_errors}, \ref{chal:cont_errors}, \ref{chal:change} \\ [1ex]
-		\hline
-	\end{tabular}
-\end{center}
-
-\begin{enumerate}[leftmargin=* ,parsep=0cm,itemsep=0cm,topsep=0cm]
-	\item Fine contingency analysis:  Due to the high ambiguity between the blocks and the presence of occluded compartments, failures can easily arise and have to be handled. In the case the human is the receiver and does not take the instructed block, the robot has to determine the origin of the failure. It could come from a perspective not taken into account either by the director or the receiver, a block description not clear enough, or just an error of the receiver regarding a correct (non-ambiguous) description.\label{chal:cont_analysis}
-	\item Not handling contingencies as errors: Based on the example of the previous challenge, the human takes another block than the one instructed but this block could be part of the next ones to take in the plan. In this case, why the robot should try to ``repair'' i.e., make the human takes the instructed block? Maybe it could mention to them that they took the wrong block but it does not matter because this one is also part of the plan. Then, either the robot could re-plan or even better, use a conditional plan and adapt according to the human's actions.\label{chal:cont_not_errors}
-	\item Handling errors as errors: Still based on the case where the human takes another block than the one instructed, the robot has to communicate and negotiate with them in order, first to fix the error i.e., put back the block to its original compartment, then adapt its original instruction to make it clearer and improve the chances to have them take the right one.\label{chal:cont_errors}
-	\item Changing something when recurrent failures: In case of recurrent failures by the partner, during one interaction session (multiple tasks can be performed in one session) or along with several ones, the robot could try to analyse the origin of the failures and adapt itself to increase the QoI and reduce the failures. It could be through properties' cost adaptation if the partner has some difficulties with certain visual features or communication context adaptation if the partner took the stored blocks into account in its understanding.\label{chal:change}
-	\item Allowing spatial references: As explained in section~\ref{chap4:subsec:psycho}, the Director Task is originally a task to test referential communication. Even if the present version asks the participants to not use spatial reference, this rule could be relaxed to study perspective-corrected spatial Referring Expression Generation.\label{chal:spatial_ref}
-	\item Understanding the human instructions: In the current implemented version, the robot can only understand a precise vocabulary, being the one describing the blocks in the way we have thought them. In a more natural interaction, humans could use a richer vocabulary, give instruction in multiple steps or have communications not directly linked to the task. During tests for designing the task, it was common to have instructions like ``take the block with a ... triangle. No, rather the one with a green border''. Such complex communications should have to be managed by the robot. \label{chal:understand}
-	\item Introducing code words: As presented in Section~\ref{chap4:subsec:material}, the visual features on the blocks have been designed to be able to see landscapes on them, with a little imagination. During the interaction, the robot could thus try to negotiate some coded words in order to be more efficient in the task considering multiple sessions. Being the receiver, it would have to understand the coded words as to be part of a description and remember them. \label{chal:words}
-	\item Referring to a past event: When a human performs multiple times the Director Task with the robot, noteworthy events can happen. These events could be recognized and recorded by the robot so it can refer to them when speaking about an object (\eg ``can you take the one you dropped in the previous task ?''). Likewise, the human may also use these past events and the robot would have to understand them. \label{chal:past}
-	%We could even imagine not only the robot referring to past events but also the human starting to doing it and the robot understanding these references. \label{chal:past}
-	\item Communicating about multiple blocks in a raw: Instead of giving instructions one at a time, the director could give instructions for multiple blocks in a raw. This may bring different kinds of communications from the base task as ``I do not remember the instruction for the last block'' when the human is the receiver. Also, this would be interesting for planning when the robot is the director as it could give instructions such as ``Take all the blocks with a triangle on them'' and it would be a different kind of instructions to interpret when the robot is the receiver.
-	\label{chal:multi}
+\begin{enumerate}
+	\item \textbf{Establishing the shared goal}: In this first step, the human and the robot negotiate and establish a shared goal. Specifically, the robot tries to determine precisely the place -- we called it the \emph{target} -- it should give directions for. This is immediately completed if the human directly asked for a known shop. Several verbal exchanges can be necessary in case the person asked for a kind of shop (\eg restaurant) or a product or in case the robot has not properly understood the name of the place and needs to disambiguate.
+	\item \textbf{Route planning according to the human willingness and ability to climb stairs}: As the robot role is to help people, adapting to them, it needs to ensure that they have the abilities to follow the route it will indicate to them. So, first the robot computes the best route to the target and then checks the presence of stairs in it. In case there are, the robot enquires whether the human can or want to climb them or not. If they cannot or do not want to, the robot computes a new route without any stairs. The planned route contains a first  \emph{passage} (\ie a corridor, a door or an escalator) which the robot will try to point.
+	\item \textbf{Ensuring correct placement}: The second human-human study, mentioned in Section~\ref{sec:methodology}, highlighted the fact that human guides point to a visible \emph{passage} before giving the route directions. Thus, we endowed the robot with this ability as described further in the item~\ref{steps:passage} of this list. In order to be in good conditions while performing this item \ref{steps:passage}, that is to say to ease the human understanding of the directions, the robot seeks better positions for the human and itself. It does so by computing a position for the human, considering their visual perspective of the passage.
+	%Clearly, it does not planned a new position if, from it, the human visibility of the passage is not higher than their current one.
+	The robot computes a new position for itself as well, to form a triangle whose vertices are the planned robot position, the planned human position and the passage, as shown in Figure~\ref{fig:chap3_human_guide} and Figure~\ref{fig:chap3_dir_giving_task}. After having computed these positions, the robot moves, and as they both are engaged in the task, expects the human to join it once its position is reached; it calls them if they do not. As the human might not be at the exact position computed for them, the robot checks their visibility of the passage. In case their visibility is too low, the robot will adjust their position thanks to verbal instructions (\ie come closer, move back). Figure~\ref{fig:chap3_dir_giving_task} illustrates the initial and final positions of both agents, in a lab context. 
+	\item \textbf{Pointing to target}: Following the sequencing obtained from the aforementioned human-human study, the robot first points in the target direction, along with a brief sentence. As the robot is a helper and it is involved in a joint action with the human, it needs to ensure that its actions produce their expected results. In this case, if the robot computed that the target should be visible from their position, it checks that the human has seen it, either by monitoring their perspective or by asking. In case of a negative answer, it will point again.\label{steps:ensuring}
+	\item \textbf{Pointing to passage and giving route directions}: Still following the sequencing from the study, when the target is not in the same physical space as them, meaning that there is a passage on the way to the target, the robot points to this passage and then verbalizes the route directions. These directions take into account the orientation the human will have and describe the route (\eg take the corridor on the left side). Finally, the way they are built (\ie the order of the steps, the keywords to use...) is also based on the human-human study. Here again, the robot ensures that the route directions have been understood by asking the person about it or if the passage has been seen if there is one.
+	% 	(only one of the two questions is asked as with both one after the other, people interacting with the robot were annoyed). 
+	In case of a negative answer, it will point and give the route directions again. Finally, the robot ends the task with a ``happy-to-help'' short sentence.\label{steps:passage}
 \end{enumerate}
 
 
-\subsection{Some Director Task-based user studies to perform}
+\begin{figure}[!ht]
+	\centering
+	\subfloat[Initial positions of the human and the robot. The human asked the robot for route directions to a target behind him.]{ 
+		\begin{minipage}{\linewidth}\hspace{0.05\linewidth}
+			\includegraphics[width=.4\linewidth]{figures/chapter3/init_pose_r.jpg}\hspace{0.1\linewidth}
+			\includegraphics[width=.4\linewidth]{figures/chapter3/init_pose.png}
+		\end{minipage}
+	}\par\vspace{2ex}
+	\subfloat[The robot and the human are in their final positions. The blue spheres are the computed position for the human by the robot. The robot is pointing to the passage (in blue frame). We can observe the triangle formed between the human, the robot and the passage (the blue area on the floor) as in Figure~\ref{fig:chap3_human_guide} where two humans are in a triangle formation.]{
+		\begin{minipage}{\linewidth}\hspace{0.05\linewidth}
+			\includegraphics[width=.4\linewidth]{figures/chapter3/final_pose_r.jpg}\hspace{0.1\linewidth}
+			\includegraphics[width=.4\linewidth]{figures/chapter3/final_pose.jpg}
+		\end{minipage}
+	}\par  
+	\caption[pos]{Initial and final positions of a direction-giving task in the lab context. On the left are pictures and on the right screenshots of Rviz\footnotemark (a 3D visualization tool for ROS.)}
+	\label{fig:chap3_dir_giving_task}
+\end{figure}
 
-Some robot behaviours, mainly about the referring expression generation, have been designed with regard to the current literature but could be refined thanks to user studies based on the Director Task. The references to the blocks involve the minimum of visual features allowing to discriminate them without ambiguity to fit the Grice's Maxim of Quantity \cite{grice_1975_logic}. However, due to all the cognitive mechanisms to use in this task (\eg perspective-taking) and the high ambiguity among the blocks, evaluating such behaviour compared to a full explanation could be interesting. Indeed, giving a reference with more information than needed would ensure to not match blocks being only visible by the receiver, which could help them to select the right block.
 
-As presented in section~\ref{chap4:subsec:material}, a special compartment equipped with a wire mesh can be used. Referring to a block matching also the one in this particular compartment could disturb the receiver or at least require a higher cognitive load to determine the right block to take. Such behavior could also be interesting to evaluate. In the same way, a block that was visible by the receiver and that the director move in a hidden compartment could disturb the receiver.
+To endow a robot with the abilities described above, to build a robotic architecture embedding all these aspects, is a challenge. We tackled it with the architecture presented in the next section.
 
-Evaluating such behaviours in a controlled task where the participants cannot know the real goal of the study could help the community in the design of architectures applied to more realistic scenarios.
+\section{The deliberative architecture}\label{sec:globalarchi}\todo{est-ce qu'il faut charcuter des détails ?}
+
+In this section, we present the robotic architecture developed to handle the direction-giving task. It can be seen as an instantiation of the architecture presented in Section~\ref{chap3:sec:rob_archi}.  
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=\textwidth]{figures/chapter3/schema_archi.pdf}
+	\caption{\label{fig:chap3_architecture} The general architecture of the system. The components presented in this paper are in\cite{matsumoto_2012_you} white. The visual perception and dialogue components have been respectively developed by IDIAP and HWU and are described in~\cite{foster_2019_mummer}. Naoqi is a Softbank Robotics software.}
+\end{figure}
+
+The figure~\ref{fig:chap3_architecture} represents the architecture, its components, and their interconnections. Communication between components relies on ROS. In this chapter, we only present the components developed by the LAAS-RIS team, represented by the colored blocks on the architecture. First, we present the two knowledge representations in the form of geometric and semantic representations. Next, we introduce the components related to the sensorimotor layer. It is the situation assessment and the physical resource manager. Then, we present the components related to the deliberative layer. They are the Human-Aware Navigation, the SVP (Shared Visual Perspective) planner, the Route Handler, and among the key components, we finish with the supervision and control system, designed to operate human-robot joint tasks in a joint action context. 
+
+\subsection{Environment representation}\label{subsec:models}
+
+For a service robot providing directions to people, we need information to understand humans' need, information to compute the route to the goal, and information to compute the visibility of both agents to plan the pointing position. To understand the needs of a human wanted to be guided, we need information about the type of stores and the sold items. To provide so, Satake \etal{} used an ontology~\cite{satake_2015_field, satake_2015_should}. To compute the route to the final destination, some works show the use a topological map~\cite{matsumoto_2012_you,okuno_2009_providing}. Each node of the graph is related to a 2D position of the environment. To estimate the human visibility of elements anywhere in the environment,  Matsumoto \etal{} used a simplified 3D model where shops are represented by 3D polygons~\cite{matsumoto_2012_you}. In our implementation, we only used two types of representation of the environment: a \textbf{geometric} and a \textbf{semantic}.
+
+Since the final deployment of the robot was in a Finland mall, we have built an mockup mall in our lab for development purposes. By mockup, we mean that shops signs have been displayed in the laboratory to create configuration similar to the real mall. The representations describe hereafter have thus been created both for the real mall and the mockup one.
+
+\subsubsection{Geometric representation}
+
+The geometric representation is used to compute the visibility of elements of the environment from different positions needed for the pointing of landmarks. However, because the robot does not accompany the person to the final destination and therefore does not move much, the possible visibility of the two agents is limited to their immediate environment. For this reason and due to the large scale of the Finland mall, we chose to geometrically describe only the subpart of the global environment that could be visible from the interaction area. For the rest of the environment, we represented the shops with 3D points only. These points are enough to point in the right direction. The resulting geometrical representation is a three-dimensional mesh model, as shown in figure.~\ref{fig:chap3_lab} for the mockup mall and in figure~\ref{fig:chap3_ideapark} for the real one. We have represented in the 3D model all the elements that could hinder visibility, such as poles or panels. In this way, we can precisely emulate human visibility. The model was created from the architectural plans first and then refined with measurements in the mall.
+
+\begin{figure}[!ht]
+	\centering
+	\begin{subfloat}[The 3D mesh model of the mockup mall at laboratory. The red square represent the interaction area as a square of 4 meters per 4 meters. Signs representing the shops have been place all around the environment.\label{fig:chap3_lab}]{
+				\includegraphics[scale=0.15]{figures/chapter3/adream_base_m.png}}
+	\end{subfloat}
+	\begin{subfloat}[The 3D mesh model of the real mall in Finland. The entire mall having a size of 528.6 meters per 247.5 meters on two levels, we have only modelled the part which can be visible from the interaction area. It results in a model of 150 meters per 69 meters.\label{fig:chap3_ideapark}]{
+			\includegraphics[scale=0.15]{figures/chapter3/ideapark_base_m.png}}
+	\end{subfloat}
+	\caption{We have built a mockup of the Finnish mall environment in our lab in order to be able to test and debug the direction-giving task in our lab. This environment comprises a two-level area with corridors, ``shops'' , passages, stairs, open central space and consequently allowed us to run realistic guiding scenarios.}
+	\label{fig:chap3_3Dmodels}
+\end{figure} 
+
+
+In order for the pointing planner to compute the visibility of the landmarks used for the route description, stairs, escalators, elevators, and store signs are represented each by a single mesh while the rest of the building is a unique 3D mesh. This means that a store is said to be visible if we can see its sign, which we think to be the most relevant element to see to recognize a shop.
+
+The 3D model is also used to generate a navigation map, constraining the robot to move in the interaction area while avoiding obstacles in it.
+
+\subsubsection{Semantic representation}\label{subsubsec:semantic}
+
+As Satake \etal{}~\cite{satake_2015_field}, our semantic representation is based on ontology. An ontology allows to define classes representing general concepts (\eg Restaurant), individuals/entities being classes instantiations (\eg Burger\_King), and properties linking two entities (\eg Burger\_King isIn Ideapark).
+To provide storage and an efficient way to manipulate the ontology and reason about it, a lightweight software has been developed, called Ontologenius, presented by Sarthou \etal{}~\cite{sarthou_2019_ontologenius}. It makes it possible to share the semantic knowledge among all the components of the architecture, here especially the route handler and the supervision, thus enabling a unique repository of knowledge.
+
+The ontology is first used to represent information about the stores. It allows to define and refine the shared goal of the task by understanding the client's wanted destination. Thus, the stores' types, their names, and the items they sell have been represented in it with a rich semantic. It allows for example to represent that both soda and hamburgers are sold in fast-foods, which are types of restaurants, but that soda can also be found in a supermarket. Thanks to Ontologenius, the names of concepts are defined in different languages and with synonyms for these names. It allows the robot to adapt itself to the human partner language. Moreover, Ontologenius endows the robot with the ability to recognize a set of names in natural language but that it will be prevented to use (\eg the robot can understand a reference to ``bank'' when a human says it but only refers to it as ``ATM'' or ``cash machine'' since there was no bank office in the mall). In addition, this software offers a fuzzy match service based on Levenshtein distance, to help the supervision system to handle ambiguities coming from the speech to text component (\eg it can match the word ``Juwelsport'' with ``Juvesport''). This set of functionalities around the concepts' names facilitates the understanding of the partner's need and thus helps at increasing the quality of interaction.
+
+In an effort to unify representations because representing as a 3D mesh the entire mall would be a complex task, we chose not to use the geometrical representation or a topological map to compute the route to the final goal but rather the semantic representation given by the ontology.
+
+To include topological information into the semantic representation, the \acrfull{ssr} has been designed, presented by Sarthou \etal{}~\cite{sarthou_2019_semantic}. With the \acrshort{ssr}, the overall knowledge is represented in an ontology with three upper classes which are: \textbf{region} (\ie a two-dimensional area that is a subset of the overall environment), \textbf{path} (\ie a one-dimensional element along which it is possible to move and which has a direction) and \textbf{place} (\ie a point of zero dimension that can represent a physical or symbolic element). The \textbf{place} class has three subclasses: \textbf{path intersection} (\ie the connection between only two paths and thus a waypoint to go from one path to another), \textbf{passage} (\ie the connection between only two regions and thus a waypoint to move from one region to another like a door, a staircase or a passage), and \textbf{shops}. A representation of these classes is visible in Figure~\ref{fig:chap3_onto_classes}.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.45]{figures/chapter3/classes.png}
+	\caption{\label{fig:chap3_onto_classes} Classes for a representation of the topology of an indoor environment in a semantic description. The classes with the solid outline are the minimum classes defined by the \acrshort{ssr}. The classes with the dotted outline are an extension of this minimal set.}
+\end{figure}
+
+An example of the final semantic knowledge represented in the ontology for a given shop is presented in Figure~\ref{fig:chap3_onto_properties}. We find here the identifier of the shop, the category to which each store belongs (\eg restaurant or hairdresser), the items sold for which people ask the most (\eg shoes or coat), and the names and synonyms in natural language and that for different languages.
+Moreover, thanks to the \acrshort{ssr} we can produce the best route (in term of complexity) as well as verbalize it using a route perspective.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=0.45]{figures/chapter3/zizzi.png}
+	\caption{\label{fig:chap3_onto_properties} Properties for a representation of the topology of an indoor environment in a semantic description.}
+\end{figure}
+
+\subsection{Perceiving the partner}\label{subsec:situation_assessment}
+
+The situation assessment component is based on the Underworld framework~\cite{lemaignan_2018_underworlds}. It aims at gathering perception information in the form of 3D position and orientation of human faces, with the 3D model and the robot state. With this information, it is able to generate the symbolics facts listed in table~\ref{tab:chap3_predicates}.
+
+\begin{table}[ht!]
+	\centering
+	\begin{tabularx}{\textwidth}{|l|X|}
+		\hline
+		\textbf{Predicate} & \textbf{Description} \\
+		\hline
+		\hline
+		isPerceiving & The robot is perceiving a human \\
+		\hline
+		isCloseTo & The human is within a distance of 0 to 1 meter of the robot \\
+		\hline
+		isLookingAt & The human is looking at the robot \\
+		\hline
+		\hline
+		isInArea & The human is in the interaction area \\
+		\hline
+		isEngagingWith & The human is close to the robot and is looking at it \\
+		\hline
+	\end{tabularx}
+	\caption{Facts computed and monitored during the direction-giving task.}
+	\label{tab:chap3_predicates}
+\end{table}
+
+\subsection{Managing the robot's resources}
+
+A humanoid robot such as Pepper can be seen as a composition of multiple physical components that can act independently of each other. For the direction-giving task, we identified four resources: the head, both arms, and the base. At the beginning of the interaction, for example, the head is used to find people to interact with, but later it will be used to track the human with the gaze. Several components could access this resource to perform these actions. However, they do not have a global picture of the ongoing task. In this case, a resource could be used by several components at the time. Consequently, it could lead to task failures.
+
+Moreover, in some cases, several resources have to be used simultaneously to perform a high-level action. To point to a landmark, one arm is selected to point while the other has to be lowered. The base is then rotated if the arm reaches the joint limit to point a target on its back. If at least one of the involved resources is simultaneously used to perform another action, the overall high-level action will fail as the global posture will no more be clear. For example, if the human gets too close to the robot and a component tries to move away from a little, the arm would no more point in the right direction.
+
+Thus, for each of the identified resources we instantiated a Resource Manager that we presented in Section~\ref{chap6:para:resource_m}. The global resource management scheme is illustrated in Figure~\ref{fig:chap3_rm} with four resource managers and one synchronizer.
+
+\begin{figure}[!hb]
+	\centering
+	\includegraphics[scale=0.26]{figures/chapter3/rm.png}
+	\caption{\label{fig:chap3_rm} Representation of the resource management system with four resource managers and a synchronizer. The red arrows represent the state machines inputs and the blue arrows represent the inputs for permanent commands.}
+\end{figure}
+
+\subsection{Describing the route to follow}\label{subsec:route_description}
+
+In large-scale environments such as malls, route computation can lead to combinatorial explosion. Therefore, to simplify the problem we chose to divide it in two stages and to conceive an algorithm for each one. The first one computes the existing routes from one Region of the mall to another. A region is for example a floor of the building so if the robot is at the ground floor and the final destination also, this means that the algorithm will not take into account all the elements of the other floors. Then, the second algorithm uses the Region-to-Region routes to calculate the Place-to-Place route. These algorithms are presented with more details in \cite{sarthou_2019_semantic}.
+
+\paragraph{Region-to-Region route}
+
+\begin{figure}[b]
+	\centering
+	\includegraphics[scale=0.17]{figures/chapter3/regions.png}
+	\caption{\label{fig:chap3_regions} Representation of an environment at the regional level.}
+\end{figure}
+
+In the \acrshort{ssr}, \textbf{passages} (\eg escalators, stairs) are elements of the environment connecting two regions through the $isIn$ property. With this property and a breadth-first search algorithm, Region-to-Region route finding algorithm is able to find the routes connecting two regions using only passages. It outputs a route with the format $region - place - region - ... - region$. In the example of Figure~\ref{fig:chap3_regions}, the final routes found by the algorithm to go from Region 1 to Region 3 are:
+
+\begin{bulletList}
+	\item \(region\_1 - passage\_1 - region\_2 - passage\_2 - region\_3\)
+	\item \(region\_1 - passage\_1 - region\_2 - passage\_3 - region\_3\)
+\end{bulletList}
+
+
+\paragraph{Place-to-Place route}
+
+The Place-to-Place route search is based on the Region-level search results. It decomposes each route into sub-routes of the form $place - region - place$. In our example, the division gives five unique sub-routes:
+\begin{bulletList}
+	\item \(start - region 1 - passage\_1\)
+	\item \(passage\_1 - region\_2 - passage\_2\)
+	\item \(passage\_2 - region\_3 - end\)
+	\item \(passage\_1 - region\_2 - passage\_3\)
+	\item \(passage\_3 - region\_3 - end\)
+\end{bulletList}
+
+Then, the algorithm aims to replace each sub-route region with a succession of paths and intersections. It works on the same principle as the previous search algorithm using the $isAlong$ property instead of the $isIn$ property. Still taking the same example and focusing on $region\_1$, it can solve the sub-route \( start - region\_1 - passage\_1\). $Region\_1$ is represented with its corridors and intersections in Figure~\ref{fig:chap3_region_1}. By applying the breadth-first search algorithm at the Place level, a solution of the form $place - path - place - ... - place$ is obtained. So for our example, \(start - corridor\_1 - intersection\_1 - corridor\_5 - passage\_1\) is a solution for the first sub-route. By doing the same for each sub-route, we can then recompose the global routes and give a detailed set of routes from start to end.
+
+The second place of the route -- the third element of the route objects -- is the one we call the passage in the description of the direction-giving task, the first salient landmark of the route to point to, which is on the way to reach the final place, \ie \(intersection\_1\) in the example.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.25]{figures/chapter3/region_1.png}
+	\caption{\label{fig:chap3_region_1} Representation of corridors and intersections in region\_1}
+\end{figure}
+
+\subsection{Planning a shared visual perspective}\label{subsec:svp}
+
+When the robot has to point to a target, two criteria have to be respected. First, the human has to be able to see the target. Second, the human has to be able to look at the pointed target and at the robot without turning the head too much. It goes the same for the robot as it has to see the pointed target, meaning not to point toward a wall and be able to simultaneously point at the target and look at the human. Consequently, to point a target in its back, it has to move. The robot and the human can thus move in the interaction area during the direction-giving task, to move to a better position for pointing at the target. To find the robot and human possible positions we designed a component called the SVP (Shared Visual Perspective) Planner, presented in~\cite{waldhart_2019_reasoning}. For the purpose of the deployment, the presented version is an adapted and slightly simplified version.
+
+To compute the visibility of both agents, the planner has access to the geometrical representation of the environment and the agents current positions. In addition, it considers an estimated agent's maximal speed to move and a visibility threshold.
+
+When the robot explains the route to the human and points to a landmark, they form what is called an F-formation. Kendon explains that \emph{``An F-formation arises whenever two or more people sustain a spatial and orientational relationship in which the space between them is one to which they have equal, direct and exclusive access''} ~\cite{kendon_1990_conducting}.
+This F-formation has been decomposed by McNeill into two types: the social formation and the instrumental formation~\cite{mcneill_2005_gesture}. While the first type corresponds to the original definition, the instrumental formation includes a physical object that all the agents can gaze at. This means that once the robot will have moved, the human will come in front of it creating a social formation in the form of a vis-a-vis (each facing the other) and when the robot will point they will change for an instrumental formation. Indeed, when both agents will reach their position computed by the planner, we want them to be able to go from one formation to the other with only a rotation; the human will not need to move again from their arriving position to see what the robot will point. 
+
+To search for better positions to reach in order to point a landmark, the planner takes three main parameters into account:
+
+\begin{bulletList}
+	\item Visibility constraint: The two agents can see either the target shop when it is the only element of the route or the passage.
+	\item Navigation distance cost: The agents do not have to move too much.
+	\item F-formation cost: The human-robot-target angle and a robot-human-target have to be less than 90${^\circ}$. 
+\end{bulletList}
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.3]{figures/chapter3/grid_map.png}
+	\caption{\label{fig:chap3_svp_grid} Visibility grid for a target located at the top right. The uncoloured areas represent an absence of visibility and the others represent the cost of visibility ranging from yellow for low visibility to purple for good visibility. The robot and the human in transparency on the image represent the final calculated positions while the others are the initial positions. }
+\end{figure}
+
+To compute the positions, the interaction area is firstly decomposed into a weighted three-dimensional (x,y for the possible positions in the area and z for the human height) grid representing the estimated human visibility of the target. The target visibility is computed offline for each position of the grid. It is based on the part that the target takes in the 360${^\circ}$ field of view of the environment. Such grid is represented in figure~\ref{fig:chap3_svp_grid} for a given human height. The white cells are positions from which the human cannot see the pointed target. The other colored cells represent the degree of visibility from the poor in yellow to the good in purple. Having the human visibility grid, the goal position is computed using a weighted cost function between good visibility and restricted distance to cross. In the example of figure~\ref{fig:chap3_svp_grid}, the transparent human head is the human goal position while the other is the initial position. From the initial position, the human was not able to the pointed target. 
+
+The robot position is computed in a second time, according to the human planned position. Divided the search into two steps allows reducing the search complexity. The robot position is thus constrained by the human one. It has also to respect a minimal and maximal distance to the human and minimal visibility of the target from it. Finally, the robot position is also determined regarding a cost preferring an F-formation limiting the robot reorientation, meaning that it can point to the target keeping its torso and its chest oriented towards the human.
+
+
+\subsection{Navigate close to human}\label{subsec:navigation}
+
+The Human-Aware Navigation component aims at moving the robot while avoiding dynamic and static obstacles in addition to proposing a socially acceptable navigation solution for the robot. For example, the robot should not pass too close to the human and should not show its back while navigating around the human. A full presentation of the planner is available in~\cite{singamaneni_2020_hateb}.
+
+\subsection{Robot execution control and supervision in a joint action context}\label{subsec:supervision}
+
+The work presented about the supervision in this section is an early version of \acrfull{jahrvis} presented in Chapter~\ref{chapter:chap6}. It integrates on one hand the decision and control for the direction-giving task, and on the other hand the implementation in this task context of the metrics presented in Chapter~\ref{chapter:chap7}, to measure the Quality of Interaction.
+
+\subsubsection{A supervision and control system dedicated to human-robot joint tasks}
+A service robot interacting with humans in a mall and providing directions to them needs a number of abilities to enable a smooth and efficient interaction. As explained in Section~\ref{sec:rationale}, the direction giving task is an asymmetric joint action, with the robot in the guide role and the human in the guided role. The \emph{Supervisor}, the supervision and control system of the robot, is built taking this specificity into account, embedding a shared representation of the direction giving task. More specifically, when giving directions to a human, the robot plans its actions and the human ones and then execute its part of the plan. To be able to know if and when the human performs their actions, it monitors the action executions and interpret the information received from the Situation Assessment (see Section~\ref{subsec:situation_assessment}). Furthermore, in such interaction, communication is important, thus the robot communicates verbally as well as non-verbally, and listens to the human. All along the interaction, it needs to maintain a distinct mental state model for the human and itself concerning the knowledge of both agents and the state of the world. Finally, it should be able to tackle events and contingencies happening during the task and to drop it when necessary.
+
+During an interaction session (see Section~\ref{chap5:sec:levels}), \emph{direction-giving task} occurs when the human involved in the ongoing interaction session  asks for directions to a place or for locations of sold items. 
+% The robot, if necessary, refines the human goal, establishes a shared goal~\cite{cohen1991}, enquires about their willingness and abilities of climbing stairs, updates its estimation of the human mental state. Then, it gives route directions while pointing at landmarks, taking their perspective into account for the landmark and the route. Finally, it checks if it has been understood, making sure that the person has all the information to complete the shared goal, being the human reaching its destination. The robot executes all these steps thanks to \emph{actions}, communicative ones or on the environment.
+
+
+\subsubsection{Implementation of the direction-giving task and its associated actions}\label{subsubsec:sup:subtasks}
+\begin{figure}[hbtp]
+	\centering
+	\includegraphics[width=\linewidth]{figures/chapter3/state_machines.pdf}
+	\caption{\label{fig:chap3_SM} Supervisor activity diagram of the direction-giving task. Each action has a color corresponding to the component with which the Supervisor interacts to execute it. It goes through every subtasks described in Section~\ref{subsubsec:sup:subtasks}. Also, the human engagement monitoring is represented. Texts between brackets correspond to beliefs on which depends the decision-making process. These beliefs can either be provided by other components or being the result of the Supervisor's own computations. }
+\end{figure}
+
+
+In the direction-giving task, plans were not computed by a planner as presented but were written with Jason reactive plans (see Section~\ref{chap4:subsec:jason}). Thus, at execution time, the Supervisor does not handle one shared plan received from a planner but plenty of (reactive) plans which are chosen among the ones from the plan library when triggered by an event or by another plan. The same plan can have multiple versions and the version to be executed is selected according to the pre-conditions (also called context). For instance, the plan \textit{verbalization(Target)} has two different versions, one in the case where the target to point is visible and the other one in the case where it is not, and at execution time, the selected one will depend on the presence or not of the belief \texttt{visible\_target(Target)} in the Supervisor belief base, as shown in Listing \ref{listing:plan}:
+
+\begin{lstlisting}[caption = Two different plans for \texttt{verbalization(Target)}, label = {listing:plan}]
++!verbalization(Target)                 // plan name
+: visible_target(Target)            // context
+<-  ?verba_name(Target, Name);      // belief query
+say(visible_target(Name)).      // action
+
++!verbalization(Target) 
+: not visible_target(Target)
+<-  ?verba_name(Target, Name);
+say(not_visible_target(Name)).
+\end{lstlisting}
+
+Even though the direction-giving task is implemented with reactive plans, it can still be represented with an activity diagram, for presentation purposes. This activity diagram is visible in Figure~\ref{fig:chap3_SM}. Each frame represents one of the steps described in Section~\ref{sec:guiding}. We now present their internal functioning and the interactions with the multiple components of the system the Supervisor has.
+
+\paragraph{Establishing the shared goal}
+When a person triggers a direction-giving task, they might directly ask something like ``where is the pharmacy?'' which allows the robot to directly establish the shared goal but, they might also ask something less precise. In the latter case, the robot needs to inquire about the human desired place to reach in order to establish the shared goal.
+
+When a person asks ``Where is a good restaurant?'', the robot presents a list of the types of food available, namely ``There are casual dining restaurants, Asian restaurants, native food restaurants, hamburger restaurants, fast food restaurants, and pizzerias.''. This behavior is quite similar to the recommendation behaviors of Kanda \etal{}~\cite{kanda_2009_affective}.
+
+To be able to display this behavior, several components of the system are requested. When the Supervisor receives $\{request=restaurant\}$ as data from the Dialogue, it asks Ontologenius (see Section~\ref{subsubsec:semantic}) for all the existing restaurant types. This list of restaurant types is sent to the Dialogue whose role is to return to the Supervisor with the type selected by the human. Finally, similarly to the way it obtained the restaurant type from the human, the Supervisor tries to get the restaurant name. Therefore, it requests from Ontologenius all the restaurants serving the given type of food. Then, this list is sent to the Dialogue whose role is to return to the Supervisor with the restaurant selected by the human among the elements' list. It should be noted that all the restaurants of the given type are suggested to the person, even though sometimes the list is long. We thought of alternatives such as randomly giving three restaurants among the ones of the list. However, these alternatives were not allowed by the mall policy as they could not provide equality between all shops. 
+
+The same principle goes for products. For example, people can ask ``Where can I buy a dress?''. Then, the Supervisor gets from Ontologenius a list of shops selling dresses and passes it to the Dialogue. The Dialogue returns the name of the shop chosen by the person.
+
+When the Supervisor receives as a goal a name it does not understand, it queries Ontologenius to try to match it to a known name as it may be not understood because of a speech recognition failure or a shortened name. For instance, thanks to the fuzzy match provided by Ontologenius, when a person asks to go to ``jewelsport'', the system can make the assumption that the person actually asked for ``Juvesport''. So the robot asks the person, ``do you mean Juvesport?'', to which the person can answer ``yes'' or ``no''. If yes, it starts the direction-giving task, if no it drops it and returns in chat mode.
+
+\paragraph{Enquiry about human willingness and abilities to climb stairs}
+As the robot is there to help humans, it has to adapt to their abilities and preferences such as a person with a shopping trolley will prefer to take escalators than stairs. The preferences definition is currently done through verbal communication.
+
+To determine human preferences about stairs, the Supervisor first requests to the Route Handler (see Section~\ref{subsec:route_description}) the possible routes to go to the target shop. The returned routes are of the form $place - path - place - ... - place$. The Supervisor selects the one with the smallest cost and then checks if one of the $place$ elements is stairs (\ie the Supervisor queries Ontologenius for the element type). If it is the case, the Supervisor asks the Dialogue with finding out if the human is able to climb stairs or not. If not, it will send a new request to the Route Handler with the parameter ``no stairs'' and will get a new set of routes. The Supervisor selects the one with the smallest cost. This new route will have a cost equal to or higher than the first one (since it was not the route with the smallest cost in the initial request), which means the goal might be more complicated to reach or it might take more time.
+
+\paragraph{Ensuring a correct placement}
+The robot's role in this task is not only to give verbal route directions but also to point to the target and the passage (\ie the third element of the route as explained Section~\ref{subsec:route_description}) the person should take in order to increase the chances that they reach their destination as it helps to orientate them in space. For the pointing to be as efficient as possible, the robot computes new positions for itself and the human where the visibility of the pointed landmarks will be better (when feasible). Then its goal is to have itself and the human reaching these new positions. 
+
+In the first step of this subtask, the Supervisor requests from the Shared Visual Perspective (SVP) Planner (see Section~\ref{subsec:svp}) the new positions for the robot and the human, with the passage to point (or the target if no passage) and the human identifier as parameters. Then, the Supervisor compares the newly received positions with the current ones of the human and the robot -- the current position of the human is provided by the Situation Assessment. In the case where the robot planned position is very close to the human's current position (\textless~0.5~m), the robot asks the human to step aside on the right or left, depending on the human's planned position. If the human does not move or does not go far enough from the planned robot position, the robot will ask again.
+
+Then, the Supervisor requests the Human-Aware Navigation (see Section~\ref{subsec:navigation})  to move the robot to its planned position. Once the Human-Aware Navigation returned that the position has been reached, the Supervisor looks for the human. It is a form of monitoring, which we show in Section~\ref{sec:rationale} is important in a joint action. If the human is not perceived -- the Supervisor did not receive from the Situation Assessment the predicate isPerceiving(\(robot, human_i\)) -- in the following seconds (6 seconds in the deployed version), the robot asks the human to come in front of it -- this is the way we have chosen after several trials (other modalities like indicating to the human by a gesture where they should stand were not sufficiently successful). If the human is still not perceived after a few seconds, the robot will ask again, remaining engaged in their joint action for a while before giving up.
+
+Once the human arrives in the robot field of view -- which means that the human more or less reached their planned position since the robot is looking in the direction of it --, they might not exactly be at their planned position. In this case, their position may not be suited to properly see what the robot has to point at. To check if they are in a position good enough to see, the Supervisor asks the SVP Planner for the visibility (at 360 degrees) of the landmark to point. In the case where the SVP Planner returns that the landmark is visible, the interaction continues. Else, the robot asks the human to move forward or backward in order to adjust their placement according to their planned position. This stops when the robot computes that the position of the human will allow them to see the target. In this way, the robot tries to ensure to put the human in the best conditions as possible for the next steps, using key elements of the joint action: monitoring of the partner actions', sharing a visual perspective and showing engagement in the task.
+
+\paragraph{Pointing to target}
+As it is shown that the use of deictic gestures such as pointing improves the understanding of route directions (see Section~\ref{sec:methodology}), we endowed the robot with this ability. 
+
+To do so, the Supervisor requests from the Physical Resource Manager that the robot points to the target. At the same time, it generates a short sentence for the robot to say and sends it to the Dialogue. The sentence varies according to the visibility of the target such as ``Here, you can see Burger King'' for a visible place and ``The restroom is in this direction'' for a non-visible one. In this way, the robot shares the human's perspective and takes into account the knowledge they can get from their environment in respect of the joint action principles. In this way, the human knows if they have to try to notice it from their place or take this information as an orientation indication. In order to continuously look at the human and not loose them from its sight, the robot does not turn its head towards the target when pointing.
+
+It is important for the robot to know if it successfully communicated the information to the human. Then, it asks if the target has been seen, as it wants to ensure its action had the expected effect.
+
+\paragraph{Pointing to passage and giving route directions}\label{par:route_understood}
+This step is executed when there is a passage in the route returned by the Route Handler. Therefore, the Supervisor sends a route to the Route Handler which returns a verbalization of this route (\eg ``Walk through that corridor, and then, turn left. From there on, Apteekki will be on your right, straight after Glitter''). Then, as explained in the \emph{Pointing to target} paragraph, the robot points, to the passage this time. And, at the same time, it verbalizes the route received from the Route Handler, added "in this direction" to the sentence if the passage is not visible.
+
+As for ensuring the target has been seen, the robot wants to make sure it has been understood and leaves the possibility to the human to hear the route directions again if they need it. In the early versions, we had programmed the robot to ask if the passage had been seen and then if the route had been understood but it was too many questions that seemed useless to users. Indeed, we analyzed it as a postcompletion error~\cite{byrne_1997}, as the goal of the human was to know the route to their location, whatever actions arising after this goal has been completed are often forgotten. In the end, the first question is asked in case of a visible passage and the second one is asked in case of a non-visible one.
+
+It may be noted in Figure~\ref{fig:chap3_SM} that it is possible to go in infinite loops such as Route directions - Ensuring route understood - Route directions - ... . To avoid this issue, the Supervisor prevents to return inside a step if it has already been executed a certain number of times (in the final version, 3 was the maximal number a step could be executed).
+
+\section{The deliberative architecture in a real-world environment}\label{subsec:archi-integration}
+
+In the previous section, we presented a deliberative architecture designed to be embedded in a service robot. The purpose of this robot was to be deployed in a mall in Finland. 
+To make this deployment successful, we did extensive tests in our laboratory where we had reproduced a part of the mall environment to be in the most realistic conditions possible\footnote{This setup not only was used for tests but also for public demos and even in the context of a scientific live event now accessible on \url{https://youtu.be/p4f3iwHht2Q?t=4495}}. Some of these emulated shop are visible in Fig.~\ref{fig:chap3_lab_shops}. 
+In Sect.~\ref{subsec:setup_mall}, we introduce the environment setup as well as the robot one. Then, in Sect.~\ref{subsec:tests_mall} and Sect.~\ref{subsec:deploy}, we present our tests and deployment in the Finnish mall. 
+
+\begin{figure}[!htp]
+   \subfloat[A person being guided, the emulated shop ``Zizzi'' is visible in the background of the picture.]{\includegraphics[width=0.49\linewidth]{figures/chapter3/lab1.png}}\hfill
+   \subfloat[A person being guided, the emulated shop ``H\&M'' is visible.]{\includegraphics[width=0.49\linewidth]{figures/chapter3/lab4.png}}\hfill
+   \subfloat[Two people simulated going to shop. The emulated shop ``Burger King'' is visible in the background and a small part of ``Thai Papaya'' is visible in the foreground.]{\includegraphics[width=0.49\linewidth]{figures/chapter3/lab3.jpg}}\hfill
+   \subfloat[A person being guided, a sign towards the toilet and the shop ``Marco Polo'' are visible on the left of the picture.]{\includegraphics[width=0.49\linewidth]{figures/chapter3/lab2.png}}\hfill
+   \caption{Examples of emulated shops of the Finnish mall in our lab.}
+   \label{fig:chap3_lab_shops}
+\end{figure}
+
+\subsection{Environment and robot setup in the Finnish mall}\label{subsec:setup_mall}
+Our architecture has been tested and deployed in a mall in Finland. As we explained previously, it has two abilities: chat with people and guide them, but in this paper we consider only the latter. The robot was able to interact in English and Finnish, though due to the vast linguistic differences between the two languages, the two versions have been kept separated, and the whole interaction can either be in one or the other. 
+
+\subsubsection{The robot home-base}
+
+For availability for as many customers as possible, the robot was contained in a defined place in the mall as shown in figure~\ref{fig:chap3_pepper_mall}. A home base was designed with the participation of all the project partners. It was a 4 per 4 meters area with a 2.5m high frame structure on it. The home base included a non-reflecting carpet on the floor and an acoustic ceiling surface on the roof.
+
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[scale=0.2]{figures/chapter3/pepper_mall.png}
+	\caption{\label{fig:chap3_pepper_mall} The pepper robot in its interaction area in the Finalnd mall, Ideapark. }
+\end{figure}
+
+During the first deployment in the real mall, we have updated both the Geometric Representation with actual measurements and the \acrfull{ssr} by making sure the regions, interfaces, corridors and intersections were represented reflecting the actual mall topology. To ensure the correctness of the instructions given by the route handler, we generated routes from the deployment location to several shops in the mall and followed them to the destination. Inaccuracies, as well as algorithmic flaws, have been fixed using this method. We also tested the interaction in the Finnish language with our native Finnish partners and corrected some mistakes in the route verbalization.
+
+\subsubsection{Hardware architecture}\label{subsec:hw}
+The robot is an upgraded, custom version of the Pepper platform~\cite{caniot_adapted_2020}, which is equipped with an Intel D435 camera and an NVIDIA Jetson TX2 in addition to the traditional sensors that are found on the previous versions of the robot. We used the Robot Operating System (ROS) to enable inter-process communication between the processing nodes. All the streams (audio, video, robot states) are sent to a remote laptop which performs all the computation. The laptop has an NVIDIA RTX 2080 graphics card (for the visual perception system) and 12 CPU cores. The 4 microphone streams are processed at a frequency of $16000$~Hz, and the full perception system delivers the output at 10~fps.
+
+\subsection{Pre-deployment in the Finnish mall, in-situ tests}\label{subsec:tests_mall}
+
+Three integration sessions, each lasting one week have been made on site, in September 2018, June 2019 and September 2019, in the mall in Finland. The whole LAAS developer team were part of these integration weeks, along with our project partners. So, I spent around 150 hours (3 times 5 days) in the mall for software integration debugging with the other developers, and testing and debugging of the direction-giving task. 
+During the integration weeks, only expert users (developers) interacted with the robot for testing purpose. 
+
+To have a working system in the lab and to have a working system in a real-world site are two different things. As much as a team prepare for an in-situ deployment, there will always be elements that will need to be tuned on site and unexpected bugs arising. Thus, I had to handle a lot of contingencies, diagnosing where the issue came from, repairing if it was originating from my software, communicating with the person responsible for the component having a bug if it was not from mine, and testing again.
+
+The first step to perform for us once on site was to update both the Geometric Representation (see Sect.~\ref{subsec:models}) which was previously based on architectural plans and refined with actual measurements and the \acrlong{ssr} (see Sect.~\ref{subsec:models}) by making sure the regions, interfaces, corridors and intersections were represented reflecting the actual mall topology. 
+
+Finally, to ensure the correctness of the instructions given by the route handler, we generated routes from the deployment location to random shops in the mall, and followed them to the destination. \acrshort{ssr} inaccuracies as well as algorithmic flaws have been fixed using this method. We also tested the interaction in Finnish language with our native Finnish partners and corrected some mistakes in the route verbalization.
+
+
+\subsubsection{Component integration problematic}
+Even though components were integrated together before getting on site, code modifications as mentioned above and intense testing can make new issues appear. So, it was essential to test the integration between all the components after this.
+
+Finally, once everything was running quite nicely, some time has been dedicated to fine-tune the direction-giving task, ensuring all the components could withstand running for several hours in a row, with naive users possibly interrupting the task at any stage. 
+
+\subsection{``In the wild'' deployment}\label{subsec:deploy}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/chapter3/guided_person.jpg}
+	\caption{A person receiving directions from Pepper. (Image from VTT team)}
+	\label{fig:guided_person}
+\end{figure}
+The robot was then installed for a long-term 14 weeks deployment from September 2019 to December 2019. During this period, the robot interacted with everyday clients of the mall, who may never had the chance to interact with a robot before. The robot was active for 3 hours per day, three days a week. As it was a project with multiple partners, it was not always possible to have our direction-giving task running. The direction giving task has been available on the robot 32 days out of the 42. The days during which it was not running, the partners' software executing on the robot where the visual perception and the dialogue that we mentioned previously, and a social signal processing feature~\cite{foster2019mummer}.
+
+Nowadays, having an autonomous robot in the wild is a challenge. At first glance, we could think that if the robot is able to run smoothly for a few hours, the challenge would be met. However, there are a lot of other elements to take into account. First, how to guarantee the safety of children and elderly? How to ensure that the robot will not fell on or bump into them despite the robot sensors, hurting them? Furthermore, not only people safety is important but making sure that the robot is not damaged by people as well. People might indeed be brutal towards the robot, on purpose or not. 
+
+To tackle the ``obvious'' issue, making sure that the robot continuously running, it was remotely watched by an on-call developer of the project team. At the beginning of the time slot, they launched all the software on the robot. Then, they checked through component monitoring, time to time, if everything was running properly, and they were in contact with the robot guard who told them if she noticed something wrong with the robot. They also had access to a video feed of the robot home-base if needed. Thus, all along this long-term deployment, we adjusted parameters and fixed bugs, with the help of the on-site team VTT and the robot guard that tested the direction-giving task when we asked her. The bugs we encountered concerned mainly Finnish translation issues (\eg ``just after Arnold's'' was translated ``paikan päälle Arnolds'' in Finnish but the correct way to say it in Finnish was ``paikan Arnolds jälkeen'' thus we changed the English sentence into ``right after the place Arnolds'' to be able to get this translation), shop names issues (\eg Finnish people use the utterance ``Hennes Mauritz'' and not ``H\&M'' which was the name in the robot ontology originally) and route issues (\eg a route has one more turn than it should have).
+
+The project consortium tackled the two safety issues (people safety and robot safety) by hiring a ``robot guard'' and by putting a sign notifying parents to not leave their children alone with the robot. During the robot active hours, this guard employee was physically present to ensure people were respectful towards the robot, \ie not hitting it or pulling it, to watch the kids who may get too close to the robot when it could have moved so they would not risk to be hurt, and to answer people who wanted to know more about the robot or the project than what was explained on the explanatory posters. She was also responsible for starting and shutting down the robot at the beginning and at the end of the half-day. Besides, for security and legal responsibility reasons, we chose to not have the robot navigating during this deployment as it would have been a complicated issue if the robot bumped into someone, especially a kid who could be hurt. It would have been possible if Pepper had a remote emergency stop which could have been given to the guard. Therefore, the step \emph{Ensuring correct placement} was removed in this context. Then, the Human-Aware Navigation component (see Sect.~\ref{subsec:navigation}) was disabled and the Shared Visual Perspective Planner (see Sect.~\ref{subsec:svp}) was only used to compute the 360 degrees visibility of a landmark from the person position.
+
+
+In total, the robot ran the direction-giving task during approximately 96 hours ``in the wild''. Out of these 96 hours, it was interacting with someone during 45 hours. Table~\ref{tab:stats_sessions} summarizes statistical data about the interaction sessions and Table~\ref{tab:stats_tasks} summarizes statistical data about the direction-giving tasks.
+
+\begin{table}[htp]
+	\centering
+	\begin{tabular}{p{0.8\linewidth}|p{0.1\linewidth}}
+		\hline
+		Description & Value \\ 
+		\hline
+		Number of occurred interaction sessions between a human and the robot &  979 \\ 
+		Cumulative duration of the interaction sessions  & 2720 min \\ 
+		Minimal duration of an interaction session  & 0.1 min \\ 
+		Maximal duration of an interaction session & 41 min \\
+		Average duration of an interaction session & 2.8 min \\
+		Standard deviation of sessions duration & 3.3 min \\
+		Average number of direction-giving tasks during a session & 1.1 \\
+		Percentage of sessions terminated by goodbyes & 30\% \\
+		Percentage of sessions terminated by the participant not perceived by the robot anymore & 70\% \\
+		\hline
+	\end{tabular}
+	\caption{Statistics on interaction sessions in the wild}
+	\label{tab:stats_sessions}
+\end{table}
+
+
+\begin{table}[htp]
+	\centering
+	\begin{tabular}{p{0.8\linewidth}|p{0.1\linewidth}}
+		\hline
+		Description & Value \\ 
+		\hline
+		Number of occurred direction-giving tasks between a human and the robot &  1156 \\ 
+		Cumulative duration of the direction-giving tasks & 930 min\\ 
+		Minimal duration of a direction-giving task & 0.01 min \\ 
+		Maximal duration of a direction-giving task & 22 min \\
+		Average duration of a direction-giving task & 0.8 min \\
+		Standard deviation of direction-giving tasks duration & 1.27 min \\
+		Success rate of the step \emph{Establishing the shared goal} & 63\% \\
+		Success rate of the step \emph{Route planning according to the human willingness and ability to climb stairs} & 100\% \\
+		Success rate of the step \emph{Pointing to target} & 56\% \\
+		Success rate of the step \emph{Ensuring target seen} & 39\% \\
+		Success rate of the step \emph{Pointing to passage and giving route directions} & 94 \% \\
+		Success rate of the step \emph{Ensuring passage seen or route understood} & 92\% \\
+		Success rate of the removed step \emph{Check if indications understood} & 19\% \\
+		\hline
+	\end{tabular}
+	\caption{Statistics on the direction-giving task in the wild. \emph{Ensuring target seen} is a part of the step \emph{Pointing to target} as described in Sect.~\ref{sec:guiding}. Likewise,  \emph{Ensuring passage seen or route understood} is a part of the step \emph{Pointing to passage and giving route directions}. The success rate of a step is the number of times the given step has been achieved over the number of times it was planned (\eg \emph{Route directions and pointing} is not planned if there is no passage to point), all direction-giving tasks combined. Steps were not achieved sometimes because of robot failures but most of the time it was because the human was leaving during the task. As mentioned in Section~\ref{par:route_understood}, we did not keep the step \emph{Check if indications understood} all along the deployment because, as shown by the success rate, people were leaving before answering this question. Then, as this step was considered as superfluous by users, we merged it with the one before, \emph{Ensuring passage seen}.}
+	\label{tab:stats_tasks}
+\end{table}
+
+
+\section{Integration and test of the QoI Evaluator}\label{sec:qoi_integration}
+As a proof-of-concept for the QoI Evaluator presented in Chapter~\ref{chapter:chap7}, we integrated it in the direction-giving task described in this chapter. It is also an excerpt of the paper accepted in the Journal of Social Robotics~\cite{mayima_2021_towards}.
+
+More specifically, this implementation of the Quality of Interaction Evaluator measured the interaction quality at the direction-giving task level and at the elementary actions level, omitting the interaction session level as this latter was not our focus in the \acrshort{mummer} project. The QoI Evaluator was integrated into \acrshort{jahrvis} presented in Chapter~\ref{chapter:chap2}. The QoI Evaluator is implemented into a Jason function (the reasoning cycle) which is invoked periodically. After multiple testings, we reached the conclusion that it was pertinent, at least in the context of the direction-giving task, to have the Evaluator computing the QoI every second for both levels. Therefore, every second, the system computes the value of each metric and then outputs a value for $QoI_{task}$ and $QoI_{action}$. 
+
+\begin{figure}[!htp]
+	\subfloat[A customer listening to Pepper after re-positioning]{\includegraphics[width=0.49\linewidth]{figures/chapter3/human_1_mall.png}}\hfill
+	\subfloat[A customer listening and Pepper pointing to a corridor]{\includegraphics[width=0.49\linewidth]{figures/chapter3/human_2_mall.png}}\hfill
+	\subfloat[A customer answering to Pepper]{\includegraphics[width=0.49\linewidth]{figures/chapter3/human_3_mall.png}}\hfill
+	\subfloat[A customer listening and Pepper pointing to a shop]{\includegraphics[width=0.49\linewidth]{figures/chapter3/human_4_mall.png}}\hfill
+	\caption{MuMMER robot engaged in direction-giving tasks. Around 350 trials with customers in the mall allowed us to gather empirical data to select the metrics and tune the measuring functions parameters.}
+	\label{fig:customers}
+\end{figure}
+
+As mentioned in the step \ref{list:mall} of the chronicle, the robot interacted in the wild with dozens of usual customers (Fig.~\ref{fig:customers}), executing around 350 direction-giving tasks. This allowed us to improve the performance of the direction-giving task, to gather standard durations of the subtasks executions and to draw lessons about metric definitions and choices (\eg we realized it was not relevant to measure the human visual attention towards the robot when it was giving the route explanation as humans look around at this moment). Unfortunately, the practical conditions of the project deployments did not offer us the possibility to evaluate the QoI Evaluator based on a study in the mall with real customers. So, we demonstrated -- after improvements of the metrics equations such as the Distance-to-Goal one, and manual tuning of their parameters based on the experience in the mall -- our finalized concept through tests in our lab (step~\ref{list:refin}). This is shown in Sect.~\ref{subsec:results} where we present and discuss, a comparison of the QoI computed by the robot when it is dealing with an ``ideal'' human, a ``confused'' human and a ``non-compliant'' human during a direction-giving task, performed in the lab. Before that, we present in Sect.~\ref{subsec:task_qoi} and Sect.~\ref{subsec:action_qoi} how the QoI is evaluated at both task and action levels for the direction-giving task.
+
+\subsection{QoI Evaluation at the task level}\label{subsec:task_qoi}
+
+In the context of the direction-giving task, we have selected two metrics to evaluate the QoI at the task level: a metric defined in the Sect.~\ref{sec:metrics}, the \emph{Deviation from standard duration} and, the aggregation over time of the actions QoIs. Following the process of Fig.~\ref{fig:qoi_schema}, we measure the QoI of the $\text{Task}_i = \text{direction-giving\_task}$, based on the QoI of all task actions and $\text{Task metric}_1$ = Deviation from standard duration.
+
+The \emph{Deviation from standard duration} is used to measure the QoI at the task level as the task is a sequence of subtasks. Indeed, if the subtask lasts longer than expected, the QoI should decrease. Then, as needed for the metric computation we have determined the values of the soft deadlines $SD_i$ for each subtask $a_i, i \in [0,4] $, using the empirical data we gathered as explained in\todo{ref sec}. Specifically, we have computed the average time execution of each subtask, after removing the cases for which the execution of the subtask was annotated as not smooth. These soft deadlines are presented in table~\ref{tab:dl}. Finally, we chose $V_i=0.5$ for all the subtasks.
+\begin{table}[ht]
+	\centering
+	\begin{tabular}{l|c}
+		\hline
+		Subtasks & soft deadline (s) \\ 
+		\hline
+		Target refinement process &  30 \\ 
+		Ensuring Correct HR Placement   & 30 \\ 
+		Ensuring target seen  & 20 \\ 
+		Direction explanation and pointing & 30 \\
+		Ensuring Direction Seen & 20\\
+		\hline
+	\end{tabular}
+	\caption{Soft deadlines $SD_i$ for each subtask of the direction-giving task}
+	\label{tab:dl}
+\end{table}
+
+The task QoI is also dependent on the actions QoI values (their computation is described in Sect.~\ref{subsec:action_qoi}). Indeed, the actions QoIs should be reflected on the task QoI as, if a majority of the actions have a low QoI, the task QoI cannot remain high. That is why, besides the\emph{ Deviation from standard duration}, we take into account the average of the action QoIs of the actions already executed or still running.
+
+Then, the task QoI is computed using Equation~\eqref{eq:qoi} presented in Sect.~\ref{sec:eval}. After various trials we have empirically chosen the weights $W_i$ for each metric $M_i, i \in [0,1]$. The final equation to compute the task QoI is:
+\[QoI_{dir-giv\_task}(t)=\frac{ \Phi_{dir-giv\_task}(t) + 3 * \overline{QoI}_{actions} }{4}\]
+
+\subsection{QoI Evaluation at the action level}\label{subsec:action_qoi}
+As mentioned earlier, each subtask of the direction-giving task can be decomposed into actions. These actions involve several turn-taking steps, the robot asking complementary information, informing the human or expecting an action or reaction from them. We need to measure the QoI during the execution of each action. To do so, we have chosen one or more metrics for each action. 
+
+\setlength\tabcolsep{1.5pt}
+\begin{table*}[ht]
+	\centering
+	\begin{tabular}{|c|p{1.5cm}|c|c|}
+		Metric id & Metric name & Metric equation -- with Equations of Section~\ref{sec:metrics} & Scaled metric -- with functions of Appendix~\ref{annex:functions} \\\hline\hline
+		
+		\(\displaystyle M_{H\_contrib}\)
+		& Human contribution to the goal 
+		& \raisebox{-0.5cm}{ \(\displaystyle nb\_R\_repet \)} &  \raisebox{-0.5cm}{ \(\displaystyle n_1(nb\_R\_repet) = 2 * \dfrac{nb\_R\_repet-3}{-3} -1 \)} \\\hline
+		
+		\(\displaystyle M_{Exp\_SI}\)
+		& Fulfilling robot expectations about social interaction 
+		&    \raisebox{-0.5cm}{ \(\displaystyle Ar = \frac{duration_{isAttentiveTo(robot)=true}}{duration_{robot\_speaks}} \) }
+		&  \raisebox{-0.5cm}{\(\displaystyle n_1(Ar) = 2 * Ar -1 \)} \\\hline
+		
+		\(\displaystyle M_{DtG}\)
+		& Distance-to-Goal & 
+		\(\displaystyle \left\{
+		\begin{array}{ll}
+		\Delta DtG(t=0) = 0\\
+		\begin{aligned}
+		\Delta& DtG(t) = \max(0,\Delta DtG(t-1) - 1)  \\&\text{if } path\_length(t) <  path\_length(t-1) \\
+		
+		\end{aligned}\\
+		\Delta DtG(t)= \Delta DtG(t-1) + 1, \text{otherwise.}
+		
+		\end{array}
+		\right.
+		\)
+		&   \(\displaystyle -s_1(DtG(t)) = -1 + 2 \exp{\left(-\ln{(2)}\left(\dfrac{DtG(t)}{5}\right)^{1.5}\right)} \) \\\hline
+		
+		\(\displaystyle M_{TtG}\)
+		& Time-To-Goal & 
+		\(\displaystyle \Delta TtG(t) = \max(0, e(t)  + TtG(t) - TtG(T_0)) 
+		\)
+		&  \(\displaystyle -s_1(TtG(t)) = -1 + 2 \exp{\left(-\ln{(2)}\left(\dfrac{TtG(t)}{5}\right)^{1.5}\right)} \) \\
+		
+		
+	\end{tabular}
+	\caption{Metrics used in the implementation presented in Section~\ref{sec:qoi_integration}.}
+	\label{tab:metrics_impl}
+\end{table*}  
+
+
+For each action of the following list, we explain which metrics $M$ of Table~\ref{tab:metrics_impl} we have used and scaling functions of Appendix~\ref{annex:functions} and then, how we compute the action QoI. Finally, the ways metrics are aggregated for each action, outputting QoI values, are summarized in Table~\ref{tab:qoi}.
+\begin{enumerate}[label=(\alph*)]
+	\item \label{list_act:info} \emph{Robot-Human information sharing: }The robot speaks to the human, shares information such as the route direction and announces the next steps of the plan. The robot expects that they are paying attention to it. Therefore, we use the \emph{Fulfilling robot expectations about social interaction} $M_{Exp\_SI}$ based on the attention ratio. Two parameters need to be defined for the scaling function, the bounds $b_1$ and $b_2$. As the minimum value for the metric, a ratio, is 0 and the maximum value is 1, then $b_1=0$ and $b_2=1$. 
+	The QoI of the action is computed with this only metric.
+	
+	\item \label{list_act:qa} \emph{Human-Robot Q/A process: } The robot asks a question to the human. As for the previous action, the robot expects the human to pay attention to it so we compute the QoI with $M_{Exp\_SI}$. It also expects the human to give an appropriate answer. If it does not happen, it will ask the human to repeat, specifying that the answer has not been understood. We have limited the possible number of attempts to 3. After 3 attempts, the robot ends the task, as it cannot carry on with the task without an answer. So, we use \emph{Human contribution to the goal} $M_{H\_contrib}$, the number of times the robot repeats. Because the maximal number of repetitions is 3, we set for the scaling function $b_1=3$ and $b_2=0$.
+	
+	The QoI is computed with the two metrics: \emph{Fulfilling robot expectations about social interaction} and \emph{Human contribution to the goal}.
+	The trials showed that the action QoI results were satisfying with the weights $W_i=1, i \in [0,1]$ as applying the Equation~\eqref{eq:qoi}.
+	
+	\item \label{list_act:moves_aside} \emph{Ensuring that Human  moves aside: }This action is used if, for pointing, the robot decides to place itself in a position which is very close to where the human is currently standing. In this case, the robot asks the human to step aside to the right or left, depending on the human's future position. Then, we want to measure the progress of the human going further from the planned robot position. In order to do this, we use the \emph{Distance-to-Goal} $M_{DtG}$ but with the condition of the $\Delta DtG$ equation adapted, being $\text{if } path\_length(t) >  path\_length(t-1)$ instead of $\text{if } path\_length(t) <  path\_length(t-1)$. We scale the metric with  $-s_1$, the additive inverse of the scaling function and not directly $s_1$ as the closer to 0 $\Delta DtG$ is, the better it is in terms of goal completion. From trials, we set $-s_1$ parameters values with $th=5$ and $k=1.5$.
+	
+	If the human does not move or does not go far enough from the robot position, the robot will ask again with a limit of 3 trials (if the robot cannot move, it will carry on the task from their current positions). So, we use $M_{H\_contrib}$ as for the previous action. 
+	
+	\item \label{list_act:nav} \emph{Human-aware robot navigation: }The robot has to move from its initial position to its computed one. It navigates while respecting social constraints and its path may change as it adapts according to what the human is doing. At execution time, to measure the robot progress towards its goal, we use the \emph{Time-to-goal} $M_{TtG}$, with the same scaling function than $M_{DtG}$. The QoI of the action is computed with this only metric. 
+	
+	\item \label{list_act:correct_place1} \emph{Ensuring correct human placement for verbal interaction: }After it has moved, the robot asks the human to come in front of it. If the human is not perceived after a few seconds, the robot will ask again and so on in a maximum of 3 trials. If after these 3 times the human is still not perceived, the robot ends the task. 
+	
+	The QoI of this action is computed with $M_{H\_contrib}$ -- we do not use $M_{Exp\_SI}$ as the human is not in the field of view when the robot is calling them.
+	
+	\item \label{list_act:correct_place2} \emph{Ensuring correct human placement for route explanation: }Once the human is in the robot field of view after the HR motion, they may not be at the right place to properly see what the robot has to point at. In this case, the robot will ask the human to move forward or backward according to what it has computed about the human perspective (\eg this is to avoid that an object occludes the view for the human). Then, we want to measure the human progress towards the position the robot has computed for them. In order to do this, we use the \emph{Distance-to-Goal} $M_{DtG}$.
+	
+	The robot stops giving instructions if it computes that the position of the human allows them to see the target, or after 3 trials, so we use $M_{H\_contrib}$. After 3 trials, if the human cannot see the target, still, the robot will carry on the task taking this into account.
+	
+	
+\end{enumerate}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{tabular}{ | c || c | c | }
+			\hline
+			Mall elements                   & Mockup mall & Real mall \\ \hline \hline
+			Shops              & 19            & 140   \\ \hline
+			Doors, stairs, elevators & 10            & 50    \\ \hline
+			Corridors              & 11            & 41    \\ \hline
+			Levels   & 2            & 2   \\ 
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{\label{tab:malls} Number of elements described in the mockup and real malls (geometric, topologic and semantic models in Fig.~\ref{fig:chap3_3Dmodels}).}
+\end{table}
+
+\bgroup
+\def\arraystretch{2.5}
+\begin{table}[t]
+	\centering
+	\begin{tabular}{|p{3.5cm}|c|}
+		Action & QoI formula (metric aggregation) \\ \hline \hline
+		Robot-Human information sharing & $ M_{Exp\_SI}(t)$ \\ \hline
+		Human-Robot Q/A process & \(\displaystyle\frac{M_{Exp\_SI}(t) + M_{H\_contrib}(t) }{2}\) \\ \hline
+		Ensuring  that  Human  moves  aside  & \(\displaystyle\frac{M_{DtG}(t) + M_{H\_contrib}(t) }{2}\) \\ \hline
+		Human-aware robot navigation  & $M_{TtG}(t)$ \\ \hline
+		Ensuring correct human placement for verbal interaction & $M_{H\_contrib}(t)$ \\ \hline
+		Ensuring correct human placement for route explanation & \(\displaystyle\frac{M_{DtG}(t) + M_{H\_contrib}(t) }{2}\) 
+	\end{tabular}
+	\caption{QoI computation for each action as an aggregation of metrics}
+	\label{tab:qoi}
+\end{table}
+\egroup
+
+\begin{figure*}[!ht]
+	\centering
+	\subfloat[Evolution over time of the measured QoI for the 'ideal' human. Both action and task QoIs remain at 1 as the task is proceeding smoothly. ]{\label{fig:human_ideal}\includegraphics [width=\linewidth]{figures/chapter3/human_ideal.png}}\hfill
+	\subfloat[Evolution over time of the measured QoI for the ``confused'' human. They took time to answer the first robot question and to move forward but the task QoI does not drop too much because the robot was able to give the route explanation without any issue even though the human was not very attentive. ]{\label{fig:human_confused}\includegraphics[width=\linewidth]{figures/chapter3/human_confused.png}}\hfill 
+	\subfloat[Evolution over time of the measured QoI for the non-compliant human. Several times the human did not give the expected answer to the robot during the target refinement process. Then, they blocked the robot path. After that, the robot had to ask twice the human to come in front of it. Finally, the robot repeated the route direction three times but still the human kept saying that they did not understand. Therefore, the task QoI decreases all along the task.] 
+	{\label{fig:human_not_comp}\includegraphics[width=\linewidth]{figures/chapter3/human_not_comp.png}}\hfill
+	\caption{Evolution over time of the measured QoI for the route guidance task with three different human behaviors. The QoI for the task is drawn in blue, and the QoI for the actions is drawn in orange.}
+	\label{fig:impl_qoi}
+\end{figure*}
+
+\subsection{Proof-of-Concept}\label{subsec:results}
+This section reports on an effective implementation of the approach as an illustrative proof of concept. We show the ability of the robot to conduct an interactive task, to assess in real-time the QoI and to track its evolution during three direction-giving task executions where the same human displayed a different way of behaving. In the three cases, the task was conducted until its end, in our lab where we reproduces the mall environment (Fig.~\ref{fig:chap3_lab}, Table~\ref{tab:malls}). The computed QoI for each way is presented in Fig.~\ref{fig:impl_qoi}. The three different ways of behaving are described in the following list:
+\begin{bulletList}
+	\item A human executed perfectly the expected actions and was not disturbing the robot when it navigated (\ie the ``ideal'' human from the robot point of view). 
+	\item A bit ``confused'' human tried to contribute to the task success but did not execute everything well. The human was, from time to time, not very attentive, as looking around. Also, they gave an answer to the first question that the robot did not understand, and then they took their time before answering again. Then, they prevented a bit the robot to move as it had planned and once the robot reached its position, they took time to come as close as the robot wanted. 
+	\item A human wanted to disturb the robot during the task. They gave three incomprehensible answers to the first question, blocked multiple times the robot in its move, waited for the robot to ask twice to come in front of it and finally asked the robot to point and explain the route three times. 
+\end{bulletList}
+
+Now, if we take a look at the QoI outputs of Fig.~\ref{fig:impl_qoi}, we can see that their three shapes are very different. In Fig.~\ref{fig:human_ideal}, we can observe that the task and actions QoIs remain with the highest value 1 all along. A graph as this one allows us to infer that everything went very smoothly during this direction-giving task. Then, we can guess that it corresponds to the execution performed with the 'ideal' human. 
+
+In Fig.~\ref{fig:human_confused}, we note that each subtask was executed in respect of the standard duration. If the QoI of \emph{Target refinement process} drops it is because of the action QoI as the QoI of the \emph{H-R Q/A process} drops because the robot had to repeat the question and the human was not looking at it. From 21 seconds to 40 seconds, we can see the task QoI getting higher as the QoIs of \emph{Human-aware robot navigation}, \emph{Ensuring correct human placement for verbal interaction} and the beginning of \emph{Ensuring correct human placement for route explanation} are quite high. Next, seeing the shape of the computed QoI of the action \emph{Ensuring human placement for route explanation}, we can infer that the human was not moving as the robot wanted. Indeed, they took 10 seconds to make one step forward (they had 1 meter to cross). Because of that, the task QoI started to decrease again. In the final part of the task, the human was time to time attentive to the robot and answered quickly to the last question, so the task QoI remained rather equal with its final value being $0.34$ which is above 0 so meaning a correct interaction.
+
+\begin{figure}[!t]
+	\centering
+	\begin{subfloat}[Human who put themselves on the robot path, preventing the robot to navigate towards its goal position]{
+			\includegraphics[width=0.29\linewidth]{figures/chapter3/blocking1.png}}\hfill
+	\end{subfloat}
+	\begin{subfloat}[Human who put themselves on the robot path after it computed a new path to reach its goal position]{
+			\includegraphics[width=0.29\linewidth]{figures/chapter3/blocking2.png}}\hfill
+	\end{subfloat}
+	\begin{subfloat}[Human finally getting outside of the robot path, allowing it to reach its goal position]{
+			\includegraphics[width=0.29\linewidth]{figures/chapter3/not_blocking.png}}\hfill
+	\end{subfloat}
+	\caption{A human disturbing the robot during \emph{Human-aware navigation}, preventing it to reach its goal position as planned.}
+	\label{fig:blockig_nav}
+\end{figure}
+
+Finally, we can see in Fig.~\ref{fig:human_not_comp} that the final QoI of the task is $-0.44$ which allows us to infer that the task was not executed smoothly. And indeed, when we look at the shape of the task QoI, it only went down (or almost) all along the task. It is explained by some subtasks that took more time than they should have and also by some actions QoIs that are very low, especially the one of \emph{Human-aware robot navigation}. At the beginning of the robot navigation, the estimated time to goal returned by the planner was 6 seconds but the robot actually took 50 seconds to reach its goal then the action QoI computed with $=M_{TtG}(t)$ was $-1$ for $40$ seconds. And indeed, all along its navigation, the human was blocking the robot until they got tired of this game, as visible on Fig.~\ref{fig:blockig_nav}.
+
+In this example, we showed the QoI evaluation process integrated to a complete robotic architecture. The robot was able to assess the QoI in real-time while interacting with a human.
+
+\subsection{Discussion on the results of the QoI Evaluator}
+While a number of evaluation methods has been proposed to evaluate a human-robot interaction from the human perspective and often for analysis after performance, our choice to let the robot evaluate, on its own and in real-time the quality of its interaction with a human is quite new and original. To endow the robot with such an ability, we designed, implemented and tested a number of metrics and a method to aggregate them.
+
+The work of Steinfeld \etal{}~\cite{steinfeld_2006_common} was very helpful to design a first set of metrics and as an inspiration about what could be used. From there, we have elaborated and proposed a set of metrics which are meant to estimate of the quality of an ongoing interaction and not once it is over. 
+The work of Hoffman regarding the \emph{fluency} definition and how to measure it was also inspiring~\cite{hoffman2019}. In a way, we extended his work by giving a meaning to the fluency measurement on the robot side, and in real-time -- while their work applies to offline evaluation of shared workspace tasks. 
+In Sect.~\ref{sec:rel}, we mentioned systems measuring human affective states in real-time such as the framework developed by Tanevaska \etal{}~\cite{tanevska:hal-01615491}. Although we think such metric could be an interesting additional information to assess if an interaction is going well, we believe that these measurements do not offer an accuracy that would lead to objective measurement of the quality of interaction, thus, we did not introduce them in our set for now. However, this could be done since our framework is designed to be open to new metrics. 
+As for contributions, like the one proposed by Anzalone \etal{}~\cite{anzalone_2015_evaluating}, based on metrics such as gaze, head pose, body pose and response times to measure real-time engagement, we took them into account to some extent. However, the measure of the engagement that we propose should be refined depending on the inputs available on-line to the robot. Moreover, we will investigate how their work could be used in a more general way (\eg depending on the action that should be done and its context, human head pose and body posture could be a good indicator of effectiveness and not only engagement). 
+
+Our intention, when we developed the idea of the Quality of Interaction Evaluation, was to use such computation to feed the decision-making process of the robot and this is what we intend to do in the future. However, such framework can also be used to compare interactions between different humans and/or robots, eventually as a benchmark similarly to the work of Sanchez-Matilla~\cite{sanchez} or as a way for developers to detect repetitive interaction issues with an unsupervised robot in a real-world environment.
+
+As a proof-of-concept, we implemented and deployed a first version of a QoI Evaluator assessing task and actions QoIs. We tested it on an interactive robot dedicated to provide route guidance to customers in a large mall. The approach gave satisfactory results. It showed the potential ability of a robot to detect momentary decreases of the Quality of Interaction and also more serious degradation of it which may need drastic change of behavior for the robot. This is only a first step and it should be validated with a study where we will ask humans to evaluate the quality of their interaction with the robot in a similar manner. The goal will be to analyse and compare this to the evaluation of the interaction quality estimated by our robot and, based on that, investigate potential improvements. 
+
+Finally, we do not claim to have a perfect measure of the Quality of Interaction. However, although the concept of Quality of Interaction is quite abstract, Movellan \etal{} showed that when it is measured by human observers, the inter-observer reliability of the concept is quite high~\cite{movellan2007rubi}. Therefore, we believe we can endow the robot with an effective and pertinent ability aiming at measuring the quality of an interaction. We are aware that the set of metrics we proposed to do so is not exhaustive but the framework is designed to be easily extended with new metrics.
+
+\section{User Study}\todo{inserer les resultats computer par Kathleen - en attente}
 
 
 \ifdefined\included

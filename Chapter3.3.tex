@@ -9,8 +9,7 @@
 	\faketableofcontents
 	\fi
 	
-\chapter{Quality of Interaction Evaluation}\label{chap2:sec:qoi}
-%\chapter{A robot evaluating its contribution to a human-robot joint action}\label{chap2:sec:qoi}
+\chapter{Quality of Interaction Evaluation}\label{chapter:chap7}
 \minitoc
 
 The work presented in this section has been excerpted from a paper published in the Journal of Social Robotics~\cite{mayima_2021_towards}.
@@ -24,7 +23,7 @@ Finally, from a methodological point of view, a robot deployed in the wild able 
 
 In this paper, we only focus on the Quality of Interaction evaluation process and not on how to use its result for decision making. Therefore,  we present in the sequel the methods and tools we developed, allowing the robot to evaluate in real-time the quality of the human-robot collaborative activity it is involved in. It is based on a set of metrics we have defined, focused on two concepts: the measure of human engagement and the measure of the effectiveness of collaborative tasks performance. However, this is by no means exhaustive, and other metrics and parameters could (and should) be added later. Our work can be seen as a toolbox among which it is possible to pick the desired metrics according to tasks or contexts. We propose a way to aggregate these metrics, producing the \acrshort{qoi}. The evaluation of the \acrshort{qoi} is performed at three different levels of abstraction: the interaction session level, the task level and the action level. In further work, this ability could provide additional information to the robot and open the possibility for reconsidering its behaviour in case it estimates that the quality of the interaction is degrading (\eg changing its plan or the way it is achieving it, informing the human or requesting a change in their behaviour, or even deciding to disengage).
 
-The section is organized as follows. First, we briefly discuss related work and the main challenges. In section~\ref{chap2:sec:levels} we present the representation of human-robot collaborative activity which we use and its hierarchical  decomposition. Finally, in sections \ref{sec:eval} and \ref{sec:metrics}, we introduce our concept and proposed set of metrics to evaluate the Quality of Interaction. Example on a real task and proof-of-concept are presented in Chapter~\ref{chapter:chap3}.
+The chapter is organized as follows. First, we briefly discuss related work and the main challenges. Then, in sections \ref{sec:eval} and \ref{sec:metrics}, we introduce our concept and proposed set of metrics to evaluate the Quality of Interaction. Example on a real task and proof-of-concept are presented in Chapter~\ref{chapter:chap8}.
 
 \section{Related work}\label{sec:rel}
 
@@ -81,7 +80,7 @@ Equation~\ref{eq:qoi} aggregates the values of the metrics chosen to be indicato
 
 \section{A set of metrics}\label{sec:metrics}
 
-In this section, we present a few measures to assess the \acrshort{qoi} of an interaction session in Sect.~\ref{subsec:m_intersess}. Then, we present metrics for the different levels based on engagement in Sect.~\ref{subsec:m_engag} and effectiveness estimations during human-robot joint activities in Sect.~\ref{subsec:task_eff}. For example, if the human is engaged and if tasks are performed effectively, the \acrshort{qoi} will tend to be high and \textit{vice versa}. Both concepts are difficult to measure, so we do not exactly measure them but we compute their trends from the set of metrics presented in this section. This set is not exhaustive and will be extended in future work but it gave promising results as we show with our implementation in Chapter~\ref{chapter:chap3}. All metrics are meant to be used for online evaluations of interactions. They are summarized in Table~\ref{tab:theo_metrics}.
+In this section, we present a few measures to assess the \acrshort{qoi} of an interaction session in Sect.~\ref{subsec:m_intersess}. Then, we present metrics for the different levels based on engagement in Sect.~\ref{subsec:m_engag} and effectiveness estimations during human-robot joint activities in Sect.~\ref{subsec:task_eff}. For example, if the human is engaged and if tasks are performed effectively, the \acrshort{qoi} will tend to be high and \textit{vice versa}. Both concepts are difficult to measure, so we do not exactly measure them but we compute their trends from the set of metrics presented in this section. This set is not exhaustive and will be extended in future work but it gave promising results as we show with our implementation in Chapter~\ref{chapter:chap8}. All metrics are meant to be used for online evaluations of interactions. They are summarized in Table~\ref{tab:theo_metrics}.
 
 \begin{table*}[t]
 	\centering
@@ -125,7 +124,7 @@ As a first version of the \textit{Human contribution to the goal}, we chose to m
 \paragraph{Fulfilling robot expectations about social interaction}\label{subsubsec:r_exp}
 During a social interaction, agents are expected to behave in a certain way and so the robot has expectations about the human. Then, the robot can monitor the human behavior to check if they are acting as they are expected to. For example, most of the time, when the robot speaks to the human, it will expect them to look at it and so it can monitor if it is the case or not as implemented by Fan \textit{et al.}~\cite{fan2017}. Quite similarly, Lemaignan \textit{et al.}~\cite{lemaignan2016} developed a way to measure if the human is \textit{with} the robot during their interaction, based on attention assessment, by computing if the human is looking at the desired attentional target or not. This latter metric will be integrated to our framework in future work.
 
-As the works of Lemaignan \textit{et al.} and Fan \textit{et al.}, we estimate the \textit{Fulfilling robot expectations about social interaction} with the human head orientation, in the context of our implementation described in Chapter~\ref{chapter:chap3}. We compute an attention ratio \ie the time during which the human is attentive to the robot (\ie staying close enough and looking at it) when it speaks compared to the total time of the speech:
+As the works of Lemaignan \textit{et al.} and Fan \textit{et al.}, we estimate the \textit{Fulfilling robot expectations about social interaction} with the human head orientation, in the context of our implementation described in Chapter~\ref{chapter:chap8}. We compute an attention ratio \ie the time during which the human is attentive to the robot (\ie staying close enough and looking at it) when it speaks compared to the total time of the speech:
 
 \begin{equation}\label{eq:attention_r}
 Ar = \frac{duration_{isAttentiveTo(robot)=true}}{duration_{robot\_speaks}}
@@ -202,7 +201,7 @@ We can notice that it is not possible for this metric to increase over time sinc
 Three examples are given in Fig.~\ref{fig:ote}. Fig.~\ref{fig:oteX}~and~\ref{fig:oteY} represent $\phi(t)_{X}$ and $\phi(t)_{Y}$ for two independent subtasks $X$ and $Y$. Fig.~\ref{fig:ote2} is a plot of $\Phi(t)_{Ta}$ for the task $Ta$ composed of the subtasks $X, Y, Z$ with $SD_X=10 s$, $V_X=0.5$, $SD_Y=5 s$, $V_Y=1$, $SD_Z=10 s$ and $V_Z=1$.
 
 \section{Conclusion}\todo{change according to how we'll modify the plan}
-In the last section, we have described a novel concept, the evaluation of the \acrfull{qoi}. This concept will be demonstrated in Section~\ref{sec:qoi_integration}, in the context of the direction-giving task presented in Chapter~\ref{chapter:chap3}.
+In the last section, we have described a novel concept, the evaluation of the \acrfull{qoi}. This concept will be demonstrated in Section~\ref{sec:qoi_integration}, in the context of the direction-giving task presented in Chapter~\ref{chapter:chap8}.
 
 
 \ifdefined\included

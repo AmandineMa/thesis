@@ -310,6 +310,13 @@ urlcolor=linkcol %couleur des liens pour les url
 	%xleftmargin=.1\textwidth, xrightmargin=.1\textwidth
 }
 
+\fancypagestyle{example}{%
+	\fancyhead[LE]{\bfseries\thepage\includegraphics[scale=0.18]{figures/chapter2/task_goal.png}\includegraphics[scale=0.18]{figures/chapter2/task_setup_mini.pdf}}   
+	\fancyhead[RO]{\includegraphics[scale=0.18]{figures/chapter2/task_goal.png}\includegraphics[scale=0.18]{figures/chapter2/task_setup_mini.pdf}\bfseries\thepage}  
+	\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
+	\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
+}%
+
 \usepackage{pdfpages}
 \usepackage{makecell}
 \usepackage{pdflscape} 

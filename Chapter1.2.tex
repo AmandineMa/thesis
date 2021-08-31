@@ -12,11 +12,11 @@
 
 \chapter{The ``special case'' of Human-Robot Interaction}
 \minitoc
-\section{Human-Robot Social Interactions}\label{chap1:sec:soc_inter}
+\section{Human-Robot Social Interactions}\label{chap2:sec:soc_inter}
 
-Now that we have seen how social interactions look like when happening between humans, we are going to see the different ways the human-robot interaction field divided and categorized interactions. It is possible to define an interaction according to its length as we will show in Section~\ref{chap1:subsec:inter_lengths}. Then, inside the interaction, what are the different temporal phases? We will see it in Section~\ref{chap1:subsec:inter_div}. Next, in Section~\ref{chap1:subsec:inter_hier}, we will take an interest in a different way to segment interactions: with hierarchical levels. Finally, some authors proposed some interaction patterns, we will present a few in Section~\ref{chap1:subsec:inter_patt}.
+Now that we have seen how social interactions look like when happening between humans, we are going to see the different ways the human-robot interaction field divided and categorized interactions. It is possible to define an interaction according to its length as we will show in Section~\ref{chap2:subsec:inter_lengths}. Then, inside the interaction, what are the different temporal phases? We will see it in Section~\ref{chap2:subsec:inter_div}. Next, in Section~\ref{chap2:subsec:inter_hier}, we will take an interest in a different way to segment interactions: with hierarchical levels. Finally, some authors proposed some interaction patterns, we will present a few in Section~\ref{chap2:subsec:inter_patt}.
 
-\subsection{Interaction lengths}\label{chap1:subsec:inter_lengths}
+\subsection{Interaction lengths}\label{chap2:subsec:inter_lengths}
 \paragraph{Short-term Interactions}
 Zheng \etal{} defined a \emph{short-term interaction}~\cite{zheng_2013_designing} based on the Unified Theories of Cognition of Newell~\cite{newell_1994_unified}. A short-term interaction corresponds to the ``cognitive band'' of cognition, during which they focus on individual utterances and speech acts for interactions that last for tens of seconds. They left aside longer-term interactions that can be in the ``rational band'' (minutes to hours) or the ``social band'' (days to months).
 Gaschler \etal{} deployed a bartender robot and defined a short-term interaction as being a customer ordering a drink – from the attention request towards the bartender to the closing of interaction by payment and exchange of polite phrases~\cite{gaschler_2012_modelling}.
@@ -30,7 +30,7 @@ For example, Kanda \etal{} performed a field trial at an elementary school in Ja
 
 In their discussion, Kanda \etal{} raised an interesting question: `` How Long Should \textquoteleft Long-Term\textquoteright{} Be?'' They found out that some authors consider that two months is a long-term interaction. They also pointed that some Human-Computer Interaction studies on long-term interaction last five weeks. In their survey, Leite \etal{} gave their point of view, which seems well-thought. They argued that it is more important to look at the number of interaction sessions and the length of these sessions (a five minutes-interaction is different from a one hour-interaction). For them, an interaction can be considered as long-term when the user becomes familiarized with the robot to a point that their perception of such robot is not biased by the novelty effect anymore. This definition raises another question: when does user’s familiarization with the robot become stable? But we will not discuss it here.
 
-\subsection{Interactions divided in phases}\label{chap1:subsec:inter_div}
+\subsection{Interactions divided in phases}\label{chap2:subsec:inter_div}
 Among works on short-term or long-term interactions, some authors divided interactions in phases which have sometimes similarities with the phases of social interactions described in Section~\ref{chap1:sec:soc_int}.
 
 Gockley \etal{} divided an interaction in three phases: greeting, core of the interaction and departure~\cite{gockley_2005_designing}. In the greeting phase, Valerie, the robot receptionist, greets people who might be interested in engaging in conversation. Thus, people are classified into ``attentional'' states:
@@ -49,12 +49,12 @@ They left open the possibility to have sub-phases inside phases.
 
 We can also find, in Lee \etal{}' work~\cite{lee_2012_personalization}, the notion of structure of interaction: interactions start with the vendor identifying the customer, greeting and engaging in small talk with the customer, engaging in the snack transaction, and then enacting social leave-taking.
 
-\subsection{Hierarchical interactions}\label{chap1:subsec:inter_hier}
+\subsection{Hierarchical interactions}\label{chap2:subsec:inter_hier}
 Not only, interactions can be divided in phases but also in levels. For example, Dautenhahn and colleagues~\cite{dautenhahn_2002_embodied, ogden_2001_interactional} defined two levels of approach for interactions, a global one and a local one. The \emph{global level approach} defines a unit of interaction as being relatively large (long sequences of interaction or large units of interaction), such as the script for a greeting as described by Kendon in~\cite{kendon_1990_conducting}. At this level, an interaction may be seen as a unit similar to a schema or script, in the computer/cognitive science senses of these terms. They named this level of interaction a ``Global Interactional Unit (GIU)''. Furthermore, a GIU can be divided in phases, each of which has associated behaviors. Behaviors have meaning and their meaning depends on the phase in which they occur, the context (\eg a ‘wave hello’ vs. a ‘wave goodbye’). Their \emph{local level approach} is a much smaller unit, often as simple as an action and a response to that action. They claimed that this view of interaction has the advantage of greater flexibility and robustness compared to the globally structured view. Flexibility is a result of the possibility of specifying acts that may occur in many global interactional structures. But, as contextual details are ignored, the ability to assign a specific meaning to an action is lost.
 
 In his thesis, Kuo insists about this flexibility and the re-usability~\cite{kuo_2012_designing}. A lower level of design is more appropriate for reuse. For him, a unit of interaction corresponds to an ``interaction cue'' (or social cue) that a robot can perceive and act upon or express in an interaction. These cues can be verbal, non-verbal, or a combination of both (multi-modal interaction). A complete episode of interaction should be constructed through composition of interaction cues with some common patterns repeated over the course of the interaction (\eg awareness of human presence).
 
-\subsection{Patterns of Interaction}\label{chap1:subsec:inter_patt}
+\subsection{Patterns of Interaction}\label{chap2:subsec:inter_patt}
 Before talking about design patterns or interaction patterns, Goffman argued that human interactions follow a specific ``order'' and characterized a number of patterns in which people interact, such as how greetings unfold and how people leave an interaction~\cite{goffman_1983_interaction}.
 
 Kahn \etal{} introduced design patterns~\cite{kahn_2008_design}, that they will later called interaction patterns in~\cite{kahn_2010_validating}, inspired from computer science. They proposed rules to follow using them and eight patterns. The two main ideas to retain is that a sequence of patterns has to be well ordered and that patterns can be hierarchical. 
@@ -98,7 +98,7 @@ Finally, Peltason and Wrede also based their work on design patterns from comput
 
 
 
-\section{Human-Robot Interaction and Joint Action}\label{chap1:sec:hri_ja}
+\section{Human-Robot Interaction and Joint Action}\label{chap2:sec:hri_ja}
 The study of human-human joint action is important to understand how to make robots better companions and partners for humans. However, it does not mean that they should imitate humans, as they are machines, they have their own abilities and have to develop their own strategies~\cite{bradshaw_2017_human} (\eg displaying an arrow on the floor while navigating~\cite{chadalavada_2015_mind, coovert_2014_spatial}).
 
 In the context of the JointAction4HRI project, a non-exhaustive review of existing robotic systems integrating but also recognizing in humans joint action mechanisms has been done, focusing on joint attention, communication to facilitate coordination, repairs strategies and commitments.
@@ -115,7 +115,7 @@ It is not always obvious for the human to know what the robot is ``thinking'', \
 
 \paragraph{Communication of intentions} As explained in Section~\ref{chap1:subsubsec:coord_smooth}, coordination smoothers facilitate the prediction and legibility of a partner's action. Investigation about how the robot could communicate its intention during navigation has been done. Some authors chose to have the robot communicating its intention using lights~\cite{szafir_2015_communicating}, comparing this method with a communication using the head orientation and finding it better~\cite{may_2015_show}. Others worked on make the robot navigation legible, improving its predictability by the human~\cite{dragan_2013_legibility, alami_2006_toward}. A last method to communication navigation intention is by projecting arrows on the floor as well as a map~\cite{chadalavada_2015_mind, coovert_2014_spatial}.  Not only robot navigation should be legible but also its gestures, when handing over an object to the human~\cite{sisbot_2012_human}, or opening a door~\cite{takayama_2011_expressing} for example. Finally, a lot of works can be found on human gestures recognition so the robot could prediction human's action intentions (\eg\cite{barros_2017_dynamic, chang_2018_effects}).
 
-\subsection{Theory of Mind in HRI}\label{chap1:subsec:tom_hri}
+\subsection{Theory of Mind in HRI}\label{chap2:subsec:tom_hri}
 \acrfull{tom} is related to joint action as shown in Section~\ref{chap1:subsec:tom}. One of the first work to bind robotics and \acrshort{tom} is Scassellati~\cite{scassellati_2002_theory}. He proposed a model of a \acrshort{tom} implementation for a robot, inspired by two models from psychology: Leslie’s Model of Theory of Mind~\cite{leslie_1984_spatiotemporal} and Baron-Cohen’s Model of Theory of Mind~\cite{baron-cohen_1995_mindblindness}. His model focused on two abilities: to make the distinction between animate and inanimate visual stimuli (following Leslie's perceptual world division into animate and inanimate spheres), and to identify gaze direction (enabling the shared attention mechanism as emphasized by Baron-Cohen). 
 
 Over the years, others tried to tackle this issue, especially focusing on perspective-taking abilities. For example, Hiatt and colleagues designed and implemented a model simulating a human with the ability to deal with false beliefs~\cite{hiatt_2010_cognitive}. They demonstrated it with the Sally--Anne test presented in Section~\ref{chap1:subsec:tom}. Milliez \etal{} endowed a robot with the ability to pass the Sally--Anne test, constructing a semantic representation of the world based on its estimation of the human's point of view~\cite{milliez_2014_framework}.
@@ -123,12 +123,12 @@ Over the years, others tried to tackle this issue, especially focusing on perspe
 Perspective-taking abilities have been used in robotics for several purposes. Berlin \etal{} presented a simulated robot able to take the visual perspective of a human teacher (the virtual camera) and showed how this ability could be used for learning in human-robot interaction~\cite{berlin_2006_perspective}. Hiatt \etal{} presented a humanoid robot reasoning on possible beliefs the human partner could have endowing the robot with the ability to deal with uncertainty about the estimation of the human's beliefs~\cite{hiatt_2011_accommodating}. In another work, perspective-taking allows the robot to solve ambiguous references to an object~\cite{ros_2010_solving}. Others make use of perspective-taking to improve human action recognition~\cite{johnson_2005_perceptual}. Endowing a robot with a perspective-taking ability can also serve to support the implementation of an autobiographical memory (a meaningful stored knowledge acquired during interactions)~\cite{pointeau_2017_role}. Finally, it can also be a way to help the robot to elaborate plans, adding communication actions to solve divergent beliefs~\cite{warnier_2012_robot}, to explain plans to the human with a level of details depending on their knowledge~\cite{milliez_2016_using} or to manage shared plans execution~\cite{devin_2016_implemented}.
 
 \subsection{Failures in HRI}
-Honig and Oron-Gilad studied the different types of failures that could happen during a human-robot interaction and proposed a classification of these~\cite{honig_2018_understanding} based on a meticulous review, illustrated with Figure~\ref{chap1:fig:err_hri}.
+Honig and Oron-Gilad studied the different types of failures that could happen during a human-robot interaction and proposed a classification of these~\cite{honig_2018_understanding} based on a meticulous review, illustrated with Figure~\ref{chap2:fig:err_hri}.
 
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter1/failures_hri.jpg}
 	\caption{Classification of failures in HRI, realized by Honig and Oron-Gilad~\cite{honig_2018_understanding}.}
-	\label{chap1:fig:err_hri}
+	\label{chap2:fig:err_hri}
 \end{figure}
 
 \subsubsection{Communicating about Failures}
