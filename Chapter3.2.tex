@@ -469,25 +469,23 @@ When it receives a new goal from the \acrlong{ism}, it queries the Task Planner 
 	\label{chap6:algo:UP}
 	\begin{algorithmic}
 		\Function{UpdatePlan}{}
-		\ForEach{primTask($i$,$state_i$,$preds_i$,$decompoOf_i$),\\\hfill $state_i=$ \algConst{PLANNED}$,i \in \mathbb{N}$}{planPrimTasks}
-		\State $preds$ $\coloneqq$\textsc{FindAll}($j$) 
-		\\\hfill such as primTask($j$,$state_j$,$preds_j$,$decompoOf_i$) $\in$ planPrimTasks,\\ \hfill $j \in preds_i$, $state_j$ $\neq$ \algConst{EXECUTED}
+		\ForEach{$\Pi_i$ with $state_i=$ \textsc{planned}}{Plan}
+		\State $preds$ $\coloneqq$\textsc{FindAll}($id_j$) 
+		\\\hfill such as $\Pi_j \in Plan, id_j \in preds_i,state_j\neq$ \textsc{executed} 
 		\If{$preds = \emptyset$}
-		\State primTask($i$,\algConst{PLANNED},$preds_i$,$decompoOf_i$) 
-		\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},$preds_i$,$decompoOf_i$)
-		\State \textsc{UpdateAbstractTasksToOngoing($decompoOf_i$)}
+		\State $state_i\coloneqq$ \textsc{todo} 
+		\State \textsc{UpdateAbstractTasksToOngoing($\Delta_i$)}
 		\EndIf
 		\EndFor
-		\If{$\forall$ primTask($state$) $\in$ planPrimTasks, 
-			\\\hfill $state=$ \algConst{EXECUTED} or $state=$\algConst{UNPLANNED}}
-		\State Goal(\algConst{ONGOING}) $\coloneqq$ Goal(\algConst{SUCCEEDED})
+		\If{$\forall \Pi_x \in$ Plan, $state_x=$ \textsc{executed} or $state_x=$ \textsc{unplanned}}
+		\State GoalState $\coloneqq$\textsc{succeeded}
 		\EndIf
 		\EndFunction
 		\Statex
-		\Function{UpdateAbstractTasksToOngoing}{$i$}
-		\If{$\exists$ abstractTask($i$,$state$,$decompoOf$) and $state=$ \algConst{PLANNED}}
-		\State abstractTask($i$,\algConst{PLANNED},$decompoOf$) $\coloneqq$ abstractTask($i$,\algConst{ONGOING},$decompoOf$)
-		\State \textsc{UpdateAbstractTasksToOngoing($decompoOf$)}
+		\Function{UpdateAbstractTasksToOngoing}{$\lambda_i$}
+		\If{$\exists \lambda_i$ with $state_i=$ \textsc{planned}}
+		\State $state_i \coloneqq$ \textsc{ongoing} 
+		\State \textsc{UpdateAbstractTasksToOngoing($\lambda_{\Delta_i}$)}
 		\EndIf
 		\EndFunction
 	\end{algorithmic}
@@ -502,43 +500,41 @@ When an action should be performed by the human and if the robot does not have a
 	\caption{Event action todo in \acrshort{rpm}}
 	\label{chap6:algo:todo}
 	\begin{algorithmic}
-	\Function{On}{primTask($i$,\algConst{TODO},$name$,$agent$,$params$)}
-	\If{$agent \in$ Human and $name \in$ PhysicalAction}
-	\State $p \coloneqq$ \textsc{ChooseObjectToMonitor($params$)}
-	\State \textsc{SetMonitorObject($p$)}
-	\State \textsc{WaitForPrimTaskStateToChange($i$)}
-	\ElsIf{$agent \in$ Robot or $agent \in$ AgentX}
-		\If{$\exists p \in params, p$ is a \sparql{} query}
-		\State $electedAgent,newParams\coloneqq$
-		\\\hfill \textsc{InstantiateParams}(primTask($i$,$state$,$name$,$agent$,$params$))
-		\State $params \coloneqq newParams$
+	\Function{On}{$\Pi_i$} with $state_i=$\textsc{todo}
+	\If{$agent_i \in$ Human and $name_i \in$ PhysicalAction}
+	\State $objM \coloneqq$ \textsc{ChooseObjectToMonitor($params_i$)}
+	\State \textsc{SetMonitorObject($objM$)}
+	\State \textsc{WaitForPrimTaskStateToChange($\Pi_i$)}
+	\ElsIf{$agent_i \in$ Robot or $agent_i \in$ AgentX}
+		\If{$\exists p \in params_i, p$ is a \sparql{} query}
+		\State $oneAgentOnly,newParams\coloneqq$ \textsc{InstantiateParams}($\Pi_i$)
+		\State $params_i \coloneqq newParams$
 		\EndIf
-		\If{$electedAgent \neq \varnothing$}
-			\State primTask($i$,\algConst{TODO},$name$,$agent$,$params$) 
-			\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},$agents[0]$,$params$)\Comment{Triggers a new \textsc{On} function}
+		\If{$oneAgentOnly \neq \varnothing$}
+			\State $agent_i \coloneqq oneAgentOnly$ \Comment{Triggers a new \textsc{On} function as \\\hfill \textsc{todo} action updated}
 		\Else
-			\State \textsc{AllocatePrimTask}(primTask($i$,$state$,$name$,$agent$,$params$))
-			\If{$agent \notin$ Human}
-			 \State \textsc{SendMessage}(ActionExecutionManager,primTask($i$,$name$,$agent$,$params$))
+			\State \textsc{AllocatePrimTask}($\Pi_i$)
+			\If{$agent_i \notin$ Human}
+			 \State \textsc{SendMessage}(ActionExecutionManager,$\Pi_i$)
 			 \EndIf
 		\EndIf
 	\EndIf
 	\EndFunction
 	\Statex
-	\Function{InstantiateParams}{primTask($i$,$state$,$name$,$agent$,$params$)}
-	\ForEach{$p$}{$params$}
+	\Function{InstantiateParams}{$\Pi_i$}
+	\ForEach{$p$}{$params_i$}
 	\If{$p$ is a \sparql{} query}
 		\State $sparqlQ \coloneqq$ \textsc{SparqlToElementList($p$)} \Comment{$sparqlQ$ is a list of list. }
-		\State $electedAgent = \varnothing$
-		\If{$\exists a_i \in sparqlQ, a_i \in $Agent and  $a_i$ is unique}
-			\State $electedAgent \coloneqq a_i$
+		\State $oneAgentOnly = \varnothing$
+		\If{$\exists a \in sparqlQ, a \in $Agent and  $a$ is unique}
+			\State $oneAgentOnly \coloneqq a$
 		\EndIf
 		\State add $sparqlQ$ in $newParams$
 	\Else
 		\State add $p$ in $newParams$
 	\EndIf
 	\EndFor
-	\State \Return $electedAgent,newParams$
+	\State \Return $oneAgentOnly,newParams$
 	\EndFunction
 	\algstore{todo}
 \end{algorithmic}
@@ -552,24 +548,22 @@ When an action should be performed by the robot or the AgentX, first it needs to
 	\caption{Event action todo in \acrshort{rpm}(continued)}
 	\begin{algorithmic}
 	\algrestore{todo}
-	\Function{AllocatePrimTask}{primTask($i$,$state$,$name$,$agent$,$params$)}
-		\If{$agent \in $Robot or 
-			\\\hfill $\exists$ primTask($j$,$state$,$name$,$agent$,$params$), $state=$ \algConst{TODO}, $j \neq i$,$agent \in$ AgentX)} 
-			\State \textsc{AllocatePrimTaskToRobot($i$,\algConst{TODO},$name$,$agent$,$params$)}
+	\Function{AllocatePrimTask}{$\Pi_i$}
+		\If{$agent_i \in $Robot or ($\exists \Pi_j$ with $j \neq i$, $state_j=$\textsc{todo}, $params_i=params_j$,\\\hfill $agent \in$ AgentX)} 
+			\State \textsc{AllocatePrimTaskToRobot($\Pi_i$)}
 		\Else
-			\While{$t_{current} < T_{max\_wait}$ or  (($state=$\algConst{ONGOING} or $state=$\algConst{EXECUTED}) \\\hfill and $agent \in$ Human)}\\\Comment{The Human Plan Manager can send a message to update the status of primTask($i$)}
+			\While{$t_{current} < T_{max\_wait}$ or \\\hfill ($state_i=$ \textsc{ongoing} or $state_i=$ \textsc{executed}) and $agent \in$ Human}\\\Comment{$\Pi_i$ state may be updated by the Human Plan Manager}
 			\EndWhile
 			\If{$agent \notin$ Human}
-				\State \textsc{AllocatePrimTaskToRobot($i$,\algConst{TODO},$name$,$agent$,$params$)}
+				\State \textsc{AllocatePrimTaskToRobot($\Pi_i$)}
 			\EndIf
 		\EndIf
 	\EndFunction
 	\Statex
-	\Function{AllocatePrimTaskToRobot}{$i$,$state$,$name$,$agent$,$params$}
-	\ForEach{$p$}{$params$}
-		\State \textsc{SelectParams($params$)}
-		\State primTask($i$,\algConst{TODO},$name$,$agent$,$params$) 
-		\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},robot,$params$)
+	\Function{AllocatePrimTaskToRobot}{$\Pi_i$}
+	\ForEach{$p$}{$params_i$}
+		\State \textsc{SelectParams($params_i$)}
+		\State $agent_i \coloneqq$ Robot
 	\EndFor
 	\EndFunction
 	\end{algorithmic}
@@ -582,38 +576,35 @@ We represented what happened when a primitive task is updated to \textsc{execute
 	\caption{Event action executed in \acrshort{rpm}}
 	\label{chap6:algo:executed}
 	\begin{algorithmic}
-	\Function{On}{primTask($i$,\algConst{EXECUTED},$name$,$agent$,$params$,$preds$,$decompoOf$)}
-		\State \textsc{EndObjectMonitoring($params$)}
-		\State \textsc{RemoveParallelBranches($agent$,$preds$)}
-		\State \textsc{UpdateAbstractTasksToExecuted($decompoOf$,\algConst{EXECUTED})}
+	\Function{On}{$\Pi_i$ with $state_i=$\textsc{executed}}
+		\State \textsc{EndObjectMonitoring($params_i$)}
+		\State \textsc{RemoveParallelBranches($agent_i$,$preds_i$)}
+		\State \textsc{UpdateAbstractTaskState($\Delta_i$,\textsc{executed})}
 		\State \textsc{UpdatePlan} \Comment{see Algorithm~\ref{chap6:algo:UP}}
 	\EndFunction
 	\Statex
-	\Function{RemoveParallelBranches}{$agent$,$preds$}
-		\State $primTasksToUnplan \coloneqq$ \textsc{FindAll}(primTask) 
-		\\\hfill with same $agent$ and $preds$, and ($state=$\algConst{TODO} or $state=$\algConst{SUSPENDED}) 
-		\State \textsc{removePrimTasks}($primTasksToUnplan$)
-	\EndFunction
-	\Statex
-	\Function{removePrimTasks}{$primTasksToUnplan$}
-		\ForEach{primTask}{$primTasksToUnplan$}
-			\State primTask($i$,$state$,$name$,$agent$,$params$,$preds$,$decompoOf$) 
-			\\\hfill $\coloneqq$ primTask($i$,\algConst{UNPLANNED},$name$,$agent$,$params$,$preds$,$decompoOf$)
-			\State \textsc{UpdateAbstractTasksToExecuted($decompoOf$,\algConst{UNPLANNED})}
-			\State \textsc{RemoveChild($i$)}
-		\EndFor
-	\EndFunction
-	\Statex
-	\Function{RemoveChild}{$i$}
-		\State $primTasksToUnplan \coloneqq$ \textsc{FindAll}(primTask($j$)) where $i \in preds_j$ 
+	\Function{RemoveParallelBranches}{$agent_i$,$preds_i$}
+		\State $primTasksToUnplan \coloneqq$ \textsc{FindAll}($\Pi_x$) \\\hfill with $agent_x=agent_i, preds_x=preds_i,$ \\\hfill$(state_x=$ \textsc{todo} or $state_x=$ \textsc{suspended})
 		\State \textsc{RemovePrimTasks}($primTasksToUnplan$)
 	\EndFunction
 	\Statex
-	\Function{UpdateAbstractTasksToExecuted}{$i$,$stateToSet$}
-		\If{$\exists$ (abstractTask($i$,$state$,$decompoOf$) or  primTask($i$,$state$,$decompoOf$)) and 
-			\\\hfill ($state=$ \algConst{EXECUTED} or $state=$ \algConst{UNPLANNED})}
-			\State abstractTask($i$,\algConst{PLANNED},$decompoOf$) $\coloneqq$ abstractTask($i$,$stateToSet$,$decompoOf$)
-			\State \textsc{UpdateAbstractTasksToExecuted($decompoOf$,$stateToSet$)}
+	\Function{RemovePrimTasks}{$primTasksToUnplan$}
+		\ForEach{$\Pi_i$}{$primTasksToUnplan$}
+			\State $state_i\coloneqq$ \textsc{unplanned} 
+			\State \textsc{UpdateAbstractTaskState($\Delta_i$,\textsc{unplanned})}
+			\State \textsc{RemoveChild($\Pi_i$)}
+		\EndFor
+	\EndFunction
+	\Statex
+	\Function{RemoveChild}{$\Pi_i$}
+		\State $primTasksToUnplan \coloneqq$ \textsc{FindAll}($\Pi_j$) with $id_i \in preds_j$ 
+		\State \textsc{RemovePrimTasks}($primTasksToUnplan$)
+	\EndFunction
+	\Statex
+	\Function{UpdateAbstractTaskState}{$id_x$,$newState$}
+		\If{$ \forall \lambda_i$,$\Pi_i$ with $\Delta_i=id_x$, ($state_i=$ \textsc{executed} or $state_i=$ \textsc{unplanned})}
+			\State $state_x \coloneqq newState$
+			\State \textsc{UpdateAbstractTaskState($\Delta_x$,$newState$)}
 		\EndIf
 	\EndFunction	
 	\end{algorithmic}
@@ -633,32 +624,30 @@ As we can see in Algorithm~\ref{chap6:algo:h_todo}, the \acrshort{hpm} estimates
 	\caption{Event action todo by human in \acrshort{hpm}}
 	\label{chap6:algo:h_todo}
 	\begin{algorithmic}
-	\Function{On}{primTask($i$,\algConst{TODO},$name$,human,$params$,$preds$)}
+	\Function{On}{$\Pi_i$} with $agent_i \in$ Human and $state_i=$ \textsc{todo}
 	\State $matchingAction \coloneqq false$
-	\While{$t_{current} < T_{timeout}$ and not $matchingAction$}
-		\If{\textsc{Match}(primTask,$monitoredAction_{\text{STARTED,PROG,ACHIEV}})$}
+	\While{$t_{current} < T_{timeout,start}$ and not $matchingAction$}
+		\If{\textsc{Match}($\Pi_i$,$monitoredAction_{\text{STARTED,PROG,ACHIEV}})$}
 		\State $matchingAction \coloneqq true$
 		\EndIf
 	\EndWhile
-	\If{$t_{current} > T_{timeout}$} \Return \EndIf
-	\If{match with $monitoredAction_{\text{STARTED,PROG}}$)}
-	\State primTask($i$,\algConst{TODO},$name$,human,$params$,$preds$) 
-	\\\hfill $\coloneqq$ primTask($i$,\algConst{ONGOING},human,$params$,$preds$)
-	\State \textsc{SendMessage}(RobotPlanManager,primTask($i$,\algConst{ONGOING},human,$params$,$preds$))
+	\If{$t_{current} > T_{timeout,start}$} \Return \EndIf
+	\If{\textsc{Match}($\Pi_i$,$monitoredAction_{\text{STARTED,PROG}})$}
+	\State $state_i \coloneqq$ \textsc{ongoing}
+	\State \textsc{SendMessage}(RobotPlanManager,$\Pi_i$)
 	\State $matchingAction \coloneqq false$
 	\EndIf
-	\State $primTasksToSuspend \coloneqq$ \textsc{FindAll}(primTask($j$)) where $i \in preds_j$ 
+	\State $primTasksToSuspend \coloneqq$ \textsc{FindAll}($\Pi_j$) with $id_i \in preds_j$ 
 	\State \textsc{SuspendPrimTasks}($primTasksToSuspend$)
-	\While{$t_{current} < T_{timeout}$ and not $matchingAction$}
-		\If{\textsc{Match}(primTask,$monitoredAction_{\text{ACHIEVED}})$}
+	\While{$t_{current} < T_{timeout,achiev}$ and not $matchingAction$}
+		\If{\textsc{Match}($\Pi_i$,$monitoredAction_{\text{ACHIEV}})$}
 		\State $matchingAction \coloneqq true$
 		\EndIf
 	\EndWhile
-	\If{$t_{current} > T_{timeout}$} \Return \EndIf
-	\State primTask($i$,$state$,$name$,human,$params$,$preds$) 
-	\\\hfill $\coloneqq$ primTask($i$,\algConst{EXECUTED},human,$params$,$preds$)
-	\State \textsc{SendMessage}(RobotPlanManager,primTask($i$,\algConst{EXECUTED},human,$params$,$preds$))
-	\State \textsc{RemoveParallelBranches}(human,$preds$) \Comment{see Algorithm~\ref{chap6:algo:executed}}
+	\If{$t_{current} > T_{timeout,achiev}$} \Return \EndIf
+	\State  $state_i \coloneqq$ \textsc{executed} 
+	\State \textsc{SendMessage}(RobotPlanManager,$\Pi_i$)
+	\State \textsc{RemoveParallelBranches}(human,$preds_i$) \Comment{see Algorithm~\ref{chap6:algo:executed}}
 	\State \textsc{UpdatePlan} \Comment{see Algorithm~\ref{chap6:algo:UP}}
 	\EndFunction	
 	\end{algorithmic}
@@ -670,19 +659,17 @@ When the robot estimates that the human knows they should perform an action but 
 	\caption{Handling of action todo timed out on wait for started/progressing action by human in \acrshort{hpm}}
 	\label{chap6:algo:h_todo_conting_1}
 	\begin{algorithmic}
-		\Function{NotDoing}{List of primTask($i$,\algConst{TODO},$name$,human,$params$)}
+		\Function{NotDoing}{List of $\Pi$ with $state=$ \textsc{todo}}
 		\If{first time for these actions}
-			\ForEach{primTask}{List of primTask}
-			\State primTask($i$,\algConst{TODO},$name$,human,$params$) 
-			\\\hfill $\coloneqq$ primTask($i$,\algConst{NOT\_STARTING},human,$params$)
+			\ForEach{$\Pi_i$}{List of  $\Pi$}
+			\State $state_i\coloneqq$ \textsc{not\_starting} 
 			\EndFor
 			\State \textsc{SendMessage}(CommManager,List of primTask)
-			\ForEach{primTask}{List of primTask}
-			\State primTask($i$,\algConst{NOT\_STARTING},$name$,human,$params$) 
-			\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},human,$params$)
+			\ForEach{$\Pi_i$}{List of $\Pi$}
+			\State$state_i\coloneqq$ \textsc{todo} 
 			\EndFor
 		\Else
-			\State \textsc{Negociation} or \textsc{StopGoal}
+			\State \textsc{Negociation} or \textsc{StopGoal} \Comment{Negociation not implemented}
 		\EndIf
 		\EndFunction
 	\end{algorithmic}
@@ -694,18 +681,15 @@ A bit similarly, when the robot observed the beginning of an action, it asks the
 	\caption{Handling of action todo timed out on wait for achieved action by human in \acrshort{hpm}}
 	\label{chap6:algo:h_todo_conting_2}
 	\begin{algorithmic}
-		\Function{NotDoing}{primTask($i$,\algConst{TODO},$name$,human,$params$)}
+		\Function{NotDoing}{$\Pi_i$} with $agent_i \in$ Human and $state_i=$ \textsc{todo}
 		\If{first time for this actions}
-			\State primTask($i$,\algConst{TODO},$name$,human,$params$) 
-			\\\hfill $\coloneqq$ primTask($i$,\algConst{NOT\_ACHIEVED},human,$params$)
-			\State $answer \coloneqq$ \textsc{SendMessage}(CommManager,primTask)
+			\State $state_i\coloneqq$ \textsc{not\_finished} 
+			\State $answer \coloneqq$ \textsc{SendMessage}(CommManager,$\Pi_i$)
 			\If{$answer=$ no}
-				\State primTask($i$,\algConst{NOT\_ACHIEVED},$name$,human,$params$) 
-				\\\hfill $\coloneqq$ primTask($i$,\algConst{TODO},human,$params$)
+				\State $state_i\coloneqq$ \textsc{todo} 
 			\Else
-				\State primTask($i$,\algConst{NOT\_ACHIEVED},$name$,human,$params$) 
-				\\\hfill $\coloneqq$ primTask($i$,\algConst{EXECUTED},human,$params$)
-				\State \textsc{UpdateOntologenius($actionEffects$)}
+				\State $state_i\coloneqq$ \textsc{executed} 
+				\State \textsc{UpdateOntologenius($necessEffectL_i$)}
 			\EndIf
 		\Else
 			\State \textsc{Negociation} or \textsc{StopGoal}
@@ -734,18 +718,19 @@ Deciding is not enough, the robot needs to be able to act. Thus, \acrshort{jahrv
 	\caption{Action execution management}
 	\label{chap6:algo:exe_manage}
 	\begin{algorithmic}
-	\Function{ExecuteAction}{primTask($i$,$name$,robot,$params$)}
-	\If{$name \in$ PhysicalAction}
-		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm},\acrshort{ham}], primTask($i$,\algConst{ONGOING}))
-	\ElsIf{$name \in$ CommunicateAction}
-		\State \textsc{SendMessage}(CommManager, primTask($i$,\algConst{TODO}))\Comment{\algConst{ONGOING} state set \\\hfill by the \acrshort{cm}}
+	\Function{ExecuteAction}{$\Pi_i$} with $agent_i \in$ Robot
+	\If{$name_i \in$ PhysicalAction}
+		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm},\acrshort{ham}], $\Pi_i$) with $state_i=$ \textsc{ongoing}
+	\ElsIf{$name _i \in$ CommunicateAction}
+		\State \Comment{\textsc{ongoing} state set by the \acrshort{cm}}
+		\State \textsc{SendMessage}(CommManager,$\Pi_i$) with $state_i=$ \textsc{todo}
 	\EndIf
-	\State $action \coloneqq$ \textsc{ActionParsing($name$,$params$)}
+	\State $action \coloneqq$ \textsc{ActionParsing($name_i$,$params_i$)}
 	\State \textsc{Execute($action$)}
-	\If{$name \in$ PhysicalAction}
-		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm},\acrshort{ham}], primTask($i$,\algConst{EXECUTED}))
+	\If{$name_i \in$ PhysicalAction}
+		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm},\acrshort{ham}], $\Pi_i$) with $state_i=$ \textsc{executed}
 	\ElsIf{$name \in$ CommunicateAction}
-		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm}], primTask($i$,\algConst{EXECUTED}))
+		\State \textsc{SendMessage}([\acrshort{rpm},\acrshort{hpm}], $\Pi_i$) with $state_i=$ \textsc{executed}
 	\EndIf
 	\EndFunction
 	\end{algorithmic}
@@ -779,7 +764,15 @@ We focused on the communicative acts described in \ref{chap6:emum:comm1} and \re
 
 As the communication is important, it is important to minimize the risk that it gets lost. Thus, when the \acrshort{cm} receives a communication to perform from another \acrshort{rja}, it ensures that it perceives the human before issuing the communication so it has more chance to get the human's attention. Therefore, it sets the monitoring channel of the Robot Resource Manager on the human head monitoring (see Section~\ref{chap6:para:resource_m}).
 
-Moreover, when the robot needs to communicate to the human that it has does a given action or to ask them to perform one, it needs to verbalize it properly. Still in the spirit of a generic system, the algorithm that we developed is not task or action specific. Action labels (presented in Section~\ref{chap6:subsec:action_rep} and verb conjugation (tense and persons) are stored in Ontologenius which can be manually fed with new ones when needed. Let's take an example where instead of making a stack, the agents has to remove the cubes from the table to put them in a green box. Then, we put ourselves in the case where the robot inform the human it has performed a Drop action \verb'robot_drop_cube' in the plan, with \verb'red_cube_1' and \verb'green_box' as parameters. First, the \acrshort{cm} queries Ontologenius to get the closest class in the hierarchy with labels. Here, it is \verb'DropAction'. There are three possible labels for this action, so the robot has the possibility to communicate about it with different action parameters: \verb'[{Agent} @Drop {Cube}, {Agent} @Drop in {Container}, {Agent} @Drop {Cube} in {Container}]'. Thus, the \acrshort{cm} finds which label matches its parameters, based on the parameter number and on their class. Then, in our case, this is \verb'{Agent} @Drop {Cube} in {Container}'. Next, for each parameter, it tries to find the right verbalization, either it will be a Referring Expression or the parameter label stored in Ontologenius, and replace them in the class action label. So, we would have something like \verb'{Agent} @Drop the red cube on the table in the box'. Finally, it replaces \verb'{Agent}' with the action actor and \verb'@Drop' with the right conjugation. As the \acrshort{cm} wants to refer to an action the robot has done, it queries the Ontology with the conjugation of \verb'Drop' at the past first singular person, which is \verb'dropped'. Then, the result of the action verbalization is \verb'I dropped the red cube on the table in the box'. 
+Moreover, when the robot needs to communicate to the human that it has does a given action or to ask them to perform one, it needs to verbalize it properly. Still in the spirit of a generic system, the algorithm that we developed is not task or action specific. Action labels (presented in Section~\ref{chap6:subsec:action_rep} and verb conjugation) are stored in Ontologenius which can be manually fed with new ones when needed.
+
+Let's take an example where instead of making a stack, the agents have to remove the cubes from the table to put them in a green box. Then, we put ourselves in the case where the robot inform the human it has performed a Drop action \verb'robot_drop_cube' in the plan, with \verb'red_cube_1' and \verb'green_box' as parameters. 
+
+First, the \acrshort{cm} queries Ontologenius to get the closest class in the hierarchy with labels. Here, it is \verb'DropAction'. There are three possible labels for this action, so the robot has the possibility to communicate about it with different action parameters: \verb'[{Agent} @Drop {Cube},' \verb'{Agent} @Drop in {Container},' \verb'{Agent} @Drop {Cube} in {Container}]'. Thus, the \acrshort{cm} finds which label matches its parameters, based on the parameter number and on their class. Then, in our case, this is \verb'{Agent} @Drop {Cube} in {Container}'. 
+
+Next, for each parameter, it tries to find the right verbalization, either it will be a Referring Expression or the parameter label stored in Ontologenius, and replace them in the class action label. So, we would have something like \verb'{Agent} @Drop the red cube on the table in the box'. 
+
+Finally, it replaces \verb'{Agent}' with the action actor and \verb'@Drop' with the right conjugation. As the \acrshort{cm} wants to refer to an action the robot has done, it queries the Ontology with the conjugation of \verb'Drop' at the past first singular person, which is \verb'dropped'. Then, the result of the action verbalization is \verb'I dropped the red cube on the table in the box'. 
 
 When the \acrshort{cm} wants to ask the human to perform an action, it uses the same algorithm and turn the sentence into an interrogative form with the verb ``can''. As \acrshort{jahrvis} manipulates conditional plans, the \acrshort{cm} can take as input list of actions and separate them with ``or'' when communicating about them. And, when it wants to communicate about the human having to perform several actions in a row, it using ``and''.
  
@@ -799,27 +792,27 @@ When the \acrshort{cm} wants to ask the human to perform an action, it uses the 
 	\EndIf
 	\State $verb \coloneqq$\textsc{GetVerb}($actionVerba$)
 	\State $conjugatedVerb \coloneqq$\textsc{GetConjug}($actionVerba$,$verb$,$person$,$tense$)\Comment{Query to \\\hfill Ontologenius}
-	\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}("\{Agent\}",$pronoun$)
-	\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}("@$verb$",$conjugatedVerb$)
+	\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}(``\{Agent\}'',$pronoun$)
+	\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}(``@$verb$'',$conjugatedVerb$)
 	\EndFunction
 	\Statex
 	\Function{LabelToWords}{$labelList$,$parameters$}
-	\State $actionVerba \coloneqq$""
+	\State $actionVerba \coloneqq$``''
 	\ForEach{$label$}{$labelList$}
-		\State $labelClassParams \coloneqq$\textsc{RegexMatch}("\{(?!Agent)(.*?)\}",$label$)
+		\State $labelClassParams \coloneqq$\textsc{RegexMatch}(``\{(?!Agent)(.*?)\}'',$label$)
 		\If{\textsc{Length}($labelClassParams$)=\textsc{Length}($parameters$)}
 		\ForEach{$param$}{$parameters$}
 			\ForEach{$labelClassParam$}{$labelClassParams$}
-			\If{$param \in labelClassParam$} \Comment{Query to Ontologenius}
-				\If{$actionVerba=$""}
+			\If{$param \in labelClassParam$} \Comment{Query to \\\hfill Ontologenius}
+				\If{$actionVerba=$``''}
 					\State $actionVerba \coloneqq label$
 				\EndIf
-				\If{$param \in$ Pickable and \fact{isAbove}{$param$}{Support}}
+				\If{$param \in$ Pickable, \fact{isAbove}{$param$}{Support}}
 					\State $param \coloneqq$\textsc{GetReferringExpression($param$)}
 				\Else
-					\State $paramVerba \coloneqq$ \textsc{GetParamVerba($param$)}\Comment{Query to \\\hfill Ontologenius}
+					\State $paramVerba \coloneqq$ \textsc{GetParamVerba($param$)}\\\hfill\Comment{Query to Ontologenius}
 				\EndIf
-				\State $actionVerba \coloneqq actionVerba.$\textsc{Replace}("\{$labelClassParam$\}",$paramVerba$)
+				\State $actionVerba$ \\\hfill $\coloneqq actionVerba.$\textsc{Replace}(``\{$labelClassParam$\}'',\\\hfill$paramVerba$)
 				\State \textbf{break}
 			\EndIf
 			\EndFor
@@ -833,11 +826,21 @@ When the \acrshort{cm} wants to ask the human to perform an action, it uses the 
 
 
 \subsection{To Understand Communications}
-That the robot communicates to the human is important but that it would be able to receive communication from them is as well. The human should be allow to communicate about the plan such as to ask precision about a given action, to signal that something is not going well or to ask the robot to perform an action. We focused on the latter in collaboration with Guillaume Sarthou. 
-\todo{example}
-The Algorithm~\ref{chap6:algo:human_instruction} allows the \acrshort{cm} to translate a human instruction to give an action (with one parameter) to perform to the robot into an instruction understandable by the \acrlong{aem}. When the \acrshort{cm} receives a human sentence such as ``Take the blue cube'', it queries the \acrfull{nlp} component which returns the action name it isolated from the rest of the sentence, a \sparql{}query corresponding to the parameter and a comprehension score. Then, it requests Ontologenius for the list of objects corresponding to the \sparql{}query, from the human's perspective. Indeed, the robot could see a blue cube which is not visible by the human, in this case, it will not be part of the returned objects as it is not part of the human's knowledge. If the human has properly given their instruction, the list size should be 1 and the algorithm is over. However, for some reason, they may have been imprecise. For example, there might be two blue cubes on the table. In this case, the \acrshort{cm} gets from Ontologenius the \sparql{}query corresponding to each object, with elements allowing to discriminate between them. Then, it requests the \acrshort{reg} for the verbalization of these objects, based on their \sparql{}description. Thus, we could have the \acrshort{cm} to ask the human something like ``Do you mean the blue cube on the table or on the shelf?''. Finally the function starts over with the human answer which could be ``the blue cube on the table'' -- the \acrshort{cm} keeps the action of the initial instruction into memory.
+To have the robot enunciating information or asking some to the human is important but that it is able to receive communication from them is as well. The human should be allow to communicate about the plan such as to ask precision about a given action, to signal that something is not going well or to ask the robot to perform an action. We focused on the latter in collaboration with Guillaume Sarthou. 
 
-Finally, once the \acrshort{cm} isolated an action and a parameter, it sends them to the \acrlong{aem}.
+The Algorithm~\ref{chap6:algo:human_instruction} allows the \acrshort{cm} to translate a human instruction about an action to perform by the robot into an instruction understandable by the \acrlong{aem}. 
+
+Let's take an example where a green cube is on a table (\verb'green_cube') and another is on a shelf beside (\verb'green_cube_3'). The human instructs the robot to take the green cube but there are two of them so we are going to see how the \acrshort{cm} process to handle this order. 
+
+When the \acrshort{cm} receives a human sentence such as ``Take the green cube'', it queries the \acrfull{nlp} component which returns the action name it isolated from the rest of the sentence (\eg in our case, ``take''), a \sparql{} query corresponding to the parameter (\eg here, a \sparql{} matching ``green cube''), and a comprehension score (\eg with such a sentence it would be 1.0). 
+
+Then, it requests Ontologenius for the list of objects corresponding to the \sparql{} query, from the human's perspective. Indeed, the robot could perceive a green cube which is not visible by the human (\eg in their back), in this case, it will not be part of the returned objects as it is not part of the human's knowledge. If the human has properly given their instruction, the object list size should be 1 and the algorithm is over (\eg in our example, if there was only one green cube). 
+
+However, for some reason, they may have been imprecise or absent minded (\eg here, they forgot that another green cube was on the shelf). In this case, the \acrshort{cm} gets from Ontologenius the \sparql{} query corresponding to each object, with elements allowing to discriminate between them. Then, it requests the \acrshort{reg} for the verbalization of these objects, based on their \sparql{} description. Thus, we could have the robot asking the human something like ``Do you mean the green cube on the table or on the shelf?''. 
+
+Then, the function starts over with the human answer which could be ``the green cube on the table'' -- the \acrshort{cm} keeps the action of the initial instruction into memory.
+
+Finally, once the \acrshort{cm} isolated an action and a parameter, it sends them to the \acrlong{aem}, in our example it would be \verb'take(pr2_robot,green_cube)'.
 
 \begin{algorithm}[!htb]
 	\caption{Understanding of a human instruction}
