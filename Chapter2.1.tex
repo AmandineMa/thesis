@@ -23,7 +23,11 @@ A very complete architecture, CRAM, dealing with problems such as manipulation, 
 
 The work of Scheutz and colleagues is compelling, as they proposed a generic architecture, DIARC, for cognitive robots collaborating with humans~\cite{scheutz_2006_utility,scheutz_2019_overview}. In this context, it handles perception, dialogue and different kind of actions. But, the architecture lacks real modeling and awareness of the human at each level.
 
+Rossi \etal{} presented in \cite{rossi_2013_extensible} an architecture to handle multi-modal interaction. In their system, users are able to express their instructions as combinations of different modalities considering that redundancy can be useful. The system is build upon a multi-layered late fusion approach, based on classification. In addition, the system is designed in a way to be easily extensible and easy to modify (\eg possibility to add or remove a modality, possibility to change the classification strategies). The system has been used for example to handle pick-place-carry tasks interacting with a robot through gestures and speech. However, this is for robots following human orders only, and not handling planning and plan execution.
+
 Another architecture worth to be mentioned is the DAC-h3 architecture by Moulin-Frier, Fischer \etal, inspired from biology~\cite{moulin_2017_dac}. It is designed for a robot maintaining social interactions with humans, able to tell narratives and to acquire knowledge thanks to its interactions with humans. As it is mainly dedicated to knowledge acquisition and expression, it lacks planning and execution abilities.
+
+As part of the Platform-Independent Cooperative Human Robot Interaction System, Lallee \etal{} proposed an original architecture for learning and executing shared plans~\cite{lallee_2012_towards}. They developed a way to encode actions in terms of perceptual changes based on motor primitives descriptions. That way, the robot is able to learn new actions as perceptions. Their actions can take several arguments (\eg AGENT put the OBJECT on the RECIPIENT) which enables the system to react and generalize when faced to a new context. The system takes as inputs spoken language interaction and visual perception. It is very interesting but focuses on robots learning objects, actions and plans and not really on collaborative tasks handling. 
 
 Finally, there is the architecture developed and implemented by Lemaignan and colleagues for collaborative robots. All deliberative components of the architecture are human-aware~\cite{lemaignan_2017_artificial}, \ie all of components except the sensorimotor layer. This architecture is based on the philosophical BDI model developed by Bratman~\cite{bratman_1987_intention,bratman_1988_plans}. It has 3 main concepts defined as the following in computer science:
 \begin{bulletList}
@@ -32,25 +36,31 @@ Finally, there is the architecture developed and implemented by Lemaignan and co
 	\item \emph{Intentions}: They are a representation of the currently chosen course of action (plan). It is the deliberative component of the system. The selected course(s) of action are determined with a deliberative function, according to the beliefs and desires~\cite{rao_1995_bdi}.
 \end{bulletList}
 
-\section{Lack and needs... TO BE DONE}
 
-\section{The new LAAS Architecture... voir si votre archi a un nom}\label{chap3:sec:rob_archi}
 
-\subsection{Specificities...}
+\section{The new LAAS Architecture -- DACOBOT}\label{chap3:sec:rob_archi}
 
-\subsection{Overall architecture explanation}\todo{mention three layered archi Pacherie ref chap1}
+In this section, we present an overview of the robotic architecture, \acrfull{dacobot}, that we collaboratively developed with Guillaume Sarthou and Guilhem Buisan. This architecture model, shown in Figure~\ref{chap3:fig:archi}, has been inspired by the architecture developed by Lemaignan and colleagues~\cite{lemaignan_2017_artificial}, mentioned in the previous section. These architectures are descendant of one of the first architectures for autonomous robots, developed by Alami \etal{}~\cite{alami_1998_architecture}. They have a common characteristic: they are divided into three levels, the decisional level, the execution level and the functional level. Well, these three levels can be compared to the levels presented in the theoretical framework developed by Pacherie and presented in Section~\ref{chap1:subsubsec:neuro_seg}, which is a strong advantage for a robotic architecture dedicated to \acrshort{hri}.
 
-In this section, we will shortly present an overview of the robotic architecture that has been developed inside the RIS team of LAAS-CNRS. The purpose of this overview is inform the reader about the inputs available for \acrshort{jahrvis}. Two instantiations of this architecture for two different tasks will be described in Chapter~\ref{chapter:chap8} and Chapter~\ref{chapter:chap9}. This architecture model, shown in Figure~\ref{chap3:fig:archi}, has been inspired by the architecture developed by Lemaignan and colleagues~\cite{lemaignan_2017_artificial}, mentioned in Section~\ref{chap3:sec:archi}. All communication between the components goes through ROS~\cite{quigley_2009_ros}.
+\subsection{Specificities}
+
+All the architectures presented in Section~\ref{chap3:sec:archi} are very interesting but we decided to focus on the last one presented, developed by Lemaignan \etal{}. It seemed relevant to us to pursue this work started in our lab by expanding the components features and refining, consolidating the interactions between these components. The component names and functions of both architectures are the same but most of the implementations are all new and the way they rely on, interact with each other, is as well. All the components of the \acrshort{dacobot} are designed to be human-aware, making the global system human-aware, which is quite rare.
+
+With this architecture, we focus on a given type of \acrlong{hri}: collaborative tasks, joint actions. In this context, the human and the robot share a common space and exchange information through multiple modalities (speech, gesture, gaze). The robot should be able to act on its environment, by manipulating objects and navigate among humans. This function is assured by the Motion Planners and Excutors presented in Section~\ref{chap3:subsubsec:motion}. In order to be aware of its environment, the robot needs perception modalities which are handled by the sensorimotor layer, it can be cameras, lasers, motion capture, force sensors, etc. To avoid each component having to process the data itself in order to be able to use them, the Situation Assessment, presented in Section~\ref{chap3:subsubsec:sa} converts them from geometric data to symbolic data. Moreover, it endows the robot's visual perspective-taking (see Section~\ref{chap1:subsec:tom}). Then, these data are stored in \acrlong{kb}s which are introduced in Section~\ref{chap3:subsubsec:kb}, one for the robot and another for the human. Finally, the heart of the architecture, the decision-making process is located in the Supervisor which is the focus of Chapters~\ref{chapter:chap5} and~\ref{chapter:chap6}. In order to make its decisions, the Supervisor relies on the \acrshort{kb}s, the communication through the \acrfull{nlp} and especially the Task Planners presented in Section~\ref{chap3:subsubsec:task_planner}. Once the decision made, it controls the robot through the Motion Planners and Executors and the \acrshort{nlp}.
+
+\subsection{Overall architecture explanation}
+
+The purpose of this overview is inform the reader about the inputs available for \acrshort{jahrvis}. Two instantiations of this architecture for two different tasks will be described in Chapter~\ref{chapter:chap8} and Chapter~\ref{chapter:chap9}. This architecture model, shown in Figure~\ref{chap3:fig:archi}, has been inspired by the architecture developed by Lemaignan and colleagues~\cite{lemaignan_2017_artificial}, mentioned in Section~\ref{chap3:sec:archi}. All communication between the components goes through ROS~\cite{quigley_2009_ros}.
 
 \begin{figure}[!ht]
 	\includegraphics[width=\linewidth]{figures/chapter2/archi_overview.pdf}
-	\caption{Overview of the RIS architecture}
+	\caption{Overview of the \acrfull{dacobot}.}
 	\label{chap3:fig:archi}
 \end{figure}
 
 \subsection{Architecture components}
 
-\subsubsection{Situation Assessment}
+\subsubsection{Situation Assessment}\label{chap3:subsubsec:sa}
 The Situation Assessment has two roles:
 \begin{enumerate}
 	\item  to gather different perceptual information and build a geometric representation of the world (\ie elements have associated 3D coordinates), composed of objects and agents; from this world representation, the module runs reasoning processes to interpret it in terms of symbolic statements between the objects themselves and between the involved agents and the objects. Such component can be implemented with frameworks like Toaster~\cite{milliez_2014_framework} or Underworld~\cite{lemaignan_2018_underworlds}.
@@ -74,7 +84,7 @@ To access to the knowledge stored in Ontologenius, the Supervisor can make a req
 \paragraph{Episodic knowledge base} is represented as a timeline, keeping track of the symbolic facts computed over time (\eg action ID 475 started at 3286 seconds and was over at 3290 seconds), either by the Situation Assessment, the Semantic Knowledge Base or the Supervisor. 
 
 
-\subsubsection{Human-Aware Motion Planners and Execution}
+\subsubsection{Human-Aware Motion Planners and Execution}\label{chap3:subsubsec:motion}
 The motion planners allow the robot to execute human-aware motion actions. According to the task needs, several planners might be involved for a same task. Indeed, in a task requiring object manipulation, the robot will need a motion planner able to plan for pick, place and drop actions, such as MoveIt\footnote{\url{https://moveit.ros.org/}} or GTP which is human-aware~\cite{waldhart_2016_novel}, and a home-made software handling the execution these trajectories\footnote{\url{https://github.com/YannickRiou/pr2_mtc}}. Moreover, in collaborative tasks, an agent might be led to hand over an object to their partner, in this case could be used a dedicated planner~\cite{mainprice_2012_sharing}. Finally, the robot might need to move in the environment, but when moving in a environment with humans, it should navigate being aware of them for safety and legibility. Thus, the robotic architecture should integrate co-navigation planner and executor such as HATEB-2~\cite{singamaneni_2020_hateb}. 
 
 These planners produce trajectories and moves on request of the Supervisor. During execution, they sends feedbacks about the state execution, in this way the Supervisor can receive data about something going wrong or the estimated remaining time of execution. 

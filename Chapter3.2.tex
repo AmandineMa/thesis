@@ -430,7 +430,7 @@ Finally, all the functions to check if a new fact update matches an action effec
 \subsection*{Demo}
 Now, we give an insight of what happens in the system when the human perform pick and place actions, based on the BuildingTask example. We will present several cases in images and one completed with a timeline and a sequence diagram.
 
-\paragraph{The human has to pick the stick} 
+\paragraph{The human has to pick the stick} There are two cubes left on the human side: the stick and the blue cube. Both red cubes are on their placements so this is the moment where the human should pick the stick. Figure~\ref{chap6:fig:action_reco_ex1_timeline} is a timeline showing on the right the facts arrived from the situation assessment, fed to the \acrshort{kb}, and then sent to the \acrshort{ham}. First, the human starts to move his hand towards the table and the cubes (Figure~ref{}). No fact is received by the \acrshort{ham} about the table as it has subscribed to \fact{handMovingToward}{Human}{Pickable} and the table is not a Pickable. We can notice that the received facts are with the predicate \textit{rightHandMovingToward} which is a subproperty of \textit{handMovingToward}. Thus, as we can see in Figure~\ref{chap6:fig:action_reco_ex1}, it triggers the possible start of two pick actions, one for the stick and the other one for the blue cube. Then, the human has the blue cube in his hand but it is still on the table (Figure~\ref{}), thus the pick action with the blue cube is considered as possibly progressing and the pick action with the stick remains as possibly started. Finally, the human withdraws his hand, holding the cube and so the cube is not on the table anymore (Figure~\ref{}). Therefore, the action is estimated as possibly achieved. As it was the one expected to be the next action to perform, the \acrlong{hpm} left aside the started action with the stick and selected the one with the cube as the one that was ongoing. It fed Ontologenius with the action and its associated parameters and Mementar with the start and end times as we can see on Figure~\ref{chap6:fig:action_reco_ex1_timeline}.
 
 
 
@@ -439,7 +439,7 @@ Now, we give an insight of what happens in the system when the human perform pic
 	\begin{figure}[!htb]
 		\centering
 		\includegraphics[width=\linewidth]{figures/chapter2/action_reco_1.pdf}
-		\caption{Timeline produced by Memetar on which appear facts from perception (blue, on the right) and the action added by the \acrlong{hpm} based on data from the \acrlong{ham} (orange, on the left). Numbers on the axis are time in milliseconds (epoch time).}
+		\caption{Timeline produced by Mementar on which appear facts from perception (blue, on the right) and the action added by the \acrlong{hpm} based on data from the \acrlong{ham} (orange, on the left). Numbers on the axis are time in milliseconds (epoch time).}
 		\label{chap6:fig:action_reco_ex1_timeline}
 	\end{figure}
 	
