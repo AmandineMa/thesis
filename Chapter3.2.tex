@@ -14,19 +14,26 @@
 
 The objective of this chapter is to present the \acrshort{jahrvis} processes involved in the decision-making and the control of the robot when jointly interacting with a human. First, we present the knowledge representations used, then the \acrlong{ism}, the \acrlong{ham}, the Shared Plans Handling composed of two processes, one for the robot (\acrlong{rpm}) and one for the human (\acrlong{hpm}), the \acrlong{aem}, and finally the \acrlong{cm}.
 
-Most examples given in this chapter will base themselves on a collaborative task, the \textit{BuildingTask}, that we are going to present now. It has been inspired by~\cite{devin_2017_decisions}. A human and a robot have to build a block construction together as represented in Figure~\ref{chap6:subfig:task_goal}. At the beginning of the task, the robot and the human have several colored cubes (the yellow one will be referred to as a stick) they can access as in a set-up like the one illustrated in Figure~\ref{chap6:subfig:task_setup}. Two identical placements are set on the table to indicate where to put the two red cubes which are the first ones to place. Each agent has 3 available actions: Pick, Place and Wait. They can only access to the cube on their side of the table.
+Most examples given in this chapter will base themselves on a collaborative task, the \textit{BuildingTask}, that we are going to present now. It has been inspired by~\cite{devin_2017_decisions}. A human and a robot have to build a block construction together as represented in Figure~\ref{chap6:subfig:task_goal}. At the beginning of the task, the robot and the human have several colored cubes (the yellow one will be referred to as a stick) they can access as in a set-up like the one illustrated in Figure~\ref{chap6:subfig:task_setup}. Two identical placements are set on the table to indicate where to put the two red cubes which are the first ones to place. Each agent has 3 available actions: Pick, Place and Wait. They can only access to the cube on their side of the table. Figure~\ref{chap6:fig:building_task} is a picture of the task being performed with a human and a PR2 robot. The PR2 robot executes the task fully autonomously, thanks to the robotic architecture presented in Section~\ref{chap3:sec:rob_archi}.
 
 \begin{figure}[!htb]
 %	\centering
 	\hspace*{\fill}%
-	\subfloat[Goal of the task (side view)]{\label{chap6:subfig:task_goal}\includegraphics[width=0.25\linewidth]{figures/chapter2/task_goal.png}}\hfill
-	\subfloat[Initial set-up (top view)]{\label{chap6:subfig:task_setup}\includegraphics[width=0.4\linewidth]{figures/chapter2/task_setup.png}}
+	\subfloat[Goal of the task (side view)]{\label{chap6:subfig:task_goal}\includegraphics[width=0.2\linewidth]{figures/chapter2/task_goal.pdf}}\hfill
+	\subfloat[Initial set-up (top view)]{\label{chap6:subfig:task_setup}\includegraphics[width=0.5\linewidth]{figures/chapter2/task_setup.pdf}}
 	\hspace*{\fill}
 	\caption{Description of the blocks building task. The human and the robot have to build the stack together. We assume that the robot and the human know where all the available blocks are. We would like the robot to adapt as much as possible to the human actions and decisions while avoiding useless or tiresome verbal interactions.}
 	\label{chap6:fig:task_blocks}
 \end{figure}
 
 Figure~\ref{chap6:fig:task_blocks} will be reminded in page headers where the BuildingTask example will be mentioned.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.7\linewidth]{figures/chapter2/building_task.jpg}
+	\caption{The BuildingTask being performed by a human and a PR2 robot. The human is perceived through motion capture and the cubes with the Kinect on the robot head.}
+	\label{chap6:fig:building_task}
+\end{figure}
 
 \section{Knowledge Representations and Management}\label{chap6:sec:know}
 As shown in Section~\ref{chap1:subsubsec:shared_rep} and Section~\ref{chap1:subsubsec:common_g}, when involved in joint actions, humans have shared representations of tasks, actions, goals and have a common ground. Thus, it is important that the robot has such internal representations.
@@ -255,16 +262,18 @@ So, for example, an excerpt of the BuildingTask plan in which the human and the 
 \end{figure}
 
 \subsection{Feeding the Knowledge Base}\label{chap6:subsec:feeding}
-Until now, we stayed focused on semantic knowledge going from the external \acrshort{kb} to \acrshort{jahrvis}. But, as mentioned earlier, one of the external \acrshort{kb} is dedicated to episodic knowledge. This \acrshort{kb} takes the form of a timeline, managed by Mementar. Whereas Ontologius feeds \acrshort{jahrvis} with knowledge, the flow is inverted for the episodic data, as Mementar is fed by \acrshort{jahrvis} among other components. Indeed, when an abstract or primitive task is started or achieved, this information is sent to Mementar for storage with the associated ID and time stamp. The objective is to have a history of the task proceeding. One of the possible use of such a history is for the robot to refer to past events during a task when communicating. We illustrate the timeline in Figure~\ref{chap6:fig:timeline} with the same example as the one above for the plan, one cube is placed by each agent.
+Until now, we stayed focused on semantic knowledge going from the external \acrshort{kb} to \acrshort{jahrvis}. But, as mentioned earlier, one of the external \acrshort{kb} is dedicated to episodic knowledge. This \acrshort{kb} takes the form of a timeline, managed by Mementar. Whereas Ontologius feeds \acrshort{jahrvis} with knowledge, the flow is inverted for the episodic data, as Mementar is fed by \acrshort{jahrvis} among other components. Indeed, when an abstract or primitive task is started or achieved, this information is sent to Mementar for storage with the associated ID and time stamp. The objective is to have a history of the task proceeding. One of the possible use of such a history is for the robot to refer to past events during a task when communicating.
+Moreover, \acrshort{jahrvis} adds the semantic data associated to a task -- agent and parameters -- to the semantic ontology. 
+%We illustrate the timeline in Figure~\ref{chap6:fig:timeline} with the same example as the one above for the plan, one cube is placed by each agent.
 
 
-\begin{figure}[!ht]
-	\includegraphics[width=\linewidth]{figures/chapter2/timeline.png}
-	\caption{Piece of timeline of an executed BuildingTask plan where the robot and the human had to place a cube each. It has been generated by Mementar after having received data from \acrshort{jahrvis}.}
-	\label{chap6:fig:timeline}
-\end{figure}\todo{refaire et ajouter le temps en legende}
+%\begin{figure}[!ht]
+%	\includegraphics[width=\linewidth]{figures/chapter2/timeline.png}
+%	\caption{Piece of timeline of an executed BuildingTask plan where the robot and the human had to place a cube each. It has been generated by Mementar after having received data from \acrshort{jahrvis}.}
+%	\label{chap6:fig:timeline}
+%\end{figure}\todo{refaire et ajouter le temps en legende}
 
-Moreover, \acrshort{jahrvis} adds the semantic data associated to a task -- agent and parameters -- to the semantic ontology.
+
 \thispagestyle{example}
 
 \section{Interaction Session Management} 
@@ -328,7 +337,7 @@ Action states are updated according to the facts defined in the human action mod
 
 We chose to use the term \emph{possibly} to describe these states as it is well-known that some estimations of action states are false but they allow the system to have an idea of what might be going on.
 
-The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap6:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Many State Machines can run simultaneously, one for each action that is estimated to be in one of the states. The parameters field of an action are filled as it progresses through the states, according to the movement and effects allocated to this action.\todo{timeline} 
+The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap6:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Many State Machines can run simultaneously, one for each action that is estimated to be in one of the states. The parameters field of an action are filled as it progresses through the states, according to the movement and effects allocated to this action.
 
 
 \thispagestyle{example}
@@ -427,26 +436,43 @@ Moreover, sometimes new facts are actually effects of robot actions. In order to
 Finally, all the functions to check if a new fact update matches an action effect are Jason rules. They rely on the external knowledge base, here Ontologenius, as there is a need to compare the predicate object and subject expected classes of an action effect with the received ones.
 
 \thispagestyle{example}
-\subsection*{Demo}
+\subsection*{Examples}
 Now, we give an insight of what happens in the system when the human perform pick and place actions, based on the BuildingTask example. We will present several cases in images and one completed with a timeline and a sequence diagram.
 
-\paragraph{The human has to pick the stick} There are two cubes left on the human side: the stick and the blue cube. Both red cubes are on their placements so this is the moment where the human should pick the stick. Figure~\ref{chap6:fig:action_reco_ex1_timeline} is a timeline showing on the right the facts arrived from the situation assessment, fed to the \acrshort{kb}, and then sent to the \acrshort{ham}. First, the human starts to move his hand towards the table and the cubes (Figure~ref{}). No fact is received by the \acrshort{ham} about the table as it has subscribed to \fact{handMovingToward}{Human}{Pickable} and the table is not a Pickable. We can notice that the received facts are with the predicate \textit{rightHandMovingToward} which is a subproperty of \textit{handMovingToward}. Thus, as we can see in Figure~\ref{chap6:fig:action_reco_ex1}, it triggers the possible start of two pick actions, one for the stick and the other one for the blue cube. Then, the human has the blue cube in his hand but it is still on the table (Figure~\ref{}), thus the pick action with the blue cube is considered as possibly progressing and the pick action with the stick remains as possibly started. Finally, the human withdraws his hand, holding the cube and so the cube is not on the table anymore (Figure~\ref{}). Therefore, the action is estimated as possibly achieved. As it was the one expected to be the next action to perform, the \acrlong{hpm} left aside the started action with the stick and selected the one with the cube as the one that was ongoing. It fed Ontologenius with the action and its associated parameters and Mementar with the start and end times as we can see on Figure~\ref{chap6:fig:action_reco_ex1_timeline}.
+\begin{figure}[!htp]
+	\subfloat[The human has his hand moving toward the blue cube and the stick (the longer blue cube ).]{\label{chap6:fig:action_monitoring_photos_toward}\includegraphics[width=0.3\linewidth]{figures/chapter2/moving_toward.jpg}}\hfill
+	\subfloat[The human is holding the stick.]{\label{chap6:fig:action_monitoring_photos_holding}\includegraphics[width=0.3\linewidth]{figures/chapter2/holding_stick.jpg}}\hfill
+	\subfloat[The human picked the stick, it is not of top of the table anymore.]{\label{chap6:fig:action_monitoring_photos_not_top}\includegraphics[width=0.3\linewidth]{figures/chapter2/not_top_stick.jpg}}\hfill
+	\caption{Decomposition of a pick action of the stick.}
+	\label{chap6:fig:action_monitoring_photos_pick}
+\end{figure}
 
+\paragraph{The human has to pick the stick} 
 
+There are two cubes on the human side: the stick and the blue cube. Both red cubes are on their placements so this is the moment where the human should pick the stick. Figure~\ref{chap6:fig:action_reco_ex1_timeline} is a timeline showing on the right the facts arrived from the situation assessment, fed to the \acrshort{kb}, and then sent to the \acrshort{ham}. First, the human starts to move his hand towards the table and the cubes (Figure~\ref{chap6:fig:action_monitoring_photos_toward}). No fact is received by the \acrshort{ham} about the table as it has subscribed to \fact{handMovingToward}{Human}{Pickable} and the table is not a Pickable. We can notice that the received facts are with the predicate \textit{rightHandMovingToward} which is a subproperty of \textit{handMovingToward}. Thus, as we can see in Figure~\ref{chap6:fig:action_reco_ex1}, it triggers the possible start of two pick actions, one for the stick and the other one for the blue cube. Then, the human has the stick in his hand but it is still on the table (Figure~\ref{chap6:fig:action_monitoring_photos_holding}), thus the pick action with the stick is considered as possibly progressing and the pick action with the blue cube remains as possibly started. Finally, the human withdraws his hand, holding the stick and so the stick is not on the table anymore (Figure~\ref{chap6:fig:action_monitoring_photos_not_top}). Therefore, the action is estimated as possibly achieved. As it was the one expected to be the next action to perform, the \acrlong{hpm} left aside the started action with the blue cube and selected the one with the stick as the one that was ongoing. It fed Ontologenius with the action and its associated parameters and Mementar with the start and end times as we can see in Figure~\ref{chap6:fig:action_reco_ex1_timeline}.
 
-\newgeometry{left=1in,right=1in,top=1.1in,bottom=0.5in}
+\paragraph{The human picks the blue cube while the robot is not looking} as it is picking the green cube as shown in Figure~\ref{chap6:fig:action_monitoring_photos_not_looking}. Then, as it places its cube on the stack (Figure~\ref{chap6:fig:action_monitoring_photos_now_looking}), it looks in the direction of the blue cube former position. Thus, the Situation Assessment produces the deletion of the fact \fact{isOnTopOf}{blue\_cube\_2}{table\_1} which is signaled to the \acrshort{kb}s which information is sent to the \acrshort{ham}. Then, the \acrshort{ham} evaluates if a human agent could be at the origin of this change in the environment, associated to a pick action according to the human action model. And, the answer is yes and a pick action of the blue cube is allocated to the present human.
+\thispagestyle{example}
+\begin{figure}[!hbtp]
+	\subfloat[The human is picking the blue cube while the robot is not looking as it is picking the green cube.]{\label{chap6:fig:action_monitoring_photos_not_looking}\includegraphics[width=0.45\linewidth]{figures/chapter2/looking_somewhere_else.jpg}}\hfill
+	\subfloat[The robot is looking again in the human direction and observes that the blue cube is not on the table anymore. It deduces that the human has taken it.]{\label{chap6:fig:action_monitoring_photos_now_looking}\includegraphics[width=0.45\linewidth]{figures/chapter2/now_looking.jpg}}\hfill
+	\caption{The robot does not see the human picking the blue cube but then it deduces that he is the one to have performed the action.}
+	\label{chap6:fig:action_monitoring_photos_missing}
+\end{figure}
+	
+\newgeometry{left=0.9in,right=0.9in,top=1.1in,bottom=0.5in}
 \begin{landscape}
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[width=\linewidth]{figures/chapter2/action_reco_1.pdf}
+		\includegraphics[width=0.9\linewidth]{figures/chapter2/action_reco_1.pdf}
 		\caption{Timeline produced by Mementar on which appear facts from perception (blue, on the right) and the action added by the \acrlong{hpm} based on data from the \acrlong{ham} (orange, on the left). Numbers on the axis are time in milliseconds (epoch time).}
 		\label{chap6:fig:action_reco_ex1_timeline}
 	\end{figure}
 	
 	\begin{figure}[!htb]
 		\centering
-		\includegraphics[width=0.8\linewidth]{figures/chapter2/action_monitoring_ex1.pdf}
-		\caption{}
+		\includegraphics[width=0.75\linewidth]{figures/chapter2/action_monitoring_ex1.pdf}
+		\caption{Sequence diagram for a pick action. The \acrshort{kb}s sends to the \acrshort{ham} the perceived facts to which the \acrshort{ham} subscribed. The \acrshort{ham} processes these facts through State Machines as presented above. Then it output action states which are sent to the \acrfull{hpm}. Arrows from the \acrshort{ham} to the \acrshort{hpm} of the same color (except black) than a arrow going from the \acrshort{kb}s to the \acrshort{ham} are triggered by it. A green plus sign means that it is a belief addition in the \acrshort{rja}, a red minus sign means that it is a belief deletion.}
 		\label{chap6:fig:action_reco_ex1}
 	\end{figure}
 \end{landscape}
@@ -506,7 +532,7 @@ The plan for the BuildingTask example is presented in Figure~\ref{chap6:fig:plan
 \end{figure}
 \thispagestyle{example}
 \paragraph{Conditional shared plans with HATP/EHDA}
-Finally, the last type of shared plans we manipulated is conditional plan, generated by \acrfull{hatpehda}~\cite{buisan_2021_human}. It is another mean to postpone decision at execution time about an agent actor or parameters, with plans where branch junctions concern human decision. Moreover, it gives a better insight about the human's choices and decisions as they are formalized with the plan. For example, in Figure~\ref{chap6:fig:plan_building2}, is shown a conditional plan computed by \acrshort{hatpehda}\footnote{The domain for this plan was written by Guilhem Buisan}. The plan indicates that the robot has to ask for human help. Then, the human will either get the coffee or fill the water. Thus, at planning time, the choice of human actions is not made, but thanks to the conditional plan, both possible solutions are planned and it is up to \acrshort{jahrvis} to follow the proper one depending on the human action detected during execution.
+Finally, the last type of shared plans we manipulated is conditional plan, generated by \acrfull{hatpehda}~\cite{buisan_2021_human}. It is another mean to postpone decision at execution time about an agent actor or parameters, with plans where branch junctions concern human decision. Moreover, it gives a better insight about the human's choices and decisions as they are formalized with the plan. For example, in Figure~\ref{chap6:fig:plan_building2}, is shown a conditional plan computed by \acrshort{hatpehda}\footnote{The domain for this plan was written by Guilhem Buisan}. The plan is the one computed for the BuildingTask. Twice during the task, the human has a choice. First, they can choose where to place their red cube or to wait for the robot to choose for the placement. The second choice happens for the positioning of the first blue cube of the stack, either the human can place it on the stick or leave it to the robot. Thus, at planning time, the planner does not know the choice the human will make, but thanks to the conditional plan, all possible solutions are considered and it is up to \acrshort{jahrvis} to ``follow'' the proper branch depending on the human action detected during execution.
 
 \todo{put on left and right pages}
 \newgeometry{left=1in,right=1in,top=1.1in,bottom=0.5in}
@@ -523,7 +549,7 @@ Finally, the last type of shared plans we manipulated is conditional plan, gener
 	\begin{figure}[!hp]
 		\centering
 		\includegraphics[scale=0.31]{figures/chapter2/plan_building2.png}
-		\caption{A conditional plan for the BuildingTask computed by \acrshort{hatpehda}. Twice during the task, the human has a choice. First, they can choose where to place their red cube or to wait for the robot to choose for the placement, \circledtext{1} on the figure. The second choice happens for the positioning of the first blue cube of the stack, either the human can place it on the stick or leave it to the robot, \circledtext{2} on the figure.}
+		\caption{A conditional plan for the BuildingTask computed by \acrshort{hatpehda}. Twice during the task, the human has a choice. First, they can choose where to place their red cube or to wait for the robot to choose for the placement, \circledtext{1} on the figure. The second choice happens for the positioning of the first blue cube of the stack, either the human can place it on the stick or leave it to the robot, \circledtext{2} on the figure. \textit{robot\_wait}, \textit{WAIT} and \textit{IDLE} are default actions generated by the planner and are immediately resolved as \textsc{executed} when they are \textsc{todo}. }
 		\label{chap6:fig:plan_building2}
 	\end{figure}
 \end{landscape}
@@ -532,7 +558,7 @@ Finally, the last type of shared plans we manipulated is conditional plan, gener
 \bigskip
 \acrshort{jahrvis} could be used to execute plans from other \acrshort{htn} planners than \acrshort{hatp} and \acrshort{hatpehda} by adding a Java class to format abstract and primitive tasks as presented in Section~\ref{chap6:subsec:action_rep} -- \acrshort{hatp} and \acrshort{hatpehda} have a dedicated Java class each, for action formatting, but their plans are handled with the same code in the plan managers.
 
-Now, we will present the two processes in charge of the shared plan management, one to handle the plan on the robot side, \ie its updates and the action execution, and the other one to handle the estimated human mental states about the shared plan. When either the robot or the human starts and finishes an action execution, facts corresponding to these events, are added to Ontologenius and Mementar to keep track of what happened during the interaction. It also registers the data about the abstract task. Then, a component of the robotic architecture used to generate communication about elements, the \acrfull{reg}, can use such information when querying by \acrshort{jahrvis} to refer to the past (\eg ``the cube you took'').
+Now, we will present the two processes in charge of the shared plan management, one to handle the plan on the robot side, \ie its updates and the action execution, and the other one to handle the estimated human mental states about the shared plan. When either the robot or the human starts and finishes an action execution, facts corresponding to these events, are added to Ontologenius and Mementar to keep track of what happened during the interaction. It also registers the data about the abstract task. Then, a component of the robotic architecture used to generate communication about elements, the \acrfull{reg}, can use such information when invoked by \acrshort{jahrvis} to refer to the past (\eg ``the cube you took'').
 
 When we will mention the robot monitoring with its head, it is done through a component described in Section~\ref{chap6:par:act_rep}.
 
@@ -550,6 +576,7 @@ When we will mention the robot monitoring with its head, it is done through a co
 
 As explained earlier, there are two processes to manage the shared plans. One of them is the \acrfull{rpm}. It is in charge of the plan updates, maintaining the robot knowledge about the ongoing goal, and deciding which action should be performed by the robot and when. Figure~\ref{chap6:fig:rob_manager_zoom} shows its relations with the other \acrshort{rja} of \acrshort{jahrvis} and components of the robotic architecture.
 
+\paragraph{Update of a plan}
 When it receives a new goal from the \acrlong{ism}, it queries the Task Planner for a plan. This plan is a sequence of abstract and primitive tasks as described in Section~\ref{chap6:subsec:shared_p_rep}. First, when receiving the plan, and then at each end of action execution, the abstract and primitive task states of the plan are screened in order to find the next primitive task to perform. The found ones have their state set to \textsc{todo}. The implemented algorithm to do so is presented in Algorithm~\ref{chap6:algo:UP}. 
 
 \begin{algorithm}[!htb]
@@ -579,9 +606,10 @@ When it receives a new goal from the \acrlong{ism}, it queries the Task Planner 
 	\end{algorithmic}
 \end{algorithm}
 
+\paragraph{TODO action event}
 As we used Jason, a process can react to events (see Section~\ref{chap4:subsec:jason}). Every abstract or primitive task state update triggers an event. We represented what happened when a primitive task is updated to \textsc{todo} in Algorithm~\ref{chap6:algo:todo}. There are three possible cases, either an action is to be performed by the human, or the robot, or it is undefined which is represented by the AgentX. 
 
-When an action should be performed by the human and if the robot does not have an action to do at the same time, the robot has to monitor them, or rather the parameters of their action, in order to be aware of what they are doing. To monitor, robot can use several modalities when they exist. Indeed, it can monitor with the camera on its head but also with a (lidar) scanner for example. As the most important thing for the \acrshort{rpm} is to monitor parameters and not how to monitor them, it sends to a component in charge of the robot resources the objects of interest for the given action. For now, only one parameter among the parameter list is selected to be monitored. The function to select this object of interest among the action parameters is simple, we take the first of the list, but it could be refined. Or, as explained earlier, parameters can be in the form of \sparql{} queries. If it is the case, the robot chose to monitor the human closest one among the ones returned by Ontologenius. Then, it waits an update on the action state -- which is updated by the \acrfull{hpm} and then sent to the \acrshort{rpm}.
+When an \textbf{action should be performed by the human} and if the robot does not have an action to do at the same time, the robot has to monitor them, or rather the parameters of their action, in order to be aware of what they are doing. To monitor, robot can use several modalities when they exist. Indeed, it can monitor with the camera on its head but also with a (lidar) scanner for example. As the most important thing for the \acrshort{rpm} is to monitor parameters and not how to monitor them, it sends to a component in charge of the robot resources the objects of interest for the given action. In the current state of the work, only one parameter among the parameter list is selected to be monitored. The function to select this object of interest among the action parameters is simple, we take the first of the list, but it could be refined. Or, as explained earlier, parameters can be in the form of \sparql{} queries. If it is the case, the robot chose to monitor the human closest one among the ones returned by Ontologenius. Then, it waits an update on the action state -- which is updated by the \acrfull{hpm} and then sent to the \acrshort{rpm}.
 
 
 \begin{algorithm}[!htb]
@@ -628,7 +656,13 @@ When an action should be performed by the human and if the robot does not have a
 \end{algorithmic}
 \end{algorithm}
 
-When an action should be performed by the robot or the AgentX, first it needs to check if all action parameters are already instantiated and not a \sparql{} request. When a parameter is a \sparql{} request, it queries Ontologenius to get all the objects matching it, and eventually, the agents, in the form of a list of list. For example, if the \sparql{} request is \verb'?0 isA Cube. ?0 hasColor red', then the result could be \verb'[[red_cube_1],[red_cube_2]]'. Or, in case where there is another element in addition to the object, such as an agent, \eg \verb'?0 isA Cube. ?0 hasColor red. ?0 isReachableBy ?1', the result could be \verb'[[red_cube_1,robot],[red_cube_2,human]]'. Sometimes, an agent action is allocated to the AgentX but the environment may have changed since planning time. Then, there may be one agent only, either the human or the robot, returned in the object list. In this case, the agent action value is updated with this agent. Next, the action has to be allocated to an agent. If the agent value corresponds to the robot, the only thing to do is to select the parameters to execute the action in case some of them are object list. For now the function is simple, the robot choses the first one of the list. If the agent value corresponds to the AgentX, then the \acrshort{rpm} checks if another action exists with the same parameters and the \textsc{todo} state. Indeed, the human cannot perform two actions at the same time so the \acrshort{rpm} can allocated one to the robot. In case there is no other action, as we think the robot as a human helper, it should leave the choice to them if they want to perform the action or not. Devin showed that naive users preferred when the robot asked them what they wanted to do~\cite{devin_2017_decisions} but it has been shown that regular users preferred when a robot adapted to them\todo{add ref}. Therefore, we chose the adaptive option, where the robot waits a few seconds to see if the human starts to perform the action. If they do, the action is allocated to the human and if they do not, the \acrshort{rpm} allocates the action to the robot. Finally, when an action was allocated to the robot, it is sent to the \acrlong{aem} that will handle the action execution as indicated by its name.
+When an \textbf{action should be performed by the robot or the AgentX}, first it needs to check if all action parameters are already instantiated and not a \sparql{} request. When a parameter is a \sparql{} request, it queries Ontologenius to get all the objects matching it, and eventually, the agents, in the form of a list of list. For example, if the \sparql{} request is \verb'?0 isA Cube. ?0 hasColor red', then the result could be \verb'[[red_cube_1],[red_cube_2]]'. Or, in case where there is another element in addition to the object, such as an agent, \eg \verb'?0 isA Cube. ?0 hasColor red. ?0 isReachableBy ?1', the result could be \verb'[[red_cube_1,robot],[red_cube_2,human]]'. Sometimes, an agent action is allocated to the AgentX but the environment may have changed since planning time. Then, there may be one agent only, either the human or the robot, returned in the object list (\eg \verb'[red_cube_1,robot]' if for some reason \verb'red_cube_2' is not reachable by the human anymore). In this case, the agent action value will be updated with this agent (\eg the robot). 
+
+Next, the action has to be allocated to an agent if it is not already the case. If the agent value corresponds to the robot, the only thing to do is to select the parameters to execute the action in case some of them are object list. In the current work, the function is simple, the robot choses the first one of the list. 
+
+If the agent value corresponds to the AgentX, then the \acrshort{rpm} checks if another action exists with the same parameters and the \textsc{todo} state. Indeed, the human cannot perform two actions at the same time so the \acrshort{rpm} can allocated one to the robot. In case there is no other action, as we think the robot as a human helper, it should leave the choice to them if they want to perform the action or not. Devin showed that naive users preferred when the robot asked them what they wanted to do~\cite{devin_2017_decisions} but MacMillan \etal showed that unnecessary can reduce the team efficiency~\cite{macmillan_2004_communication}. Therefore, we chose the adaptive option, where the robot waits a few seconds to see if the human starts to perform the action. If they do, the action is allocated to the human and if they do not, the \acrshort{rpm} allocates the action to the robot. 
+
+Finally, when an action is allocated to the robot, it is sent to the \acrlong{aem} that will handle the action execution as indicated by its name.
 
 
 \begin{algorithm}[!htb]
@@ -658,7 +692,12 @@ When an action should be performed by the robot or the AgentX, first it needs to
 \end{algorithm}
 
 \thispagestyle{example}
-We represented what happened when a primitive task is updated to \textsc{executed} in Algorithm~\ref{chap6:algo:executed}. As explained above, the manipulated plans can be conditional plans. Thus, at the end of each action execution, the \acrshort{rpm} looks for if actions of other branches exist. First, it tries to find if the agent and predecessors of the action which just finished are the same than the one another action. If it is the case, all the abstract and primitive task descendant of this found action are set \textsc{unplanned}. 
+\paragraph{EXECUTED action event}
+We represented what happened when a primitive task is updated to \textsc{executed} in Algorithm~\ref{chap6:algo:executed}. As explained above, the manipulated plans can be conditional plans. Thus, at the end of each action execution, the \acrshort{rpm} looks if at place of the plan, the human had the choice between the action they just executed and other actions. If it is the case, these other actions and all their descendants are set to \textsc{unplanned} as they should not be executed. For example, let's look at the \acrshort{hatpehda} plan in Figure~\ref{chap6:fig:plan_building2} and the first choice the human can do. The robot detected that the human placed their red cube on \verb'placement_1'. Thus, the action with them placing the cube on  \verb'placement_1', and the one where they wait, as well as the all the other abstract and primitive tasks of these two branches, are not part of the plan anymore. 
+
+\thispagestyle{example}
+Then, the plan is updated to find the next actions \textsc{todo} as presented in Algorithm~\ref{chap6:algo:UP}.
+%To do so, it tries to find if the agent and the predecessor of the action which just finished are the same than the ones of another action. If it is the case, all the abstract and primitive task descendant of this found action are set \textsc{unplanned}.
 
 \begin{algorithm}[!htb]
 	\caption{Event action executed in \acrshort{rpm}}
@@ -979,6 +1018,17 @@ Then, the function starts over with the human answer which could be ``the green 
 
 Finally, once the \acrshort{cm} isolated an action and a parameter, it sends them to the \acrlong{aem}, in our example it would be \verb'take(pr2_robot,green_cube)'.
 
+\section{Example}\todo{detailler un peu plus}
+In Figure~\ref{chap6:fig:debut_tache_deroule}, we present a part of what happens in the system during a collaborative task. It starts at the beginning of the BuildingTask and finishes when the robot has to place its red cube.
+
+\begin{landscape}
+\begin{figure}[!hbt]
+	\centering
+	\includegraphics[width=\linewidth]{figures/chapter2/debut_tache_deroule.pdf}
+	\caption{}
+	\label{chap6:fig:debut_tache_deroule}
+\end{figure}
+\end{landscape}
 
 
 \ifdefined\included
