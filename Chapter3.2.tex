@@ -9,12 +9,12 @@
 	\faketableofcontents
 	\fi
 
-\chapter{How JAHRVIS works}\label{chapter:chap6}
+\chapter{How JAHRVIS work}\label{chapter:chap6}
 \minitoc
 
 The objective of this chapter is to present the \acrshort{jahrvis} processes involved in the decision-making and the control of the robot when jointly interacting with a human. First, we present the knowledge representations used, then the \acrlong{ism}, the \acrlong{ham}, the Shared Plans Handling composed of two processes, one for the robot (\acrlong{rpm}) and one for the human (\acrlong{hpm}), the \acrlong{aem}, and finally the \acrlong{cm}.
 
-Most examples given in this chapter will base themselves on a collaborative task, the \textit{BuildingTask}, that we are going to present now. It has been inspired by~\cite{devin_2017_decisions}. A human and a robot have to build a block construction together as represented in Figure~\ref{chap6:subfig:task_goal}. At the beginning of the task, the robot and the human have several colored cubes (the yellow one will be referred to as a stick) they can access as in a set-up like the one illustrated in Figure~\ref{chap6:subfig:task_setup}. Two identical placements are set on the table to indicate where to put the two red cubes which are the first ones to place. Each agent has 3 available actions: Pick, Place and Wait. They can only access to the cube on their side of the table. Figure~\ref{chap6:fig:building_task} is a picture of the task being performed with a human and a PR2 robot. The PR2 robot executes the task fully autonomously, thanks to the robotic architecture presented in Section~\ref{chap3:sec:rob_archi}.
+Most examples given in this chapter will base themselves on a collaborative task, the \textit{BuildingTask}, that we are going to present now. It has been inspired by~\cite{devin_2017_decisions}. A human and a robot have to build a block construction together as represented in Figure~\ref{chap6:subfig:task_goal}. At the beginning of the task, the robot and the human have several colored cubes (the yellow one will be referred to as a stick) they can access as in a set-up like the one illustrated in Figure~\ref{chap6:subfig:task_setup}. Two identical placements are set on the table to indicate where to put the two red cubes which are the first ones to place. Each agent has 3 available actions: Pick, Place and Wait. They can only access to the cube on their side of the table. Figure~\ref{chap6:fig:building_task} is a picture of the task being performed with a human and a PR2 robot. The PR2 robot executes the task fully autonomously, thanks to the robotic architecture presented in Section~\ref{chap3:sec:rob_archi}. A video of the task with the robot running completely autonomously can be seen\footnote{Link to come}.
 
 \begin{figure}[!htb]
 %	\centering
@@ -36,7 +36,7 @@ Figure~\ref{chap6:fig:task_blocks} will be reminded in page headers where the Bu
 \end{figure}
 
 \section{Knowledge Representations and Management}\label{chap6:sec:know}
-As shown in Section~\ref{chap1:subsubsec:shared_rep} and Section~\ref{chap1:subsubsec:common_g}, when involved in joint actions, humans have shared representations of tasks, actions, goals and have a common ground. Thus, it is important that the robot has such internal representations.
+As shown in Section~\ref{chap1:subsubsec:shared_rep} and Section~\ref{chap1:subsubsec:common_g}, when involved in joint actions, humans maintain shared representations of tasks, actions, goals and have a common ground. Thus, it is important that the robot has such representations.
 
 During an interaction, \acrshort{jahrvis} processes use knowledge bases (KB) of two types: internal and external ones. Concerning the first type, each \acrshort{rja} has its own knowledge base that we call belief base in Jason vocabulary. It is used for knowledge which serves to \acrshort{jahrvis} internal computations only. As for the external knowledge bases, there are the ones presented in Section~\ref{chap3:subsubsec:kb} as part of the robotic architecture, Ontologenius and Mementar. Updates from subscription to Ontologenius facts are received through ROS topics and converted as Jason percepts to be added to the subscribing \acrshort{rja} belief base. 
 
@@ -98,11 +98,11 @@ Action representations allow
 	\item to monitor the human's attention towards its actions and to communicate about them
 \end{bulletList} 
 
-We defined three action representations according to these three uses. Actions should be written and loaded by the programmer according to the task they need the robot to perform, following the defined formats in the dedicated files. This allow \acrshort{jahrvis} core to be task-independent.
+We defined three action representations according to these three uses. Actions should be written and loaded by the programmer according to the task they need the robot to perform, following the defined formats in the dedicated files. This allows \acrshort{jahrvis} core to be task-independent.
 
 Human actions to recognize and robot actions to execute are written in an ASL file to benefit from Jason reasoning features. And, the same robot actions but with other information allowing \acrshort{jahrvis} to communicate about them and to monitor the human's attention towards them are stored in Ontologenius to benefit from the reasoning features. This latter representation is described in the next paragraph.
 
-\paragraph{External Action Representation}
+\paragraph{External Action Representation} (\ie stored in Ontologenius).
 For the needs of \acrshort{jahrvis}, we represented actions, their verbal labels and their effects in the semantic \acrshort{kb} managed by Ontologenius. We show in Figure~\ref{chap6:fig:class_actions} a representation of some actions we stored in Ontologenius using the Web Ontology Language (OWL) (see Listing~\ref{chap2:lst:classes}) and in Figure~\ref{chap6:fig:class_effects} a representation of possible action effects.
 
 \begin{lstlisting}[style=OwlTurtle, label={chap2:lst:classes}, caption={Description of ontology classes in the OWL language using the Turle syntax.} ]
@@ -150,7 +150,7 @@ Finally, as mentioned earlier and as visible in Listing~\ref{chap2:lst:classes},
 
 We have seen the possibilities offered by Ontologenius to \acrshort{jahrvis}. Now, we present the two internal action representations, one of the human actions in order to recognize them and the other one is of the robot actions, to allow the robot to estimate the human monitoring activity of its actions. 
 
-\paragraph{Internal Action Representation}\label{chap6:par:act_rep}\mbox{}
+\paragraph{Internal Action Representation}\label{chap6:par:act_rep}(\ie stored in \acrshort{jahrvis})\mbox{}
 
 \bigskip
 What does \acrshort{jahrvis} need to \textbf{recognize a human action}? We defined a human action as: 
@@ -285,7 +285,7 @@ Moreover, \acrshort{jahrvis} adds the semantic data associated to a task -- agen
 	\label{chap6:fig:session_manager_zoom}
 \end{figure}
 
-The \acrfull{ism} handles the interaction sessions and manages the robot (shared) goals. Figure~\ref{chap6:fig:session_manager_zoom} proposes a focus on the \acrshort{jahrvis} structure and the components of the robotic architecture around the \acrshort{ism}. Figure~\ref{chap6:fig:session_manager} shows the process we designed, modeling the different states in which the robot can. Moreover, we thought the manager with the ability to consider that a human can join another one during a conversation. However, we have not implemented it yet.
+The \acrfull{ism} handles the interaction sessions and manages the robot (shared) goals. Figure~\ref{chap6:fig:session_manager_zoom} proposes a focus on the \acrshort{jahrvis} structure and the components of the robotic architecture around the \acrshort{ism}. Figure~\ref{chap6:fig:session_manager} shows the process we designed, modeling the different states in which the robot can be. Moreover, we thought the manager with the ability to consider that a human can join another one during a conversation. However, we have not implemented it yet.
 
 \begin{figure}[!htb]
 	\centering
@@ -294,7 +294,7 @@ The \acrfull{ism} handles the interaction sessions and manages the robot (shared
 	\label{chap6:fig:session_manager}
 \end{figure}
 
-A simpler version works as following. An interaction session is triggered when a human is close enough to start a conversation and seems willing to, \ie when the fact  \fact{isEngagedWith}{human\_i}{robot} is added to the knowledge base and sent to \acrshort{jahrvis}. In this way, the robot tries to respect people that does not want to interact with it. From there, the robot is in the first phase of the interaction session, the \textit{greetings}. The robot says hello to the human and announces the activities it can perform with them, depending on the context they are in. The interaction manager triggers the tracking of the human's head by the robot head. This has two purposes: to signal the robot's engagement and to monitor the human's actions. This behavior is quite similar to the one described by Satake \etal~\cite{satake_2015_should}. 
+A simpler version work as following. An interaction session is triggered when a human is close enough to start a conversation and seems willing to, \ie when the fact  \fact{isEngagedWith}{human\_i}{robot} is added to the knowledge base and sent to \acrshort{jahrvis}. In this way, the robot tries to respect people that does not want to interact with it. From there, the robot is in the first phase of the interaction session, the \textit{greetings}. The robot says hello to the human and announces the activities it can perform with them, depending on the context they are in. The interaction manager triggers the tracking of the human's head by the robot head. This has two purposes: to signal the robot's engagement and to monitor the human's actions. This behavior is quite similar to the one described by Satake \etal~\cite{satake_2015_should}. 
 
 
 An interaction session stays open as long as the human and the robot perform activities together, \ie as long as the human is engaged in the interaction. This engagement is monitored by the robot in different ways: through the predicate \fact{isEngagedWith}{human\_i}{robot} during dialogue phases outside a task and through what is happening during a task. If at some point the human is not perceived for a while or the human says goodbye, then the manager ends the session. In the latter case, the robot replies with goodbyes. Finally, it returns to its home-base if it has one.
@@ -316,7 +316,7 @@ In order to coordinate properly, humans monitor each others when they are in a j
 	\item an available open-source code 
 \end{bulletList}
 
-Thus, we implemented our own model-based solution with an \acrshort{rja} dedicated to \acrfull{ham}. Figure~\ref{chap6:fig:action_monitoring_zoom} shows its relations with the other \acrshort{rja} of \acrshort{jahrvis}  and components of the robotic architectures. It could be replaced later with a more complex solution meeting the needs, but even though the current one is quite simple it has interested properties, matching the criteria presented above.
+Thus, we implemented our own model-based solution with an \acrshort{rja} dedicated to \acrfull{ham}. Figure~\ref{chap6:fig:action_monitoring_zoom} shows its relations with the other \acrshort{rja} of \acrshort{jahrvis}  and components of the robotic architectures. It could be replaced later with a more complex solution meeting the needs, but even though the current one is quite simple, it has interesting properties, matching the criteria presented above.
 
 The \acrshort{ham} relies on the action model presented in Section~\ref{chap6:par:act_rep} which it loads at initiation. We chose to base our action recognition process on human movements and action effects that the robot can observe. As it needs to recognize them, it extracts the predicate types corresponding to those and subscribes to updates about these facts to Ontologenius as explained in Section~\ref{chap6:sec:know}. 
 
@@ -337,7 +337,7 @@ Action states are updated according to the facts defined in the human action mod
 
 We chose to use the term \emph{possibly} to describe these states as it is well-known that some estimations of action states are false but they allow the system to have an idea of what might be going on.
 
-The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap6:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Many State Machines can run simultaneously, one for each action that is estimated to be in one of the states. The parameters field of an action are filled as it progresses through the states, according to the movement and effects allocated to this action.
+The algorithm we developed can be depicted in the form of a Finite State Machine representing the state of one action as shown in Figure~\ref{chap6:fig:action_monitoring} and is implemented in ASL (the code is available in Appendix~\ref{app:jahrvis:h_monitoring}). Many State Machines can run simultaneously, one for each action that is estimated to be in one of the states. The parameters field of an action are filled as it is making progress through the states, according to the movement and effects allocated to this action.
 
 
 \thispagestyle{example}
@@ -437,7 +437,7 @@ Finally, all the functions to check if a new fact update matches an action effec
 
 \thispagestyle{example}
 \subsection*{Examples}
-Now, we give an insight of what happens in the system when the human perform pick and place actions, based on the BuildingTask example. We will present several cases in images and one completed with a timeline and a sequence diagram.
+Now, we give an insight of what happens in the system when the human perform pick and place actions, based on the BuildingTask example. We will present several cases in pictures and one completed with a timeline and a sequence diagram.
 
 \begin{figure}[!htp]
 	\subfloat[The human has his hand moving toward the blue cube and the stick (the longer blue cube ).]{\label{chap6:fig:action_monitoring_photos_toward}\includegraphics[width=0.3\linewidth]{figures/chapter2/moving_toward.jpg}}\hfill
@@ -495,7 +495,7 @@ To generate these plans, we worked with two planners, \acrshort{hatp} and \acrsh
 \paragraph{``Usual'' shared plans with HATP and HATP/EHDA} The first type of shared plans handled are what we could call ``usual'' shared plans. Each action is allocated to an agent as well as action parameters are given objects. Thus, in this kind of plan, no decision is left to \acrshort{jahrvis} about who should execute the action or with what object.
 
 \paragraph{AgentX shared plans with HATP}
-The second type of shared plans is an extension of the work of Devin about postponing some decisions from planning time to execution time about the actor of some actions and some parameters~\cite{devin_2017_decisions}. In works previous to Devin, all the actions of the computed plans were allocated and completely instantiated during plan elaboration. 
+The second type of shared plans is an extension of the work of Devin about postponing some decisions from planning time to execution time about the actor of some actions and some parameters~\cite{devin_2017_decisions}. In work previous to Devin, all the actions of the computed plans were allocated and completely instantiated during plan elaboration. 
 
 We re-implemented her idea of \emph{AgentX} in our plan managers (with some modifications, for example we do not replan once an action is allocated as we are able to identify in real-time if a next action is still feasible or not), enabling the \emph{choice} of the agent who should perform the action at execution time when the planner has computed that both agents could do it. This a mean to specify a goal in a more abstract way. Thus, when an action can indifferently be done by both agents, the planner returns  $\Pi=\langle id_\Pi,state_\Pi,name_\Pi,\text{AgentX},params_\Pi,preds_\Pi,\Delta_\Pi\rangle$.In this case, according to what \acrshort{jahrvis} estimates the human wants to do, it can allocate the action to itself or to them. Therefore, in the BuildingTask example, instead of having the planner arbitrary choosing which agent, the human or the robot, will place the first blue cube on the stick, it allocate it to AgentX.
 \thispagestyle{example}
@@ -738,7 +738,7 @@ Then, the plan is updated to find the next actions \textsc{todo} as presented in
 \end{algorithm}		
 
 \clearpage
-\subsection{Human Plan Management}\label{chap6:subsec:human_plan}\todo{add wait and check already performed (state based + transition based)}
+\subsection{Human Plan Management}\label{chap6:subsec:human_plan}
 
 \begin{figure}[!hbt]
 	\centering
@@ -753,7 +753,7 @@ When a shared goal starts, it receives from the \acrshort{rpm} the list of primi
 
 \paragraph{Action to be performed by the human} We present Algorithm~\ref{chap6:algo:h_todo}, describing what happens in the~\acrshort{hpm} when it computes that the human has an action to perform, with effects that are VisualEffects (see Section~\ref{chap6:subsec:action_rep}). It only shows when everything goes well, \ie that the human perform the right action in the allocated time. The way the robot reacts if the human is not acting, by communicating, is described with Algorithm~\ref{chap6:algo:h_todo_conting_1} for the case where the action never started and with Algorithm~\ref{chap6:algo:h_todo_conting_2} for the case where the robot detected the start but cannot see the final action effects.
 
-As we can see in Algorithm~\ref{chap6:algo:h_todo}, the \acrshort{hpm} estimates the human is aware that they have an action to perform, it checks if action data received from the \acrlong{ham} matches it. The function comparing the \textsc{todo} action with monitored actions communicated by the \acrshort{ham} is a Jason rules, comparing the agent names, the action classes and the parameters. If the \textsc{todo} action has \sparql-like parameters, the rule allows to check if it can corresponds to the parameters of a given recognized action. Moreover, because \acrshort{jahrvis} enables the use of conditional plan where the branch choices are made by the human, when the human makes one of this choice, the other branches have to been \textsc{suspended} and then \textsc{unplanned}.
+As we can see in Algorithm~\ref{chap6:algo:h_todo}, when the \acrshort{hpm} estimates the human is aware that they have an action to perform, it checks if action data received from the \acrlong{ham} matches it. The function comparing the \textsc{todo} action with monitored actions communicated by the \acrshort{ham} is a Jason rules, comparing the agent names, the action classes and the parameters. If the \textsc{todo} action has \sparql-like parameters, the rule allows to check if it can corresponds to the parameters of a given recognized action. Moreover, because \acrshort{jahrvis} enables the use of conditional plan where the branch choices are made by the human, when the human makes one of this choice, the other branches have to be \textsc{suspended} and then \textsc{unplanned}.
 
 \begin{algorithm}[!htb]
 	\caption{Event action todo by human in \acrshort{hpm}}
@@ -832,6 +832,13 @@ A bit similarly, when the robot observed the beginning of an action, it asks the
 		\EndFunction
 	\end{algorithmic}
 \end{algorithm}		
+
+Sometimes, it can happen that the \acrshort{hpm} receives from the \acrshort{ham} that a human action has been achieved whereas no human primitive task is in a \textsc{todo} state. This recognized action might be matching a \textsc{planned} action which would have been the next to be set to \textsc{todo}. Such a situation arises because \acrshort{hatpehda} is still a prototype and does not give the causal links between actions. Then currently, we can see the human performing an action which preconditions are met whereas in the plan it appears after a given robot action not executed yet. In a plan with causal links, this type of action would be parallel to the robot action and not following. But, meanwhile we are waiting for a planner update, we implemented the handling of such a case. If this happens, the primitive task is set to \textsc{executed} and the plan state is updated with Algorithm~\ref{chap6:algo:UP}.
+
+Moreover, as we can see in the plan represented in Figure~\ref{chap6:fig:plan_building2}, the human has sometimes \verb'WAIT' actions allocated to them in the plan. Contrarily to \verb'IDLE' for situations in which the human cannot act without the robot action or has finished their part of the plan, the human can be acting during \verb'WAIT' actions, performing their next non-wait action. Indeed, it is also a case where causal links should be used. Thus, we circumvented the issue by checking if a human recognized action matches an action following \verb'WAIT' actions in the plan. If so, the action is set to \textsc{executed} and the plan state is updated with Algorithm~\ref{chap6:algo:UP}.
+
+Finally, if a human action recognized as achieved but does not match the two situations explained in the previous paragraphs, the \acrshort{hpm} requests a replanning to the \acrshort{rpm}.
+
 
 \paragraph{Action to be performed by the robot} Now, the \acrshort{hpm} should also handle when an action is to be performed by the robot. Thanks to the class action we defined (see Section~\ref{chap6:subsec:action_rep}), actions on the environment and communication actions can be process differently. For the latter, human attention is monitored by the \acrlong{cm}. 
 
@@ -1018,14 +1025,21 @@ Then, the function starts over with the human answer which could be ``the green 
 
 Finally, once the \acrshort{cm} isolated an action and a parameter, it sends them to the \acrlong{aem}, in our example it would be \verb'take(pr2_robot,green_cube)'.
 
-\section{Example}\todo{detailler un peu plus}
-In Figure~\ref{chap6:fig:debut_tache_deroule}, we present a part of what happens in the system during a collaborative task. It starts at the beginning of the BuildingTask and finishes when the robot has to place its red cube.
+\section{Example}
+\thispagestyle{example}
+The example starts at the beginning of the BuildingTask and finishes when the robot has to place its red cube. The plan generated by \acrshort{hatpehda} (see Figure~\ref{chap6:fig:plan_building2}) indicates that first the robot has to pick its red cube, then that the human has to pick his, and either place it on one of the placements or wait for the robot to do it first. Finally, the robot places its cube. 
+
+In Figure~\ref{chap6:fig:debut_tache_deroule}, we present an insight of what happens in the system during a collaborative task. We can see that the robot executed the planned pick action. When performing its action, it was looking at its red cube so it could not see if the human was looking at its action or not. Thus, it considered that the human had not seen it. Once its action was over, it looked back at the human and was able to update his mental state, \ie it estimated that the human knew the robot red cube was not on the table anymore (Situation Assessment). Therefore, it considered that as he had seen its action effect, he was aware of its action. Then, the robot action goes from \textsc{not\_seen} to \textsc{executed} in the estimated human knowledge of the plan. 
+
+In parallel to the robot action execution, we can notice that the human picked his red cube at the same the robot was picking its, whereas it was not planned this way. However, it is ok since it was the next action to do for the human (see Section~\ref{chap6:sec:plan_handling}, causal links handling in plans are future work). 
+
+Then, after both picks, the robot waits for the human to make his choice about the red cube placement. The human starts to move his hand toward the placements. As they are near to each other, the Situation Assessment is not able to distinguish if the hand goes more in the direction of one of them. Thus, the \acrlong{ham} computes that as the human is holding the red cube and moving his hand toward support, place actions may have started. Then, when the cube is on top of the \verb'placement_1', it computes that the corresponding place action has been achieved. Then, the robot place action becomes \textsc{todo}. Finally, the actions of the not chosen branches are set to \textsc{unplanned}.
 
 \begin{landscape}
 \begin{figure}[!hbt]
 	\centering
 	\includegraphics[width=\linewidth]{figures/chapter2/debut_tache_deroule.pdf}
-	\caption{}
+	\caption{Insight of what happens in the system during a collaborative task. Knowledge are facts generated by the Situation Assessment and Ontologenius. The plan execution is managed by the \acrlong{rpm} on one side and the \acrlong{hpm} on the other side. The robot actions are sent by the \acrlong{aem} for execution to the Motion Planner and Executor. The human actions are recognized by the \acrlong{ham}.}
 	\label{chap6:fig:debut_tache_deroule}
 \end{figure}
 \end{landscape}
