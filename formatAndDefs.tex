@@ -232,6 +232,9 @@ urlcolor=linkcol %couleur des liens pour les url
 \patchcmd{\ALG@doentity}{\item[]\nointerlineskip}{}{}{} % no spurious vertical space
 % end vertical rule patch for algorithmicx
 
+%modify \@endpart so it doesn't produce a blank page
+\renewcommand{\@endpart}{\vfil\newpage}
+
 \makeatother
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -346,6 +349,19 @@ urlcolor=linkcol %couleur des liens pour les url
 	\fancyhead[RE]{\bfseries\nouppercase{\leftmark}}      % Chapter in the right on even pages
 	\fancyhead[LO]{\bfseries\nouppercase{\rightmark}}     % Section in the left on odd pages
 }%
+
+
+\newenvironment{partintro}
+{\vspace*{\fill}
+	\thispagestyle{plain}
+	\section*{\centering Introduction to part \thepart}
+	\begin{quotation}}
+	{\end{quotation}\vspace*{\fill}\newpage}
+\newcommand{\nopartintro}{%
+	\vspace*{\fill}
+	\thispagestyle{empty}
+	\newpage
+}
 
 \usepackage{pdfpages}
 \usepackage{makecell}
