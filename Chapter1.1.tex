@@ -16,7 +16,7 @@
 
 When humans collaborate to achieve a task together, numerous neurocognitive mechanisms come into play, more than we would have thought at first glance. Some of these mechanisms are also triggered in humans’ minds when they interact with robots as they are essential to a successful collaboration. Therefore, it is important for roboticists designing robots that will closely interact with humans to be aware of and take into account the humans mental states and sensorimotor functions involved in controlling and smoothing collaborative task performance.  However, this does not imply that robots have to be endowed with the same mechanisms since being able to collaborate with humans does not mean to imitate them. What is key to roboticists is to understand how humans work and to design robots that will adapt. 
 
-Consequently, this manuscript starts with an immersion in philosophy and social and cognitive psychology. We develop key elements for collaboration such as \acrlong{tom}, joint action and communication.
+Consequently, this thesis starts with an immersion in philosophy and social and cognitive psychology. We develop key elements for collaboration such as \acrlong{tom}, joint action and communication.
 
 We focused on four main questions which were important to us, as roboticists, to design and develop our supervision software and integrate it in a robotic architecture dedicated to \acrshort{hri}. 
 
@@ -39,7 +39,7 @@ Especially the reflection around the joint action concept and communication has 
 \label{chap1:sec:soc_int}
 
 \subsection{How to define a social interaction?}
-First, let’s take a look at the dictionary and see how the word \emph{interaction} is defined. According to the Oxford dictionary, an interaction is a ``reciprocal action or influence'' and more precisely a ``communication or direct involvement with someone or something''. As for the Cambridge dictionary, it defines it as an occasion when two or more people or things communicate with or react to each other''. Those definitions can give a hint about what it an interaction between humans but they are not specific enough. 
+First, let’s take a look at the dictionary and see how the word \emph{interaction} is defined. According to the Oxford dictionary, an interaction is a ``reciprocal action or influence'' and more precisely a ``communication or direct involvement with someone or something''. As for the Cambridge dictionary, it defines it as ``an occasion when two or more people or things communicate with or react to each other''. Those definitions can give a hint about what it an interaction between humans but they are not specific enough. 
 
 Now, going through social psychology literature, one of the first attempts to define \emph{social interaction} was by Goffman~\cite{goffman_1967_interaction}. He distinguished three basic interaction units: the social occasion, the gathering and the social situation. The social occasion is an event that is temporally and spatially situated in such a way that it forms a unit that can be looked forward and back upon, by participants that are informed by the event (dinner, meeting, sport game...). The gathering refers to any set of two or more individuals who are at the moment in one another’s immediate presence. It can be noted that a social occasion may include several gatherings but that gathering do not need social occasions to occur (they can happen in office spaces, street corners, restaurants...). The social situation refers to the full spatial environment that embraces interacting people. It is created as soon as people engage in interaction, when mutual monitoring occurs and ends when the next to the last person leaves. Furthermore, Goffman distinguished between focused and unfocused interaction (gathering). A focused gathering has its members that can come together to sustain a joint focus of visual and cognitive attention and are open to each other for talk. He calls it encounters or engagements. On the other hand, an unfocused gathering has its members present to one another but not engaged together (\eg persons waiting for a bus). In this same book, Goffman proposed a definition of social encounter: ``an occasion of face-to-face interaction, beginning when individuals recognize that they have moved into one another’s immediate presence and ending by an appreciated withdrawal from mutual participation''.
 
@@ -67,7 +67,7 @@ Finally, there is the close salutation, the most normalized phase of the greetin
 We should keep in mind that these studies and interaction analysis have been done in Western countries, and so that it is different in other cultures.
 
 \subsubsection{Topics}
-Episodes of social interaction, in a conversation context, vary a lot in their contextualized nature, which leads to a large variety of topics and sequences of topics. Interactions that happen in ordinary or institutional contexts can be pre-organized around one or more topics. Robinson gave examples such as an emergency call or an expected call back by a friend to discuss an expected single item of business~\cite{robinson_overall_2012}. 
+As structures of social interactions have mainly been studied in Conversation Analysis, they call what follows an opening, ``topics''. Episodes of social interaction, in a conversation context, vary a lot in their contextualized nature, which leads to a large variety of topics and sequences of topics. Interactions that happen in ordinary or institutional contexts can be pre-organized around one or more topics. Robinson gave examples such as an emergency call or an expected call back by a friend to discuss an expected single item of business~\cite{robinson_overall_2012}. 
 
 \subsubsection{Closing}
 Schegloff is one of the reference on closing as well~\cite{schegloff_1973_opening}. A closing can be divided into two phases: the topic termination and the leave-taking.
@@ -110,7 +110,7 @@ Thus, we will first give an overview of the more characteristic definitions of w
 
 \subsection{How to define Joint Action?}\label{chap1:subsec:def_ja}
 
-This section is the result of talks with Kathleen Belhassein and V{\'\i}ctor Fern{\'a}ndez Castro, study of the literature and analysis from a non-psychologist/philosopher point of view.
+This section is the result of talks with Kathleen Belhassein and V{\'\i}ctor Fern{\'a}ndez Castro and study of the literature from a non-psychologist/philosopher point of view.
 
 An important number of social interactions and encounters are encompassed by the notion of joint action. Broadly considered, joint action is any form of social interaction whereby two agents or more coordinate their actions in order to pursue a joint goal. However, the notion of joint action has particularly been subject to debate in philosophy and psychology. For instance, according to Sebanz \etal~\cite[p.~70]{sebanz_2006_joint}, ``joint action can be regarded as
 any form of social interaction whereby two or more individuals coordinate their actions in space and time to bring about a change in the environment.''; while other authors~\cite{carpenter_2009_just, cohen_1991_teamwork, fiebich_2013_joint, tomasello_2005_understanding,pacherie_2012_agency} resist the idea that instances of mere coordination – \eg two partners walking side by side – constitute a joint action if they met some necessary conditions like sharing goals and intentions.
@@ -159,7 +159,7 @@ This model of action has then been enriched with the specificities of joint acti
 
 \subsection{What is necessary for Joint Action?}\label{chap1:subsec:necess_ja}
 
-This section is the result of talks with Kathleen Belhassein and V{\'\i}ctor Fern{\'a}ndez Castro, study of the literature and analysis from a non-psychologist/philosopher point of view.
+This section is the result of talks with Kathleen Belhassein and V{\'\i}ctor Fern{\'a}ndez Castro and study of the literature from a non-psychologist/philosopher point of view.
 
 Leaving aside the debate on the concept of joint action, we aim to focus on the mechanisms that enable the consecution of joint actions. What we found to be the mechanism on which every author (or almost) agrees on to say that it is required for a joint action is the \emph{coordination}. This mechanism itself is supported by other cognitive and sensorimotor processes. Also, philosophers introduced another concept involved in joint action which is the \emph{shared intention}. 
 
@@ -282,7 +282,9 @@ For Pacherie, there are three types of predictions: self-predictions, other-pred
 Coordination smoothers, as their name implies, are one way to facilitate coordination. They are defined as the changes in an agent own behavior to ease the interaction with another one~\cite{vesper_2010_minimal}. For example, an agent may exaggerate their movements, making them easier to predict for their partner. The change of behavior may concern not only one's own behavior but also the use of objects according to their affordance. Coordination smoothers can be produced automatically such as a nod or be intentional~\cite{michael_2015_commitments}.
 
 \section{How does one person share information with another? -- Communication}\label{chap1:sec:comm}
-%\subsection{Communication}\label{chap1:sec:comm}
+
+This section is composed of excerpts from the publication submitted at Acta Psychologica~\cite{belhassein_2021_adressing}.
+
 An important part of human psychological devices involved in joint action is communicative, serving different purposes – \eg negotiating, guiding, questioning~\cite{austin_1962_how, clark_1992_arenas, sperber_1995_relevance} and leading to mobilize different types of information. This flexibility allows us to provide information about the relevant objects involved in a task, but also about the emotional or cognitive states of the participants. 
 
 Interestingly, humans often establish communicative strategies to facilitate information exchange before the joint action itself. The establishment of \emph{mutual recognition} is fundamental for the initiation of the joint action but also strongly influences its deployment. For instance, establishing mutual recognition facilitates the assignment of roles, which also determines the communicative strategies used during the execution of the action. 
@@ -330,6 +332,20 @@ In psychology or philosophy, there are not a lot of work on what happens once an
 	\item Other-initiated other-repair: The one not responsible of the trouble initiates and carries out the repair. This is closest to what is conventionally understood as ``correction''.
 \end{bulletList}
 \end{comment}
+
+\section{Conclusion}
+
+In this chapter, we presented the concepts from psychology and philosophy which were for us a frame, a guide to design and implement an architecture for a collaborative robot, and especially the supervision component of this architecture. 
+
+We started with how a social interaction is defined and its structure. It is two people or more, being aware of each other and that their acts and behaviors can influence the other. Usually, there is an opening, ``something'' like topics of conversation and then a closing. This helped us to defined what we called ``interaction sessions'' in the context of \acrshort{hri} (see Chapter~\ref{chapter:chap5}). 
+
+Then, we explored what is beyond the term \acrfull{tom}, the ability to represent others' unobservable mental states, \ie their intentions, beliefs, knowledge, goals...One with this ability will be likely to better collaborate and coordinate with another than someone without it. Thus, we claim that it is important to devise a collaborative robot with this idea in mind. And so, this is what we have done. Most components of our robotic architecture implement a form of \acrshort{tom}, including the supervision component which is the subject of Chapters~\ref{chapter:chap5} and~\ref{chapter:chap6}.
+
+Next, we dwelt on joint action and the processes on which it relies. Joint action is the frame in which we place our human-robot collaborative tasks. It necessitates, among other things, joint commitment, coordination, shared representations, monitoring and joint attention. We endowed our collaborative robot which such mechanisms, even if sometimes only partly or superficially. It can be seen all along the next parts of the thesis.
+
+Finally, we studied communication, which can be verbal and non-verbal. It is key in human-human interactions and so in human-robot interactions as well. We show how we integrated it in our system in Chapter~\ref{chapter:chap6} and Parts~\ref{part:part3} and~\ref{part:part4}.
+
+The validity of such concepts implemented in a collaborative robot (do they function? are they relevant?...) can be measured through user studies as the one we carried out with a direction-giving robot (see Chapter~\ref{chapter:chap8}). Or, it can be by the robot evaluating itself the quality of its interaction with a human as shown in Chapters~\ref{chapter:chap7} and~\ref{chapter:chap8}. 
 
 \ifdefined\included
 \else
