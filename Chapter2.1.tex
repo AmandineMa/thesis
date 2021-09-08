@@ -38,7 +38,7 @@ Finally, there is the architecture developed and implemented by Lemaignan and co
 
 
 
-\section{The new LAAS Architecture -- DACOBOT}\label{chap3:sec:rob_archi}
+\section{The updated LAAS Architecture -- DACOBOT}\label{chap3:sec:rob_archi}
 
 In this section, we present an overview of the robotic architecture, \acrfull{dacobot}, that we collaboratively developed with Guillaume Sarthou and Guilhem Buisan. This architecture model, shown in Figure~\ref{chap3:fig:archi}, has been inspired by the architecture developed by Lemaignan and colleagues~\cite{lemaignan_2017_artificial}, mentioned in the previous section. These architectures are descendant of one of the first architectures for autonomous robots, developed by Alami \etal{}~\cite{alami_1998_architecture}. They have a common characteristic: they are divided into three levels, the decisional level, the execution level and the functional level. Well, these three levels can be compared to the levels presented in the theoretical framework developed by Pacherie and presented in Section~\ref{chap1:subsubsec:neuro_seg}, which is a strong advantage for a robotic architecture dedicated to \acrshort{hri}.
 
@@ -59,11 +59,11 @@ With this architecture, we focus on a given type of \acrlong{hri}: collaborative
 \subsubsection{Situation Assessment}\label{chap3:subsubsec:sa}
 The Situation Assessment has two roles:
 \begin{enumerate}
-	\item  to gather different perceptual information and build a geometric representation of the world (\ie elements have associated 3D coordinates), composed of objects and agents; from this world representation, the module runs reasoning processes to interpret it in terms of symbolic statements between the objects themselves and between the involved agents and the objects. Such component can be implemented with framework like Toaster~\cite{milliez_2014_framework} or Underworld~\cite{lemaignan_2018_underworlds}.
+	\item  to gather different perceptual information and build a geometric representation of the world (\ie elements have associated 3D coordinates), composed of objects and agents; the module runs reasoning processes to interpret this geometric world into a symbolic world, grounding \emph{symbolic facts} which specify object properties, relations between the objects, and relations between the involved agents and the objects. Such component can be implemented with framework like Toaster~\cite{milliez_2014_framework} or Underworld~\cite{lemaignan_2018_underworlds}.
 	\item estimate the human's perspective and build an estimation of their world representation; it is the first step allowing to implement the theory of mind principles (see Section~\ref{chap1:sec:tom}).
 \end{enumerate}
 
-Thus, the Situation Assessment outputs data, which we call \textit{symbolic facts}, such as \fact{isOnTopOf}{cube\_1}{cube\_3} or \fact{isReachableBy}{cube\_2}{human\_0}. The first element of this triplet is called the property, the second one is the subject and the last one is the object.
+Thus, the Situation Assessment represents the state of the world like it is perceived by the agents, the human and the robot. It is in the form of symbolic facts, such as \fact{isOnTopOf}{cube\_1}{cube\_3} or \fact{isReachableBy}{cube\_2}{human\_0}. The first element of this triplet is called the property, the second one is the subject and the last one is the object.
 
 \subsubsection{Knowledge Bases}\label{chap3:subsubsec:kb}
 
@@ -77,13 +77,13 @@ Besides, it is also in charge of representing the current symbolic world-state (
 
 To access to the knowledge stored in Ontologenius, the Supervisor can make a request to know if a given fact exists or ask an information about a class, a property or an object instantiation (\eg the Supervisor can ask the human understandable name of pick\_action which is ``pick''). Another way is to subscribe to updates (addition or deletion) for given facts (\ie facts necessary to the task or the Supervisor functioning). It is useful for keeping updates about the environment and avoid to be snowed under too much data. For example, the Supervisor can ask to receive every update (addition or deletion) of any fact belonging to the type \fact{isOnTopOf}{Cube}{Table}. In this case, it will receive the addition of \fact{isOnTopOf}{cube\_2}{table\_1} but not of \fact{isOnTopOf}{spoon}{table\_1}. It is possible to either specify the class or individual of the subjects/objects that should be concerned by the subscription, or to receive every facts (\eg it can subscribe to receive additions of the human looking at the robot |[add]human_0$\lvert$isLookingAt$\lvert$robot| or to receive all updates about every objects that the human looks at |[?]human_0$\lvert$isLookingAt$\lvert$?|). The way the Supervisor chooses which fact it should receive is described in Chapter~\ref{chapter:chap6}.
 
-\paragraph{Episodic knowledge base} is represented as a timeline, keeping track of the symbolic facts computed over time (\eg action ID 475 started at 3286 seconds and was over at 3290 seconds), either by the Situation Assessment, the Semantic Knowledge Base or the Supervisor. 
+\paragraph{Episodic knowledge base} is represented as a timeline, keeping track of the symbolic facts computed over time (\eg action ID 475 started at 3286 seconds and was over at 3290 seconds), either by the Situation Assessment, the Semantic Knowledge Base or the Supervisor. One of the possible use is to refer to past actions when communicating with the human~\cite{sarthou_2021_extending}.
 
 
 \subsubsection{Human-Aware Motion Planners and Execution}\label{chap3:subsubsec:motion}
 The motion planners allow the robot to execute human-aware motion actions. According to the task needs, several planners might be involved for a same task. Indeed, in a task requiring object manipulation, the robot will need a motion planner able to plan for pick, place and drop actions, such as MoveIt\footnote{\url{https://moveit.ros.org/}} or GTP which is human-aware~\cite{waldhart_2016_novel}, and a home-made software handling the execution these trajectories\footnote{\url{https://github.com/YannickRiou/pr2_mtc}}. Moreover, in collaborative tasks, an agent might be led to hand over an object to their partner, in this case could be used a dedicated planner~\cite{mainprice_2012_sharing}. Finally, the robot might need to move in the environment, but when moving in a environment with humans, it should navigate being aware of them for safety and legibility. Thus, the robotic architecture should integrate co-navigation planner and executor such as HATEB-2~\cite{singamaneni_2020_hateb}. 
 
-These planners produce trajectories and moves on request of the Supervisor. During execution, they sends feedbacks about the state execution, in this way the Supervisor can receive data about something going wrong or the estimated remaining time of execution. 
+These planners produce trajectories and moves on request of the Supervisor. During execution, they send feedbacks and results about the state execution, in this way the Supervisor can receive data about errors, unexpected events or the estimated remaining time of execution. It allows the Supervisor, then, to decide and act based on this information.
 
 \subsubsection{Human-Aware Task Planner}\label{chap3:subsubsec:task_planner}
 We can distinguish two situations in which a collaborative robot needs a human-aware task planner: 
@@ -95,7 +95,7 @@ In the first situation, it might consider asking the human's help whereas in the
 
 The human-aware task planners generate symbolic shared plans in which each agent, human and robot, has actions of the task assigned to them, depending on criteria such as programmer-defined costs, minimization of the human's effort, and their preferences and comfort. Such plans are constructed to be as respectful as possible of social constraints which benefits to the also human-aware Supervisor. However, the human is neither an agent that the planner can directly control or an agent that will know the complete plan. Thus, it allows the robot to plan by emulating the human decision, action, and reaction processes. 
 
-We worked with two human-aware task planners: \acrfull{hatp}~\cite{lallement_2014_hatp} and \acrfull{hatpehda}~\cite{buisan_2021_human}.
+We worked with two human-aware task planners: \acrfull{hatp}~\cite{lallement_2014_hatp}, and a recent and prototypical planner called \acrfull{hatpehda}~\cite{buisan_2021_human}.
 
 The \acrfull{hatp} proposes a hierarchical approach to multi agents task planning. This \acrfull{htn}-based planner is able to elaborate a multi agents plan based on a single \acrshort{htn} tree. \acrshort{htn} planning aims at decomposing abstract tasks into primitive tasks by choosing from a list of available context-dependent refinements for each abstract task, ensuring that preconditions and effects of refined primitives tasks are satisfied throughout the created plan. This formalism is suitable for human-robot interactions as it allows the robot to communicate about the plan more easily. \acrshort{hatp} has been specially designed to integrate a number of features that are meant to promote the synthesis of plans that are acceptable by humans and easily if not trivially understandable by them. It allows to specify the humans and robot capabilities in terms of actions they can execute. Several aspects such as human preferences and comfort, estimation of human effort to achieve a task in a given context and ``social rules'' are used in a cost-based approach to build ``sufficiently good'' human-robot shared plans.
 
@@ -106,7 +106,6 @@ The \acrfull{hatpehda} also proposes a hierarchical approach to multi agents tas
 The Supervision is the puppet master of the system, embedding the robot high-level decisions, controlling its behavior and trying to react to contingencies, always considering the human it is interacting with. It is not standalone, relying on the components described above to be able to take decisions, be aware of the environment and make the robot moves.
 \newline
 
-After giving an overview of the components on which the supervision relies, we present the context in which we place ourselves for human-robot collaboration.
 
 
 
