@@ -13,9 +13,9 @@
 \label{chapter:chap8}
 \minitoc
 
-This chapter is from an article submitted to the  User Modeling and User-Adapted Interaction (UMUAI) Journal. This work has been achieved in collaboration with Guillaume Sarthou, Guilhem Buisan, Phani-Teja Singamaneni, Yoan Sallami, Kathleen Belhassein, and Jules Waldhart. In this chapter, we first give an overview of the European H2020 Project \acrfull{mummer}\footnote{\url{http://mummer-project.eu/}}. We then present the components developed by the LAAS-RIS team. My technical contributions are related to the Supervisor component, the component integration, the overall system debugging, the real-world deployment and the user study.
+This chapter is from an article submitted to the  User Modeling and User-Adapted Interaction (UMUAI) Journal. This work has been achieved in collaboration with Guillaume Sarthou, Guilhem Buisan, Phani-Teja Singamaneni, Yoan Sallami, Kathleen Belhassein, and Jules Waldhart. In this chapter, we first give an overview of the European H2020 Project \acrfull{mummer}\footnote{\url{http://mummer-project.eu/}}. We then present the components developed by the LAAS-RIS team. The author technical contributions are related to the Supervisor component, the component integration, the overall system debugging, the real-world deployment and the user study.
 
-\section{Introduction}
+\section{Introduction}\label{chap8:sec:intro}
 
 In large scale indoor environments, like museums, shopping malls, or airports, the presence of large interactive screens, maps, or signs underline the importance of providing information on itineraries. However, orienting and reading maps to find one's own way may be challenging and Rossi \etal showed that people preferred a social robot over a mobile application~\cite{rossi_2018_socially}. As for signs, the wanted written information may not be within sight. People also look for information not available on visual media such as the location of a given product. That is where the robot has a role to play, bringing a new way to help people to get their bearings in large indoor environments such as shopping malls.
 
@@ -146,7 +146,7 @@ From the analysis of human-human direction-giving and through an iterative desig
 
 To endow a robot with the abilities described above, to build a robotic architecture embedding all these aspects, is a challenge. We tackled it with the architecture presented in the next section.
 
-\section{The deliberative architecture}\label{sec:globalarchi}\todo{est-ce qu'il faut charcuter des détails ?}
+\section{Description of deliberative architecture}\label{sec:globalarchi}\todo{est-ce qu'il faut charcuter des détails ?, acronyms}
 
 In this section, we present the robotic architecture developed to handle the direction-giving task. It can be seen as an instantiation of the architecture presented in Section~\ref{chap3:sec:rob_archi}.  
 
@@ -417,7 +417,7 @@ In Sect.~\ref{subsec:setup_mall}, we introduce the environment setup as well as 
 \subsection{Environment and robot setup in the Finnish mall}\label{subsec:setup_mall}
 Our architecture has been tested and deployed in a mall in Finland. As we explained previously, it has two abilities: chat with people and guide them, but in this paper we consider only the latter. The robot was able to interact in English and Finnish, though due to the vast linguistic differences between the two languages, the two versions have been kept separated, and the whole interaction can either be in one or the other. 
 
-\subsubsection{The robot home-base}
+\subsubsection{The robot home-base}\label{chap8:subsubsec:home}
 
 For availability for as many customers as possible, the robot was contained in a defined place in the mall as shown in figure~\ref{fig:chap3_pepper_mall}. A home base was designed with the participation of all the project partners. It was a 4 per 4 meters area with a 2.5m high frame structure on it. The home base included a non-reflecting carpet on the floor and an acoustic ceiling surface on the roof.
 
@@ -514,6 +514,210 @@ In total, the robot ran the direction-giving task during approximately 96 hours 
 	\label{tab:stats_tasks}
 \end{table}
 
+\section{User Study}
+
+As presented in the introduction (Section~\ref{chap8:sec:intro}), we performed a user study with the mall customers in January 2020, on one week, after the 14 months deployments. It was carried out in collaboration with Kathleen Belhassein, the leader of this study. She elaborated the study procedure and performed the analysis of the collected data. And, she participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, the video coding. The author was in charge of the robotic system, and participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, and the video coding. 
+
+This study was an opportunity to investigate the impact of different communicative strategies used by the robot in the context of a real environment task. Indeed, Pepper is a robotic platform with a certain number of communication means, among which the tablet, gestures, movements, dialogue, or even lights. In this study, Pepper used different communicative channels to describe the route to take: 
+\begin{bulletList}
+	\item The dialogue, verbally explaining the route
+	\item The tablet, which transcribed Pepper's oral speech
+	\item The lights, to inform that it was listening or reasoning
+	\item The gestures, to give rhythm to its speech or to point an element on the road 
+	\item Its movements, to take the perspective of his interlocutor and adapt his route description
+\end{bulletList}
+
+This user study aims at comparing three different versions of the robotic system, in order to evaluate the impact of the different communicative strategies on the efficiency and quality of the interaction perceived by the customers: is the route description more efficient if the robot positions itself in space to point, taking the perspective of its interlocutor? Is the interaction more pleasant for the users? Is the quality of the interaction perceived as better?
+More precisely, we have chosen to compare three versions of the system:
+\begin{bulletList}
+	\item Condition 1 : Dialogue only
+	\item Condition 2 : Dialogue + Pointing
+	\item Condition 3 : Dialogue + Pointing + Navigation (the complete system)
+\end{bulletList}
+
+In Condition 1, the robot performs the task only through dialogue. It verbally explains the route to be taken without ever pointing to an element or moving. Condition 2 integrates pointing gestures in parallel with the dialogue, and the possibility to rotate on itself to point to the desired element. Finally, Condition 3 is performed with the complete system as presented in Section~\ref{sec:globalarchi}, reasoning on the participant's perspective to move so that the participant can see the pointed element.
+
+In the user study context, the possible content of the dialogue task was identical for all participants (except in the case of the last item): 
+
+\begin{bulletList}
+	\item Introduction: \textit{``Hi, my name is Pepper, I can help you find your way...''}
+	\item Target: Verbalization of the direction of the desired store
+	\item Path: Verbalization of the path to take to get to the desired store
+	\item Comprehension question: \textit{``Did you understand?'', ``Have you seen the intersection?''}
+	\item Repetition: \textit{``Should I show you again?''}
+	\item Repositioning face: \textit{``Please, come in front of me''}
+	\item Repositioning distance: \textit{``Can you come closer?''}
+	\item Lateral repositioning: \textit{``Can you make a few steps on your left/right, please?''}
+	\item Announcement of a move: \textit{``I'm going to move so I can show you.''}
+	\item Announcement of path explanation: \textit{``Now I'm going to explain to you the route.''}
+	\item OK
+	\item End of interaction: \textit{I'm happy that I was able to help you. Okay, let's talk about something else...''}
+	\item Other: The chatbot starts up and the robot says something unrelated to the task at hand, it happens when the speech recognition does not understand what the human said
+\end{bulletList}
+
+Some items, such as repositioning requests or move announcements, were not present in the no travel conditions.
+
+\subsection{Participants}
+
+Two experimenters were present and visible to the participants in order to manage the registration systems and the visitors of the mall, to ensure the smooth running of each participation, and to administer the questionnaires as well as the effectiveness test. A third experimenter, being hidden from the participants by a panel, managed the launch of the Supervision. Indeed, some parameters had to be manually changed to switch between conditions, and it also ensured a clean start for each interaction. This launch was the only moment in a condition during which the experimenter intervened on the robotic system, otherwise the robot was acting completely autonomously. A fourth experimenter, from VTT, was present to provide translation and conduct the experiment in Finnish.
+
+In total, 34 participants took part in this study. There were 22 women and 12 men, and their ages ranged from 20 to 68 ($M=37.12$, $SD=10.22$). All were shoppers at the Ideapark shopping center. Participants were recruited through a website\footnote{\url{https://sites.google.com/view/pepper-exam/home}} combined with a recruitment questionnaire\footnote{\url{https://forms.gle/bNMfSFVHznAPw9BS9}}, published in the mall the previous weeks. All participants completed a consent form and an image rights release form (appendix \ref{sec:consent-mummer}). The experiment lasted approximately 40 minutes for one participant, and was located in the robot interaction area (see Figure~\ref{fig:chap3_pepper_mall} and Section~\ref{chap8:subsubsec:home}).
+
+9 participants were excluded from the analyses due to technical problems during the experiment, which could later interfere with their evaluations of the different systems. Thus, 25 participants were included in the analysis, 17 women and 8 men with their ages still ranging from 20 to 68 ($M=37.12$, $SD=10.11$).
+
+\subsection{Tools for Data Collection}
+
+In order to collect the participants' opinions about each condition, we prepared two questionnaires for them to fill: \acrshort{perdita}, a questionnaire dedicated for \acrshort{hri} user studies and a questionnaire that we devised for this particular user study. These questionnaires were presented in Finnish to the participants (both of them were translated double-blind) but will be presented in English in this section. At the end of each condition, each participant had to fill both.
+
+Moreover, all interactions were recorded which allowed us to analyze the videos, noticing participants' gazes and moves.
+
+\subsubsection{\acrshort{perdita} Questionnaire}
+
+The appropriateness of the robotic system decisions was evaluated with the questionnaire \acrfull{perdita}~\cite{devin_2018_evaluating} which in the form of a scale from 1 to 7. It was developed at LAAS-CNRS and has been proposed to the robotic community as a basis for the development of a tool to evaluate the decisional aspects of a robotic agent in a joint action. It is not specific to a robotic platform or to a particular task. The version used in this study has several dimensions, each measuring a specific aspect of joint action (Table~\ref{chap8:table:perdita}). It was used in two previous studies~\cite{devin_2018_evaluating,buisan_thesis}. After the first one~\cite{devin_2018_evaluating}, the questionnaire and the dimensions were refined as the reliability was too low. Then, in the second study~\cite{buisan_thesis} with the updated questionnaire, the reliability was good enough which allowed us to keep this version of the questionnaire for our experimentation. 
+
+\begin{table}[]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{c|c|c}
+			Dimension & Question & Item \\\hline\hline
+			Collaboration &
+			\makecell{In your opinion, \\ the collaboration with the robot was:} &
+			\begin{tabular}[c]{@{}c@{}}Limiting/Adaptive\\ Useless/Useful\\ Unsatisfying/Satisfying\\ Disturbing/Acceptable\\ Ineffective/Effective\end{tabular} \\ \hline
+			Interaction &
+			\makecell{In your opinion, \\the interaction with the robot was:} &
+			\begin{tabular}[c]{@{}c@{}}Negative/Positive\\ Unpractical/Practical\\ Complicated/Simple\\ Ambiguous/Clear\\ Unpleasant/Pleasant\end{tabular} \\\hline
+			Perceived robot skill &
+			\makecell{In your opinion, \\the robot is rather:} &
+			\begin{tabular}[c]{@{}c@{}}Not reactive/Reactive\\ Inefficient/Efficient\\ Unintelligent/Intelligent\\ Unskilled/Skilled\end{tabular} \\\hline
+			Verbal &
+			\makecell{In your opinion,\\ the robot speech was:} &
+			\begin{tabular}[c]{@{}c@{}}Useless/Useful\\ Inappropriate/Appropriate\\ Unpredictable/Predictable\end{tabular} \\\hline
+			Action &
+			\makecell{In your opinion, \\ the robot chose to act in a way which was:} &
+			\begin{tabular}[c]{@{}c@{}}Unsuitable/Suitable\\ Uncomfortable/Accomodating\\ Unpredictable/Predictable\\ Not reassuring/Reassuring\end{tabular}
+		\end{tabular}%
+	}
+	\caption{English translation of the questions for each dimension of \acrshort{perdita}. The used questionnaire, in Swedish, is in Appendix~\ref{app:perdita}.}
+	\label{chap8:table:perdita}
+\end{table}
+
+\subsubsection{Additional Questionnaire}
+An additional questionnaire was used to collect the participants' evaluation of the overall quality of the interaction. Originally, we devised this questionnaire in order to comparer its result with the \acrshort{qoi} measured by the robot (see Chapter~\ref{chapter:chap7}). However, the integration of the \acrshort{qoi} Evaluator was not mature enough at the time of the user study and so there were no robotic results to compare the questionnaire to. But, interestingly, as we will see in Section~\ref{chap8:subsec:us_results}, this questionnaire gave valuable results.
+Participants were asked to rate their interaction with Pepper on a scale of -1 (poor) to +1 (good). Two additional open-ended questions were asked: ``Have you seen everything Pepper has indicated to you?'' and ``Did you understand the path you have to take?''. 
+
+
+\subsubsection{Video Observation}
+
+The interactions between the participants and the robot were filmed by three cameras placed around the interaction area. Fences prevented other mall shoppers from entering the experimental area, and signs indicated the presence of cameras.
+
+The videos were annotated using the software ELAN\footnote{\url{https://archive.mpi.nl/tla/elan}}~\cite{wittenburg_2006_elan}, in order to analyze communicative elements between the participant and the robot (such as gazes or positions) in terms of frequency of occurrence, durations, and sequences of occurrence. A behavioral video coding scheme was devised prior to the user study, based on the tests conducted in the laboratory, allowing the analysis of these elements. This coding scheme can be found in Appendix~\ref{app:coding}. 
+
+10\% of the videos were analyzed in double-blind. The Cohen's kappa coefficients were all higher than 0.8, ensuring good inter-rater reliability.
+
+\subsubsection{Interview}
+
+After having participated in the three conditions, participants were briefly interviewed by an experimenter from VTT (as they spoke Finnish) to gather their impressions of the three experimental phases. The experimenter first asked the participant if they had noticed anything about the study, especially if they had noticed a difference between the three phases. The experimenter then asked the participant which phase they liked best and why, and which one they liked least. Finally, the participant was told the purpose of the study.
+
+
+\subsection{Procedure}
+The study was a within-subjects experiment, whose goal was to evaluate the impact of three different versions of the system, each reflecting a particular communicative strategy, on the effectiveness of the route description and the interaction quality. 
+
+The task was for participants to ask the robot where a particular store was located, so that the robot would explain the route to get there.
+
+The independent variable was the version of the system used. The first version, corresponding to Condition 1, was performed using only dialog (verbal and visual\footnote{Pepper verbally explained the route, and the content of its speech was simultaneously displayed on the display on its chest}). We had disabled the subtask ``Ensuring Correct Placement'' and the pointing actions (see Figure~\ref{fig:chap3_SM}). The second version of the system, corresponding to the Condition 2, added the pointing of the passage and the target (eventually rotating to be able to do so). However, the ``Ensuring Correct Placement'' subtask remained disabled. Finally, the last version, corresponding to Condition 3, was performed with the complete system, as described in Section~\ref{sec:globalarchi}, \ie re-enabling the ``Ensuring Correct Placement'' subtask. 
+
+Each participant was confronted with the three conditions, the order being counterbalanced for each.
+
+Three stores were chosen as targets to ask about, based on their visibility and distance from where the robot was deployed: 
+\begin{bulletList}
+	\item Finnlandia: a store close and visible 
+	\item Pentik: a close but not visible store
+	\item City Kulta: a distant and not visible store
+\end{bulletList}
+
+Stores were also counterbalanced within the experimental conditions.
+
+The participant was first greeted by the experimenters in the interaction area at the time of the appointment. It would sign the consent form and image rights release. One of the experimenters would then explain to the participant how the interaction would take place, without mentioning the purpose of the study. The participant was then asked to come in front of the robot to start a habituation phase, in which the robot demonstrated its capabilities and the behaviors it might exhibit during the study. During this phase, the robot would give a route direction, pointing and moving around the participant. 
+
+Before each condition execution, an experimenter would inform the participant for which store they should asked the robot the route. 
+
+The experiment started with one of the condition. The participant would interact with the robot and then, once the direction-giving task was completed, they would go to a desk near the interaction area to fill the questionnaires. Then, it was the same again for the two other conditions. Finally, once the participant had gone through each condition, the interview was conducted.
+
+The participant was then thanked with a 20 euros gift card to be used in one of the Ideapark shops.
+
+\subsection{Results}
+\subsubsection{\acrshort{perdita}}
+
+Data from \acrshort{perdita} were analyzed using the Friedman test because the measures were non-parametric. Indeed, nothing proves that each gap between two numbers of the scale are identical (\eg a person could easily change their answer from 2 to 3 but a lot less from 6 to 7). It is separately performed on each dimension of the questionnaire. To use such a test allows to know if the answers filled by participants for a given dimension and a given condition are significantly different from the ones given for the same dimension in the other conditions. Analyses revealed that only the dimension Collaboration showed a significant trend, $F(2,25) = 5.96, p = 0.0509$, with the effect size measured by Kendall's W being small ($W=0.1192$). This was followed by a pairwise comparison using the Wilcoxon signed-rank test. The p-values were adjusted\footnote{P-values are adjusted because several tests were performed on the same data.} using the Bonferroni-Holm multiple testing correction method. The results do not show a significant comparison (see Table~\ref{chap8:table:wilcox_perdita}). 
+
+Analyses showed no significant effect of the different experimental conditions on the Perceived Competence ($F(2,25)=5.45, p=0.0655$), Interaction ($F(2,25)=4.89, p=0.0867$), Verbal Interventions ($F(2,25)=2.85, p=0.240$) and Action ($F(2,25)=4.98, p=0.0830$) dimensions.
+
+\begin{table}[]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lccccccccc}
+			Dimension     &  y &  group1 & group2 &  n1 &  n2 & statistic & p &  p.adj &p.adj.signif \\ \hline\hline
+			Action  & data  & 1 & 2  & 25  & 25    &236 & 0.136 & 1 & ns       \\\hline
+			Action& data& 1  & 3  & 25  & 25  & 268   & 0.397 & 1 & ns       \\\hline
+			Action& data& 2  & 3  & 25  & 25  & 372   & 0.246 & 1 & ns       \\\hline
+			Collaboration & data& 1  & 2  & 25  & 25  & 236   & 0.139 & 1 & ns       \\\hline
+			Collaboration & data& 1  & 3  & 25  & 25  & 235   & 0.134 & 1 & ns       \\ \hline
+			Collaboration & data& 2  & 3  & 25  & 25  & 326   & 0.793 & 1 & ns       \\ \hline
+			Competence    & data& 1  & 2  & 25  & 25  & 226   & 0.092 & 1 & ns       \\ \hline
+			Competence    & data& 1  & 3  & 25  & 25  & 216   & 0.062 & 0.868  & ns       \\ \hline
+			Competence    & data& 2  & 3  & 25  & 25  & 314   & 0.977 & 1 & ns       \\ \hline
+			Interaction   & data& 1  & 2  & 25  & 25  & 254   & 0.259 & 1 & ns       \\ \hline
+			Interaction   & data& 1  & 3  & 25  & 25  & 238   & 0.15  & 1 & ns       \\ \hline
+			Interaction   & data& 2  & 3  & 25  & 25  & 296   & 0.748 & 1 & ns       \\ \hline
+			Verbal& data& 1  & 2  & 25  & 25  & 202   & 0.032 & 0.48   & ns       \\ \hline
+			Verbal& data& 1  & 3  & 25  & 25  & 268   & 0.396 & 1 & ns       \\ \hline
+			Verbal& data& 2  & 3  & 25  & 25  & 396   & 0.102 & 1 & ns       \\ \hline
+		\end{tabular}%
+	}
+	\caption{Results of the Wilcoxon signed-rank test on the answers given to the \acrshort{perdita} questionnaire. Comparisons are made between all conditions for each dimension of the questionnaire. No comparison is significant.}
+	\label{chap8:table:wilcox_perdita}
+\end{table}
+
+\subsubsection{Additional Questionnaire}
+The interaction score given by the participants when asked to rate their interaction on a scale of -1 to +1 correlated with the Interaction dimension of the PeRDITA questionnaire ($r = 0.85, p<0.05$). The score were scaled from 0 to 2 (instead of -1 to +1) to ease the analysis. They were analyzed with the Friedman test, since the data do not follow a normal distribution (the Shapiro-Wilk test was significant ($W=0.829, p=7.153e-08$)).
+
+Analysis reveals a significant effect of the conditions on the interaction score of the additional questionnaire ($F(2,25) = 10.7, p<0.01$) with a small effect size ($W=0.215$). Pairwise comparison performed with the Wilcoxon test and adjusted p-values, shows a significant difference between Condition 1 ($M=1.18, SD=0.69$) and 2 $(M=1.5, SD=0.6; p<0.05$), and between Condition 1 ($M=1.18, SD=0.69$) and 3 ($M=1.56, SD=0.46; p<0.01$) (see Table~\ref{chap8:table:wilcox_QA}). No significant difference was found between Condition 2 and Condition 3, $p=0.506$ (see Figure~\ref{chap8:fig:graph_QA}).
+
+\begin{table}[]
+	\centering
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{ccccccccc}
+			\hline
+			 y     & group1 &  group2 &  n1 &  n2 &  statistic & p & p.adj & p.adj.signif \\ \hline
+		Interaction note     & 1     & 2     & 25& 25& 16.5     & 0.011    & \textbf{0.023}       & *   \\ \hline
+			Interaction note     & 1     & 3     & 25& 25& 5.0      & 0.002    & \textbf{0.007}       & **  \\ \hline
+		Interaction note & 2     & 3     & 25& 25& 42.0     & 0.506    & 0.506& ns  \\ \hline
+		\end{tabular}%
+	}
+	\caption{Results of Wilcoxon signed-ranks test on responses about interaction of the additional questionnaire. Comparisons between group 1 and 2 ($p<0.05$) and between group 1 and 3 ($p<0.01$) were significant.}
+	\label{chap8:table:wilcox_QA}
+\end{table}
+
+Responses to the two open-ended questions in the supplemental questionnaire (``Did you see all the items Pepper showed you?'' and ``Did you understand the path you need to take?'') were classified into two categories: ``Yes'' and ``No''. The responses indicating that they only partially understood the path, or that they only saw some of the elements shown by Pepper were counted as a negative response. These data were analyzed with Cochran's Q test. Affirmative responses appear to be more frequent in experimental conditions 2 and 3 (see Figure~\ref{chap8:fig:yn_QA} and Table~\ref{chap8:table:contingency_table_QA}), which is confirmed by the analyses for question 1 which show that the answer given depends on the experimental condition ($Q(2,25)=9.1, p<0.05$). Post-hoc comparisons were performed via the McNemar test.
+
+\begin{table}[]
+	\centering
+	\resizebox{0.6\textwidth}{!}{%
+		\begin{tabular}{l|lllll}
+			\hline
+			\multicolumn{1}{c|}{}            &     & Condition 1          & Condition 2          & Condition 3          & Total \\ \cline{2-6}
+			\multicolumn{1}{c|}{}            & Oui & \begin{tabular}[c]{@{}l@{}}10\\ 16.333\\ 0.400\end{tabular} & \begin{tabular}[c]{@{}l@{}}20\\ 16.333\\ 0.800\end{tabular} & \begin{tabular}[c]{@{}l@{}}19\\ 16.333\\ 0.760\end{tabular} & 49        \\ \cline{2-6}
+			\multicolumn{1}{c|}{}            & Non & \begin{tabular}[c]{@{}l@{}}15\\ 8.667\\ 0.600\end{tabular}  & \begin{tabular}[c]{@{}l@{}}5\\ 8.667\\ 0.200\end{tabular}   & \begin{tabular}[c]{@{}l@{}}6\\ 8.667\\ 0.240\end{tabular}   & 26        \\ \cline{2-6}
+			\multicolumn{1}{c|}{\multirow{-4}{*}{\rotatebox[origin=c]{90}{\large Question 1}}} &     & \begin{tabular}[c]{@{}l@{}}25\\ 0.333\end{tabular}          & \begin{tabular}[c]{@{}l@{}}25\\ 0.333\end{tabular}          & \begin{tabular}[c]{@{}l@{}}25\\ 0.333\end{tabular}          & 75        \\ \hline
+			 &     & Condition 1          & Condition 2          & Condition 3          & Total \\ \cline{2-6}
+			 & Oui & \begin{tabular}[c]{@{}l@{}}12\\ 16.333\\ 0.480\end{tabular} & \begin{tabular}[c]{@{}l@{}}20\\ 16.333\\ 0.800\end{tabular} & \begin{tabular}[c]{@{}l@{}}17\\ 16.333\\ 0.680\end{tabular} & 49        \\ \cline{2-6}
+			 & Non & \begin{tabular}[c]{@{}l@{}}13\\ 8.667\\ 0.520\end{tabular}  & \begin{tabular}[c]{@{}l@{}}5\\ 8.667\\ 0.200\end{tabular}   & \begin{tabular}[c]{@{}l@{}}8\\ 8.667\\ 0.320\end{tabular}   & 26        \\ \cline{2-6}
+			\multirow{-4}{*}{\rotatebox[origin=c]{90}{\large Question 2}}      &     & \begin{tabular}[c]{@{}l@{}}25\\ 0.333\end{tabular}          & \begin{tabular}[c]{@{}l@{}}25\\ 0.333\end{tabular}          & \begin{tabular}[c]{@{}l@{}}25\\ 0.333\end{tabular}          & 75        \\ \hline
+		\end{tabular}%
+	}
+	\caption{Contingency table}
+	\label{chap8:table:contingency_table_QA}
+\end{table}
 
 \section{Integration and test of the QoI Evaluator}\label{sec:qoi_integration}
 As a proof-of-concept for the QoI Evaluator presented in Chapter~\ref{chapter:chap7}, we integrated it in the direction-giving task described in this chapter. It is also an excerpt of the paper accepted in the Journal of Social Robotics~\cite{mayima_2021_towards}.
@@ -720,7 +924,9 @@ As a proof-of-concept, we implemented and deployed a first version of a QoI Eval
 
 Finally, we do not claim to have a perfect measure of the Quality of Interaction. However, although the concept of Quality of Interaction is quite abstract, Movellan \etal{} showed that when it is measured by human observers, the inter-observer reliability of the concept is quite high~\cite{movellan2007rubi}. Therefore, we believe we can endow the robot with an effective and pertinent ability aiming at measuring the quality of an interaction. We are aware that the set of metrics we proposed to do so is not exhaustive but the framework is designed to be easily extended with new metrics.
 
-\section{User Study}\todo{inserer les resultats computer par Kathleen - en attente}
+
+
+
 
 
 \ifdefined\included
