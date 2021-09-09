@@ -11,13 +11,51 @@
 \addstarredchapter{Introduction} %Sinon cela n'apparait pas dans la table des matières
 \markboth{INTRODUCTION}{}
 
+Robots will interact more and more with humans in the future and thus will need to be endowed with the pertinent abilities. We are still far from having autonomous robots among humans and able to smoothly collaborate with them.
 
+A lot of research focus on abilities needed to the robot to make it more intelligent, useful and adaptive: the planning, the perception, the knowledge management, the navigation, the action recognition, the dialog... But those does not make a robot function, those does not make a robot collaborate with a human in a task. What does? The supervision. Indeed, this component, such a puppeteer, controls from above the wires of the other architecture components. Leaning on them, it makes the decisions about how and when the robot should act, in a collaborative task with a human, it decides what the robot should say; reacting to the environment, the human behavior and the human speech. A robot should be able to act following a plan but more importantly, it should be able to react to the unexpected or to (robotic or human) errors. And what can give a robot such abilities? A supervision component, or we should say, a component with a vision.
 
+Thereby, given the central role of this component, we could thought that it is extensively studied in \acrlong{hri}, a field of research whose aims is to build robots that will autonomously interact with humans. However, it is not. This lack led to a slight change of subject for this thesis. Indeed, initially, the goal was to devise a supervisor making the robot robust to a number of contingencies that could happen during a human-robot interaction. But, in order to have a supervisor handling contingencies, we needed first a supervisor for ``non-contingent'' situations. Well, we could not find any existing system implementing a supervision component in the context of human-robot collaborative tasks, on which we could build contingencies handling. Thus, we devised it.
 
+\section*{A Supervision for \acrlong{hri}}
+\markright{A Supervision for \acrlong{hri}}
+When humans collaborate to achieve a task together, numerous neurocognitive mechanisms come into play, more than we would have thought at first glance. Some of these mechanisms are also triggered in humans’ minds when they interact with robots as they are essential to a successful collaboration. Therefore, it is important for roboticists designing robots that will closely interact with humans to be aware of and take into account the humans mental states and sensori-motor functions involved in controlling and smoothing collaborative task performance. However, this does not imply that robots have to be endowed with the same mechanisms since being able to collaborate with humans does not mean to imitate them. What is key to roboticists is to understand how humans work and to design  robots that will adapt. Consequently, we closely collaborated with a psychologist and a philosopher in order to learn the keys of human collaboration such as joint action, commitment, shared representations...(Chapter~\ref{chapter:chap1}) It was also back and forth discussions between them and us, trying to close the gap between what abilities a robot should have and what is currently technically possible.
 
-\section*{Contributions of the Thesis}
+Thus, when designing and implementing our supervisor for human-robot collaborative tasks, our minds were well nourished. In this thesis, we tackled the issue of a real component supervision for \acrshort{hri}. It endows the robot with a number of abilities in order to make the robot the best partner possible for humans such as modeling their mental states or adapting to their decisions (Chapter~\ref{chapter:chap5} and Chapter~\ref{chapter:chap6}).
+
+\section*{A first step toward contingency handling}
+\markright{A first step toward contingency handling}
+
+Even though we could not lean on an existing supervision system in order to endow a robot with abilities making it able to cope with the unexpected, we started brainstorming on the subject. We realized that before being able to handle with contingencies, the robot should be able notice them. But, is it necessary to react immediately when something derails a bit or should there be a kind of threshold? As humans, sometimes, we run into minor incidents when performing a task for example, but as the situation is good overall, we tolerate it. Thus, we came with a novel idea: to give the robot the ability to evaluate, in real-time, the quality of its interaction with its human partner (Chapter~\ref{chapter:chap7}). This is a first step toward contingency handling as later, outside the scope of this thesis, it could integrated to the supervision, helping it to improve its decision and its reactions. For example, if something would go wrong during an action but the overall interaction quality was good, it could decide that it was not a matter of importance and ignore it. However, if it happened in the context of a bad quality or that the same action was going wrong again and again, then it could react.
+
+\section*{Summary of the Thesis}
 \markright{SUMMARY OF THE THESIS}
 
+This manuscript is divided in four parts. 
+
+The first part lays the funding principles of a decision-making system for human-robot collaboration. We start in Chapter~\ref{chapter:chap1} by providing a framework for reflecting upon key elements for human-human collaboration. We dive into psychology and philosophy literatures tackling multiple concepts, mainly around joint action such as shared representations, joint attention, coordination... But we also address social interactions, \acrlong{tom} and communication. 
+
+Then, in Chapter~\ref{chapter:chap2}, we explore existing robotic systems implementing concepts associated to social interactions or joint action.
+
+\bigskip 
+
+The second part aims at presenting the key challenges of social interaction management. The supervision component belongs to a robotic architecture. Thus, in Chapter~\ref{chapter:chap3}, we present a number of robotic architectures and the one we integrated our component with. 
+
+Then we highlight, in Chapter~\ref{chapter:chap4}, the central role of the supervision in this architecture as well as what tools are available to develop such a component and which one we chose.
+
+\bigskip
+
+In the third part are concentrated the two main contributions of this thesis: \acrfull{jahrvis}, the supervisor we devised, and a \acrfull{qoi} Evaluator. We start with an overview of the \acrshort{jahrvis} features in Chapter~\ref{chapter:chap5}, \ie a system embedding the robot high-level decisions, controlling its behavior, always considering the human it is interacting with. It is able to do so by taking into account shared plans, human mental states, its knowledge about the current state of the environment, and human actions, inspired by the principles described in Part~\ref{part:part1}. 
+
+Then, we detail in Chapter~\ref{chapter:chap6}, one by one, the modules composing its structure: interaction management, human action recognition, shared plan handling, action execution management and communication management. It is accompanied with an example which has been executed on a PR2 robot. 
+
+And, we introduce in Chapter~\ref{chapter:chap7}, a mean to evaluate from the robot point of view, the \acrlong{qoi}. We present the general concept, a set of metrics enabling such an ability and a way to aggregate these metrics. 
+
+\bigskip
+
+Finally, the fourth part present two tasks which have been executed thanks to the supervisor developed in the context of this thesis. The first task, presented in Chapter~\ref{chapter:chap8}, was tackled with the first version of \acrshort{jahrvis} in the context of a H2020 European project, \acrfull{mummer}\footnote{The \acrshort{mummer} project funded three years of this thesis out of four.}. The robot had to give directions to customers within a Finnish mall. This was a real challenge as the robot was deployed there for three months.
+
+Lastly, in Chapter~\ref{chapter:chap9}, we present a task which was executed with the almost-complete version of \acrshort{jahrvis}. It is a task where a human and a robot partners have to communicate in order to remove the right cubes of a task. It was inspired by a task in psychology. We propose this task to the \acrshort{hri} community as a set of challenges to take up as well as a breeding ground for user studies.
 
 \subsection*{List of Publications}
 \markright{LIST OF PUBLICATIONS}
@@ -32,8 +70,6 @@
 \item Singamaneni, P-T., Mayima, A., Sarthou, G., Sallami, Y., Buisan, G., Y., Belhassein, K., Waldhart, J., \& Clodic, A. (2020, March). Guiding Task through Route Description in the MuMMER Project. [Video]. In \textit{HRI '20: ACM/IEEE International Conference on Human-Robot Interaction.} (pp.643-643).
 
 \item Belhassein, K., Fernández Castro, V., \& Mayima, A. (2020). A Horizontal Approach to Communication for Human-Robot Joint Action: Towards Situated and Sustainable Robotics. In \textit{Culturally Sustainable Social Robotics}. (pp.204-214).
-
-\item Foster, M.E., Craenen, B., [...], Mayima, A., [...], Lammi, H., \& Tammela, A. (2019, November). MuMMER: Socially Intelligent Human-Robot Interaction in Public Spaces. Artificial Intelligence for Human-Robot Interaction. In \textit{Symposium (AI-HRI), AAAI Fall Symposium Series 2019}.
 
 \item  Mayima, A., Clodic, A., \& Alami, R. (2019, November). Evaluation of the Quality of Interaction from the robot point of view in Human-Robot Interactions. In \textit{ The 11th International Conference on Social Robotics (ICSR) (1st Edition of Quality of Interaction in Socially Assistive Robots (QISAR) Workshop)}.
 \end{itemize}
