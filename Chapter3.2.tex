@@ -140,6 +140,8 @@ As we know, when an agent performs an action, the other agent may monitor it, if
 
 Finally, as mentioned earlier and as visible in Listing~\ref{chap2:lst:classes}, Ontologenius allows to define label classes and so label for actions. These labels are then used by \acrshort{jahrvis} to verbalize the plan actions and based on a simple grammar we defined. For example, in ``\{Agent\} @Place \{Pickable\}'', elements between braces are to be instantiated at execution time by \acrshort{jahrvis} communication process when needed. Then, the @ symbol indicates that the word is a verb that should be conjugated. Verb conjugations can also be found in the \acrshort{kb} as shown in Listing~\ref{chap2:lst:verb}. Thus, the communication manager could process it leading to ``I placed the blue cube''.
 
+\newpage
+
 \begin{lstlisting}[style=OwlTurtle, label={chap2:lst:verb}, caption={Description of the class describing the verb Place in the third-person present-tense, in the OWL language using the Turle syntax.} ]
 :PlaceTSPSimplePresent	rdf:type owl:Class ;
 						rdfs:subClassOf :PlaceSimplePresent ;
@@ -561,9 +563,6 @@ Finally, the last type of shared plans we manipulated is conditional plan, gener
 Now, we will present the two processes in charge of the shared plan management, one to handle the plan on the robot side, \ie its updates and the action execution, and the other one to handle the estimated human mental states about the shared plan. When either the robot or the human starts and finishes an action execution, facts corresponding to these events, are added to Ontologenius and Mementar to keep track of what happened during the interaction. It also registers the data about the abstract task. Then, a component of the robotic architecture used to generate communication about elements, the \acrfull{reg}, can use such information when invoked by \acrshort{jahrvis} to refer to the past (\eg ``the cube you took'').
 
 When we will mention the robot monitoring with its head, it is done through a component described in Section~\ref{chap6:par:act_rep}.
-
-
-\todo{replan,contingencies?}
 
 \subsection{Robot Plan Management}\label{chap6:subsec:robot_plan}
 
@@ -1046,6 +1045,34 @@ Then, after both picks, the robot waits for the human to make his choice about t
 \end{figure}
 \end{landscape}
 \restoregeometry
+
+\section{Conclusion and Future work}
+In this chapter, we have proposed a generic supervision component providing robot decision and control to the robotic architecture it is integrated to, for collaborative robots. The developed \acrfull{rja} have their basis into the joint action principles presented in Chapter~\ref{chapter:chap1}. It endows the robot with knowledge representation, perspective-taking and \acrshort{tom}, joint attention, monitoring, communication, shared plan management. Have we respected the requirements listed in Chapter~\ref{chapter:chap4}?
+
+\subsubsection*{How is it generic?}
+First, the joint action and collaboration principles it tries to implement are valid in a certain number of collaborative contexts. Indeed, in any task, it is important to estimate the beliefs of the human partner, \ie what they perceive, what they know or not know of the task or the environment, and what they think of the task progress. Now, imagine a collaborative robot whose camera is on the chest and not its head. When performing a BuildingTask with the human, it could orient its head toward behind it, it would not matter for its own performance to the task. However, such a lack of joint attention would be prejudicial as contrary to what the human expects from a partner in a collaborative task. Then, to be able to monitor the human seems compulsory in order to what the robot partner does and so to be able to estimate the task progress and to act as well. And, Communication is also key. Indeed, who was not fed up by a virtual assistant which could not understand, at all, their request? Who wants to continue to interact with such device when it happens repeatedly? 
+
+Then, the core of \acrshort{jahrvis} does not depend on a task. Every elements that are task dependent are loaded in separate files: action models, action recipes for execution and repair, and task goals. Facts to monitor human actions are automatically collected from the action models when starting the system and then it subscribes to them. For the rest, it is task-agnostic, the decision-making processes are task independent as the algorithms used are the same for different collaborative tasks (but of course it takes into account the task data in real-time as input). Indeed, to have \acrshort{jahrvis} manipulating a plan for a new task, the only condition is to respect the given format. Moreover, we presented \acrshort{jahrvis} running with two different task planners but if another planner with different characteristics was needed for a given task, it could be easily used as the only thing to do is to write the file to convert the plan into the write format and then to add it to the list of the known planners. Finally, the \acrshort{jahrvis} \acrshort{rja} themselves could be replace by other modules if respecting the format, such as the action recognition. Indeed, as well as the \acrlong{hpm} receives the lists of possibly started, ongoing or executed human actions, it is ``happy''.
+
+\subsubsection*{How does it take the human partner into account?} First, \acrshort{jahrvis} bases itself on a robotic architecture incorporating human-aware components. The Situation Assessment computes two world representations: one for the robot and one for the human. Each of these worlds feeds the \acrlong{kb} corresponding to the given agent. It allows \acrshort{jahrvis} to make use of perspective-taking towards the human. Then, when performing a plan with the human, it tries to monitor them as often as possible. This allows to react consequently to the human's actions. Next, it has two separated processes to handle a shared plan in order to maintain an estimation of the human's knowledge about the task progress.
+
+\subsubsection*{How does it leave decisions to the human?} Two methods were integrated to \acrshort{jahrvis} in order to have the robot flexible and adaptive. Indeed, to have a complete plan with all the object and agent actions allocated before even having started the task can be very limiting, as sometimes several objects can be possibly used to execute a given action for example. 
+
+The first method was the use of an ``AgentX'' and object parameters under the form of \sparql{} queries. Thus, when a action is possible by either the human or the robot, or the human has the choice between two objects to act, the robot knows it and can adapt while considering it is normal. With a more classical plan, if the human took an appropriate object but not the one the robot had plan, re-planning would be needed and is not necessarily bad. But it leaves aside that the human did a choice that was making the plan progressing, and so that they were committed and not making errors.
+
+The second method was the ability to handle conditional plans. The planner output a plan representing human choices at some points. Thus, \acrshort{jahrvis}, recognizing divergent plan branches, is aware when it has to wait for the human to make a choice. It monitors them and when it estimated the human chose a branch, it disables the other ones.
+
+\subsubsection*{How does it recognize the human actions?} We showed that \acrshort{jahrvis} could successfully recognize human actions involving object manipulations, producing changes, new facts in the world. This feature is model based which is often not the case in other systems, as they use learning methods. Although being quite simple, it is very convenient to endow the robot with the ability to recognize a new action. Moreover, it is robust to unreliable perception, either because of the perception component or because the robot was not looking the human at the right time to observe them acting.
+
+\subsubsection*{How does it handle contingencies?} Not so well. This is feature we wanted to explore at first, as explained in the thesis introduction. However, as we needed to have a system able to handle task in which everything was smooth, we implemented this first, leaving no time to develop nice strategies to handle contingencies and failures. However, we still implemented simple ways to react to such situations: when an human action is monitored and estimated as not being part of the plan, it replans, and when a robot action execution fails, it tries once again. If after the second tentative it still fails, it gives up the task, warning the human of its decision and its failure.
+
+\subsubsection*{How does it manage relevant communications?} Dialog is not the focus on this thesis but it seemed important to us to think about communicative strategies that could be useful in task. We focused on the robot communicating about actions, either an action it executed or one that the human should perform. It was extensively based on the \acrshort{kb}s and the \acrfull{reg}, allowing to have nothing hard-coded except question prefixes. We also implemented an algorithm allowing the robot to parse a human order of an action to execute.
+
+\subsubsection*{How does it consider interaction outside collaborative tasks?} We designed a frame, called interaction session, endowing the robot with internal states such a greetings, tasks, goodbyes. It is not developed much but it implements the minimum social rules of a social interaction: the greetings and the goodbyes. It also model that the robot can ``have a life of its own'' as not involved in an interaction session.
+
+\subsubsection*{How does it adapt to human experience, abilities or preferences?} It was not the element on which we focused the most so the adaptation to the human abilities or preferences is poor or null in \acrshort{jahrvis}. However, this issue has been a bit tackled in the context of the direction-giving task presented in Chapter~\ref{chapter:chap8}. Moreover, we did not go really far in this direction but we investigated a bit the aspect concerning human experience, as \acrshort{jahrvis} feeds the \acrshort{kb}s with data about the collaborative task it is in. This allows the \acrshort{reg} to refer to past events when generating a referring expression on request of \acrshort{jahrvis}.
+
+
 
 \ifdefined\included
 \else

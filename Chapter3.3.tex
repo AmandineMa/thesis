@@ -49,7 +49,7 @@ In summary, while a substantial number of studies have been devoted to the evalu
 
 \section{The Quality of Interaction (QoI)}\label{sec:eval}
 
-We believe the real-time assessment of the \acrshort{qoi} with a human partner (\ie what the robot ``thinks'' about how the interaction is going) is a new knowledge that could enhance the robot decision-making process. We define the Quality of Interaction as a measure that indicates how good is the interaction during human-robot collaborative activities. It is computed in real-time based on a set of metrics, at three different levels: the interaction session level, the tasks level and the actions level. The \acrshort{qoi} of a given level is computed from selected metrics but also from the \acrshort{qoi}s of the level below as shown in Fig.~\ref{fig:qoi_schema}.
+We believe the real-time assessment of the \acrshort{qoi} with a human partner (\ie what the robot ``thinks'' about how the interaction is going) is a new knowledge that could enhance the robot decision-making process. We define the Quality of Interaction as a measure that indicates how good is the interaction during human-robot collaborative activities. It is computed in real-time based on a set of metrics, at three different levels: the interaction session level, the tasks level and the actions level (see Section~\ref{chap5:sec:levels}). The \acrshort{qoi} of a given level is computed from selected metrics but also from the \acrshort{qoi}s of the level below as shown in Fig.~\ref{fig:qoi_schema}.
 
 \begin{figure}[!ht]
 	\centering
@@ -81,26 +81,6 @@ Equation~\ref{eq:qoi} aggregates the values of the metrics chosen to be indicato
 \section{A set of metrics}\label{sec:metrics}
 
 In this section, we present a few measures to assess the \acrshort{qoi} of an interaction session in Sect.~\ref{subsec:m_intersess}. Then, we present metrics for the different levels based on engagement in Sect.~\ref{subsec:m_engag} and effectiveness estimations during human-robot joint activities in Sect.~\ref{subsec:task_eff}. For example, if the human is engaged and if tasks are performed effectively, the \acrshort{qoi} will tend to be high and \textit{vice versa}. Both concepts are difficult to measure, so we do not exactly measure them but we compute their trends from the set of metrics presented in this section. This set is not exhaustive and will be extended in future work but it gave promising results as we show with our implementation in Chapter~\ref{chapter:chap8}. All metrics are meant to be used for online evaluations of interactions. They are summarized in Table~\ref{tab:theo_metrics}.
-
-\begin{table*}[t]
-	\centering
-	\begin{tabular}{|c|p{0.5cm}|p{3cm}|p{3.5cm}|c||c|c|c|}
-		\hline
-		&  \multicolumn{2}{c|}{Metric names} & Measures & Illustration & Session & Task & Action \\
-		\hline\hline
-		\multirow{10}{*}{\rotatebox[origin=t]{90}{Effectiveness}} & \multirow{6}{*}
-		{\rotatebox{90}{Progress towards goal}} & Distance-to-Goal  & Geometric distance & \parbox[c]{3.5cm}{\includegraphics[width=3.5cm]{figures/chapter2/dtg.png}} & & x & x \\\cline{3-8}
-		& & Time-to-Goal & Time & \parbox[c]{3.5cm}{\includegraphics[width=3.5cm]{figures/chapter2/ttg.png}} & & x & x\\\cline{3-8}
-		&  & Steps-to-Goal & Number of executed actions/substasks & \raisebox{-0.3cm}{\parbox[c][1.5cm]{3cm}{\includegraphics[width=3cm]{figures/chapter2/stg.png}}}&  & x &  \\\cline{2-8}
-		&  \multicolumn{2}{p{3.5cm}|}{Deviation from standard duration} & Time & \parbox[c][1.2cm]{3.5cm}{\includegraphics[width=3.5cm]{figures/chapter2/dd.png}}& & x & x \\\hline
-		\multirow{5}{*}{\rotatebox[origin=c]{90}{Engagement}} 
-		&  \multicolumn{2}{p{3.5cm}|}{Fulfilling robot expectations about social interaction} & \eg attention ratio, with-me-ness,... & \raisebox{-0.6cm}{\includegraphics[width=3.5cm]{figures/chapter2/ar.png}}&x & x & x \\\cline{2-8}
-		&  \multicolumn{2}{p{3.5cm}|}{Human contribution to the goal} & \eg number of repeated instructions, number of successful human actions,... & \raisebox{-0.8cm}{{\includegraphics[width=2.4cm]{figures/chapter2/cg.png}}} & & x & x \\\hline
-		% &  \multicolumn{2}{c|}{Interaction continuation} & \eg duration, number of tasks/actions, termination manner & x & x & \\\hline
-	\end{tabular}
-	\caption{The set of metrics presented in Section~\ref{sec:metrics}.}
-	\label{tab:theo_metrics}
-\end{table*}     
 
 
 \subsection{Measures to assess the QoI at the interaction session level}\label{subsec:m_intersess}
@@ -200,8 +180,32 @@ We can notice that it is not possible for this metric to increase over time sinc
 
 Three examples are given in Fig.~\ref{fig:ote}. Fig.~\ref{fig:oteX}~and~\ref{fig:oteY} represent $\phi(t)_{X}$ and $\phi(t)_{Y}$ for two independent subtasks $X$ and $Y$. Fig.~\ref{fig:ote2} is a plot of $\Phi(t)_{Ta}$ for the task $Ta$ composed of the subtasks $X, Y, Z$ with $SD_X=10 s$, $V_X=0.5$, $SD_Y=5 s$, $V_Y=1$, $SD_Z=10 s$ and $V_Z=1$.
 
-\section{Conclusion}\todo{change according to how we'll modify the plan}
-In the last section, we have described a novel concept, the evaluation of the \acrfull{qoi}. This concept will be demonstrated in Section~\ref{sec:qoi_integration}, in the context of the direction-giving task presented in Chapter~\ref{chapter:chap8}.
+\begin{landscape}
+	\begin{table*}[t]
+		\centering
+		\begin{tabular}{|c|p{0.5cm}|l|p{5cm}|c||c|c|c|}
+			\hline
+			&  \multicolumn{2}{c|}{Metric names} & Measures & Illustration & Session & Task & Action \\
+			\hline\hline
+			\multirow{10}{*}{\rotatebox[origin=t]{90}{Effectiveness}} & \multirow{6}{*}
+			{\rotatebox{90}{Progress towards goal}} & Distance-to-Goal  & Geometric distance & \parbox[c]{5cm}{\includegraphics[width=5cm]{figures/chapter2/dtg.png}} & & x & x \\\cline{3-8}
+			& & Time-to-Goal & Time & \parbox[c]{5cm}{\includegraphics[width=5cm]{figures/chapter2/ttg.png}} & & x & x\\\cline{3-8}
+			&  & Steps-to-Goal & Number of executed actions/substasks & \raisebox{-0.3cm}{\parbox[c][2cm]{5cm}{\includegraphics[width=4cm]{figures/chapter2/stg.png}}}&  & x &  \\\cline{2-8}
+			&  \multicolumn{2}{p{5cm}|}{Deviation from standard duration} & Time & \parbox[c][3cm]{5cm}{\includegraphics[width=5cm]{figures/chapter2/dd.png}}& & x & x \\\hline
+			\multirow{5}{*}{\rotatebox[origin=c]{90}{Engagement}} 
+			&  \multicolumn{2}{p{5cm}|}{Fulfilling robot expectations about social interaction} & \eg attention ratio, with-me-ness,... & \raisebox{-0.6cm}{\includegraphics[width=4cm]{figures/chapter2/ar.png}}&x & x & x \\\cline{2-8}
+			&  \multicolumn{2}{p{5cm}|}{Human contribution to the goal} & \eg number of repeated instructions, number of successful human actions,... & \raisebox{-1.5cm}{{\includegraphics[width=3cm]{figures/chapter2/cg.png}}} & & x & x \\\hline
+			% &  \multicolumn{2}{c|}{Interaction continuation} & \eg duration, number of tasks/actions, termination manner & x & x & \\\hline
+		\end{tabular}
+		\caption{The set of metrics presented in Section~\ref{sec:metrics}.}
+		\label{tab:theo_metrics}
+	\end{table*}     
+\end{landscape}
+
+\section{Conclusion}
+In this chapter, we described a novel concept: the \acrlong{qoi} evaluating from the robot point of view. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make more pertinent its decision-making processes. The evaluation of the \acrshort{qoi} relies on a model of interaction, considered at three levels: the interaction session level, the tasks level and the actions level. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low QoI is assessed, closing the loop with the Supervision.
+
+The concept will be demonstrated and discussed in Section~\ref{sec:qoi_integration}, in the context of the direction-giving task presented in next chapter.
 
 
 \ifdefined\included

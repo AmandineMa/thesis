@@ -19,7 +19,7 @@ This chapter is from an article submitted to the  User Modeling and User-Adapted
 
 In large scale indoor environments, like museums, shopping malls, or airports, the presence of large interactive screens, maps, or signs underline the importance of providing information on itineraries. However, orienting and reading maps to find one's own way may be challenging and Rossi \etal showed that people preferred a social robot over a mobile application~\cite{rossi_2018_socially}. As for signs, the wanted written information may not be within sight. People also look for information not available on visual media such as the location of a given product. That is where the robot has a role to play, bringing a new way to help people to get their bearings in large indoor environments such as shopping malls.
 
-Therefore, in the context of the European H2020 Project \acrshort{mummer}\footnote{http://mummer-project.eu/}, we developed and deployed a social service robot in one of the largest malls of Finland, Ideapark in the city of Lemp\"a\"al\"a. This social robot is able to engage, chat with people, and guide them. We will not talk about the two first mentioned behaviors, developed by our project partners, but focus in this paper on the direction-giving.
+Therefore, in the context of the European H2020 Project \acrshort{mummer}\footnote{\url{http://mummer-project.eu/}}, we developed and deployed a social service robot in one of the largest malls of Finland, Ideapark in the city of Lemp\"a\"al\"a. This social robot is able to engage, chat with people, and guide them. We will not talk about the two first mentioned behaviors, developed by our project partners, but focus in this paper on the direction-giving.
 
 As the mall has approximately 1.2 kilometers of shopping and pedestrian streets and more than 150 shops, people get easily lost. In such a large environment, having a robot guiding customers to their wanted destination would be time-consuming for the robot and would prevent this resource to be available for as many customers as possible. Inspired by the manner in which the mall employees perform this activity, we chose the solution to have a robot not accompanying people to their desired destination but rather verbally describing the route while grounding it with pointing gestures. If necessary, it moves a few meters inside its dedicated area (Figure~\ref{fig:chap3_pepper_mall}) to improve the perspective sharing with the human when pointing at a landmark, and therefore to improve the human understanding of the route. These features are unique to a robot and cannot be found on a map or an interactive screen. To endow the robot with such abilities, we built a complete implementation of a robotic architecture that has been deployed in a real-world environment, the Finnish mall. There, it ran for three months, three days a week. Here is a sum-up of the project steps:
 \begin{enumerate}
@@ -37,14 +37,13 @@ As the mall has approximately 1.2 kilometers of shopping and pedestrian streets 
 	\item March 2020: Refinement of the QoI Evaluator, \ie improvement of the metric functions and tuning of their parameters. In the lab, with the same direction-giving task than the one used in the mall, comparison of the QoI computed by the robot when it is dealing with an ``ideal'' human, a ``confused'' human and a ``non-compliant'' human. \\ $\Longrightarrow$ version 3 of the QoI Evaluator\label{list:refin}
 \end{enumerate}
 
-All along the process, we elaborated and built the system based on the main principles and ingredients which have been identified and are investigated by the Human-Human Joint Action community. We also conducted preliminary studies and used the Joint Action perspective to analyze how human guides would achieve such an activity at the place where the robot was intended to be deployed. This was possible essentially because we were able to combine the results of the JointAction4HRI\footnote{It is a multi-disciplinary project which gathers philosophers, developmental psychologists and roboticists. \url{https://jointaction4hri.laas.fr/}} project with the \acrshort{mummer} project.
+All along the process, we elaborated and built the system based on the joint action principles (see Chapter~\ref{chapter:chap1}). We also conducted preliminary studies and used the joint action perspective to analyze how human guides would achieve such an activity at the place where the robot was intended to be deployed. This was possible essentially because we were able to combine the results of the JointAction4HRI\footnote{\url{https://jointaction4hri.laas.fr/}} project with the \acrshort{mummer} project.
 
 Our claim is that such an approach is relevant in the way the joint action principles provide pertinent guidelines and it is possible to effectively elaborate models and implement systems based on them. 
 The output is a complete robot architecture that integrates a number of components implementing the main decisions and behaviors which have been identified. Each of them makes use of various models and decisional algorithms, all integrating explicitly human models and joint action principles and mechanisms.
 
 
-The chapter is constructed as follows. In Section~\ref{sec:related-work} we provide background information about robot guides and direction-giving task and discuss about how the human partner has been considered. In Section~\ref{sec:rationale} we discuss how we model the direction-giving task as a human-robot joint action. We analyse the task based on human-human exploratory studies and decompose it into a succession of precise subtasks in Section\ref{sec:modeling}. An overview of the resulting architecture and a description of its components are presented in Section~\ref{sec:globalarchi}. Then, we present in Section~\ref{subsec:archi-integration}, the integration of the overall architecture into a physical robot and the steps until its final deployment ``into the wild''. In Section~\ref{sec:qoi_integration}, we show how we used this task to implement the QoI Evaluator presented in Chapter~\ref{chapter:chap7}. Finally, we present the user study we performed with 35 participants and its results.
-
+The chapter is constructed as follows. In Section~\ref{sec:related-work} we provide background information about robot guides and direction-giving task and discuss about how the human partner has been considered. In Section~\ref{sec:rationale} we discuss how we model the direction-giving task as a human-robot joint action. We analyse the task based on human-human exploratory studies and decompose it into a succession of precise subtasks in Section\ref{sec:modeling}. An overview of the resulting architecture and a description of its components are presented in Section~\ref{sec:globalarchi}. Then, we present in Section~\ref{subsec:archi-integration}, the integration of the overall architecture into a physical robot and the steps until its final deployment ``into the wild''. In Section~\ref{chap8:sec:us}, we present the user study we carried out with 35 participants and its results. Finally, in Section~\ref{sec:qoi_integration}, we show how we used this task to implement the QoI Evaluator presented in Chapter~\ref{chapter:chap7}. 
 
 
 \section{Related work}
@@ -146,7 +145,7 @@ From the analysis of human-human direction-giving and through an iterative desig
 
 To endow a robot with the abilities described above, to build a robotic architecture embedding all these aspects, is a challenge. We tackled it with the architecture presented in the next section.
 
-\section{Description of deliberative architecture}\label{sec:globalarchi}\todo{est-ce qu'il faut charcuter des détails ?, acronyms}
+\section{Description of deliberative architecture}\label{sec:globalarchi}
 
 In this section, we present the robotic architecture developed to handle the direction-giving task. It can be seen as an instantiation of the architecture presented in Section~\ref{chap3:sec:rob_archi}.  
 
@@ -181,7 +180,7 @@ The geometric representation is used to compute the visibility of elements of th
 \end{figure} 
 
 
-In order for the pointing planner to compute the visibility of the landmarks used for the route description, stairs, escalators, elevators, and store signs are represented each by a single mesh while the rest of the building is a unique 3D mesh. This means that a store is said to be visible if we can see its sign, which we think to be the most relevant element to see to recognize a shop.
+In order for the SVP planner to compute the visibility of the landmarks used for the route description, stairs, escalators, elevators, and store signs are represented each by a single mesh while the rest of the building is a unique 3D mesh. This means that a store is said to be visible if we can see its sign, which we think to be the most relevant element to see to recognize a shop.
 
 The 3D model is also used to generate a navigation map, constraining the robot to move in the interaction area while avoiding obstacles in it.
 
@@ -190,9 +189,7 @@ The 3D model is also used to generate a navigation map, constraining the robot t
 As Satake \etal{}~\cite{satake_2015_field}, our semantic representation is based on ontology. An ontology allows to define classes representing general concepts (\eg Restaurant), individuals/entities being classes instantiations (\eg Burger\_King), and properties linking two entities (\eg Burger\_King isIn Ideapark).
 To provide storage and an efficient way to manipulate the ontology and reason about it, a lightweight software has been developed, called Ontologenius, presented by Sarthou \etal{}~\cite{sarthou_2019_ontologenius}. It makes it possible to share the semantic knowledge among all the components of the architecture, here especially the route handler and the supervision, thus enabling a unique repository of knowledge.
 
-The ontology is first used to represent information about the stores. It allows to define and refine the shared goal of the task by understanding the client's wanted destination. Thus, the stores' types, their names, and the items they sell have been represented in it with a rich semantic. It allows for example to represent that both soda and hamburgers are sold in fast-foods, which are types of restaurants, but that soda can also be found in a supermarket. Thanks to Ontologenius, the names of concepts are defined in different languages and with synonyms for these names. It allows the robot to adapt itself to the human partner language. Moreover, Ontologenius endows the robot with the ability to recognize a set of names in natural language but that it will be prevented to use (\eg the robot can understand a reference to ``bank'' when a human says it but only refers to it as ``ATM'' or ``cash machine'' since there was no bank office in the mall). In addition, this software offers a fuzzy match service based on Levenshtein distance, to help the supervision system to handle ambiguities coming from the speech to text component (\eg it can match the word ``Juwelsport'' with ``Juvesport''). This set of functionalities around the concepts' names facilitates the understanding of the partner's need and thus helps at increasing the quality of interaction.
-
-In an effort to unify representations because representing as a 3D mesh the entire mall would be a complex task, we chose not to use the geometrical representation or a topological map to compute the route to the final goal but rather the semantic representation given by the ontology.
+As presented in Chapter~\ref{chapter:chap3}, our semantic representation is based on ontology and is stored using Ontologenius. First, it used to represent information about the stores. It allows to define and refine the shared goal of the task by understanding the client's wanted destination. Thus, the stores' types, their names, and the items they sell have been represented in it with a rich semantic. It allows for example to represent that both soda and hamburgers are sold in fast-foods, which are types of restaurants, but that soda can also be found in a supermarket. Thanks to Ontologenius, the names of concepts are defined in different languages and with synonyms for these names. It allows the robot to adapt itself to the human partner language. Moreover, Ontologenius endows the robot with the ability to recognize a set of names in natural language but that it will be prevented to use (\eg the robot can understand a reference to ``bank'' when a human says it but only refers to it as ``ATM'' or ``cash machine'' since there was no bank office in the mall). In addition, this software offers a fuzzy match service based on Levenshtein distance, to help the supervision system to handle ambiguities coming from the speech to text component (\eg it can match the word ``Juwelsport'' with ``Juvesport''). This set of functionalities around the concepts' names facilitates the understanding of the partner's need and thus helps at increasing the quality of interaction.
 
 To include topological information into the semantic representation, the \acrfull{ssr} has been designed, presented by Sarthou \etal{}~\cite{sarthou_2019_semantic}. With the \acrshort{ssr}, the overall knowledge is represented in an ontology with three upper classes which are: \textbf{region} (\ie a two-dimensional area that is a subset of the overall environment), \textbf{path} (\ie a one-dimensional element along which it is possible to move and which has a direction) and \textbf{place} (\ie a point of zero dimension that can represent a physical or symbolic element). The \textbf{place} class has three subclasses: \textbf{path intersection} (\ie the connection between only two paths and thus a waypoint to go from one path to another), \textbf{passage} (\ie the connection between only two regions and thus a waypoint to move from one region to another like a door, a staircase or a passage), and \textbf{shops}. A representation of these classes is visible in Figure~\ref{fig:chap3_onto_classes}.
 
@@ -327,10 +324,10 @@ The Human-Aware Navigation component aims at moving the robot while avoiding dyn
 
 \subsection{Robot execution control and supervision in a joint action context}\label{subsec:supervision}
 
-The work presented about the supervision in this section is an early version of \acrfull{jahrvis} presented in Chapter~\ref{chapter:chap6}. It integrates on one hand the decision and control for the direction-giving task, and on the other hand the implementation in this task context of the metrics presented in Chapter~\ref{chapter:chap7}, to measure the Quality of Interaction.
+The work presented about the supervision in this section is an early version of \acrfull{jahrvis} presented in Chapters~\ref{chapter:chap5} and~\ref{chapter:chap6}. It integrates on one hand the decision and control for the direction-giving task, and on the other hand the implementation in this task context of the metrics presented in Chapter~\ref{chapter:chap7}, to measure the Quality of Interaction.
 
 \subsubsection{A supervision and control system dedicated to human-robot joint tasks}
-A service robot interacting with humans in a mall and providing directions to them needs a number of abilities to enable a smooth and efficient interaction. As explained in Section~\ref{sec:rationale}, the direction giving task is an asymmetric joint action, with the robot in the guide role and the human in the guided role. The \emph{Supervisor}, the supervision and control system of the robot, is built taking this specificity into account, embedding a shared representation of the direction giving task. More specifically, when giving directions to a human, the robot plans its actions and the human ones and then execute its part of the plan. To be able to know if and when the human performs their actions, it monitors the action executions and interpret the information received from the Situation Assessment (see Section~\ref{subsec:situation_assessment}). Furthermore, in such interaction, communication is important, thus the robot communicates verbally as well as non-verbally, and listens to the human. All along the interaction, it needs to maintain a distinct mental state model for the human and itself concerning the knowledge of both agents and the state of the world. Finally, it should be able to tackle events and contingencies happening during the task and to drop it when necessary.
+A service robot interacting with humans in a mall and providing directions to them needs a number of abilities to enable a smooth and efficient interaction. As explained in Section~\ref{sec:rationale}, the direction giving task is an asymmetric joint action, with the robot in the guide role and the human in the guided role. The Supervisor is built taking this specificity into account, embedding a shared representation of the direction giving task. More specifically, when giving directions to a human, the robot plans its actions and the human ones and then execute its part of the plan. To be able to know if and when the human performs their actions, it monitors the action executions and interpret the information directly received from the Situation Assessment (see Section~\ref{subsec:situation_assessment}). Furthermore, in such interaction, communication is important, thus the robot communicates verbally as well as non-verbally, and listens to the human. All along the interaction, it needs to maintain a distinct mental state model for the human and itself concerning the knowledge of both agents and the state of the world. Finally, it should be able to tackle events and contingencies happening during the task and to drop it when necessary.
 
 During an interaction session (see Section~\ref{chap5:sec:levels}), \emph{direction-giving task} occurs when the human involved in the ongoing interaction session  asks for directions to a place or for locations of sold items. 
 % The robot, if necessary, refines the human goal, establishes a shared goal~\cite{cohen1991}, enquires about their willingness and abilities of climbing stairs, updates its estimation of the human mental state. Then, it gives route directions while pointing at landmarks, taking their perspective into account for the landmark and the route. Finally, it checks if it has been understood, making sure that the person has all the information to complete the shared goal, being the human reaching its destination. The robot executes all these steps thanks to \emph{actions}, communicative ones or on the environment.
@@ -365,7 +362,7 @@ When a person triggers a direction-giving task, they might directly ask somethin
 
 When a person asks ``Where is a good restaurant?'', the robot presents a list of the types of food available, namely ``There are casual dining restaurants, Asian restaurants, native food restaurants, hamburger restaurants, fast food restaurants, and pizzerias.''. This behavior is quite similar to the recommendation behaviors of Kanda \etal{}~\cite{kanda_2009_affective}.
 
-To be able to display this behavior, several components of the system are requested. When the Supervisor receives $\{request=restaurant\}$ as data from the Dialogue, it asks Ontologenius (see Section~\ref{subsubsec:semantic}) for all the existing restaurant types. This list of restaurant types is sent to the Dialogue whose role is to return to the Supervisor with the type selected by the human. Finally, similarly to the way it obtained the restaurant type from the human, the Supervisor tries to get the restaurant name. Therefore, it requests from Ontologenius all the restaurants serving the given type of food. Then, this list is sent to the Dialogue whose role is to return to the Supervisor with the restaurant selected by the human among the elements' list. It should be noted that all the restaurants of the given type are suggested to the person, even though sometimes the list is long. We thought of alternatives such as randomly giving three restaurants among the ones of the list. However, these alternatives were not allowed by the mall policy as they could not provide equality between all shops. 
+To be able to display this behavior, several components of the system are requested. When the Supervisor receives $\{request=restaurant\}$ as data from the Dialogue, it asks Ontologenius for all the existing restaurant types. This list of restaurant types is sent to the Dialogue whose role is to return to the Supervisor with the type selected by the human. Finally, similarly to the way it obtained the restaurant type from the human, the Supervisor tries to get the restaurant name. Therefore, it requests from Ontologenius all the restaurants serving the given type of food. Then, this list is sent to the Dialogue whose role is to return to the Supervisor with the restaurant selected by the human among the elements' list. It should be noted that all the restaurants of the given type are suggested to the person, even though sometimes the list is long. We thought of alternatives such as randomly giving three restaurants among the ones of the list. However, these alternatives were not allowed by the mall policy as they could not provide equality between all shops. 
 
 The same principle goes for products. For example, people can ask ``Where can I buy a dress?''. Then, the Supervisor gets from Ontologenius a list of shops selling dresses and passes it to the Dialogue. The Dialogue returns the name of the shop chosen by the person.
 
@@ -434,10 +431,10 @@ The robot is an upgraded, custom version of the Pepper platform~\cite{caniot_ada
 
 \subsection{Pre-deployment in the Finnish mall, in-situ tests}\label{subsec:tests_mall}
 
-Three integration sessions, each lasting one week have been made on site, in September 2018, June 2019 and September 2019, in the mall in Finland. The whole LAAS developer team were part of these integration weeks, along with our project partners. So, I spent around 150 hours (3 times 5 days) in the mall for software integration debugging with the other developers, and testing and debugging of the direction-giving task. 
+Three integration sessions, each lasting one week have been made on site, in September 2018, June 2019 and September 2019, in the mall in Finland. The whole LAAS developer team were part of these integration weeks, along with our project partners. So, the author spent around 150 hours (3 times 5 days) in the mall for software integration debugging with the other developers, and testing and debugging of the direction-giving task. 
 During the integration weeks, only expert users (developers) interacted with the robot for testing purpose. 
 
-To have a working system in the lab and to have a working system in a real-world site are two different things. As much as a team prepare for an in-situ deployment, there will always be elements that will need to be tuned on site and unexpected bugs arising. Thus, I had to handle a lot of contingencies, diagnosing where the issue came from, repairing if it was originating from my software, communicating with the person responsible for the component having a bug if it was not from mine, and testing again.
+To have a working system in the lab and to have a working system in a real-world site are two different things. As much as a team prepare for an in-situ deployment, there will always be elements that will need to be tuned on site and unexpected bugs arising. Thus, the author had to handle a lot of contingencies, diagnosing where the issue came from, repairing if it was originating from my software, communicating with the person responsible for the component having a bug if it was not from mine, and testing again.
 
 The first step to perform for us once on site was to update both the Geometric Representation (see Sect.~\ref{subsec:models}) which was previously based on architectural plans and refined with actual measurements and the \acrlong{ssr} (see Sect.~\ref{subsec:models}) by making sure the regions, interfaces, corridors and intersections were represented reflecting the actual mall topology. 
 
@@ -452,7 +449,7 @@ Finally, once everything was running quite nicely, some time has been dedicated 
 \subsection{``In the wild'' deployment}\label{subsec:deploy}
 \begin{figure}
 	\centering
-	\includegraphics[width=\linewidth]{figures/chapter3/guided_person.jpg}
+	\includegraphics[width=0.5\linewidth]{figures/chapter3/guided_person.jpg}
 	\caption{A person receiving directions from Pepper. (Image from VTT team)}
 	\label{fig:guided_person}
 \end{figure}
@@ -514,7 +511,7 @@ In total, the robot ran the direction-giving task during approximately 96 hours 
 	\label{tab:stats_tasks}
 \end{table}
 
-\section{User Study}
+\section{User Study}\label{chap8:sec:us}
 
 As presented in the introduction (Section~\ref{chap8:sec:intro}), we performed a user study with the mall customers in January 2020, on one week, after the 14 months deployments. It was carried out in collaboration with Kathleen Belhassein, the leader of this study. She elaborated the study procedure and performed the analysis of the collected data. And, she participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, and the video coding. The author was in charge of the robot, and participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, and the video coding. 
 
@@ -769,7 +766,7 @@ Finally, other analyses are presented in Table~\ref{chap8:tab:proba_video}.
 \section{Integration and test of the QoI Evaluator}\label{sec:qoi_integration}
 As a proof-of-concept for the QoI Evaluator presented in Chapter~\ref{chapter:chap7}, we integrated it in the direction-giving task described in this chapter. It is also an excerpt of the paper accepted in the Journal of Social Robotics~\cite{mayima_2021_towards}.
 
-More specifically, this implementation of the Quality of Interaction Evaluator measured the interaction quality at the direction-giving task level and at the elementary actions level, omitting the interaction session level as this latter was not our focus in the \acrshort{mummer} project. The QoI Evaluator was integrated into \acrshort{jahrvis} presented in Chapter~\ref{chapter:chap5}. The QoI Evaluator is implemented into a Jason function (the reasoning cycle) which is invoked periodically. After multiple testings, we reached the conclusion that it was pertinent, at least in the context of the direction-giving task, to have the Evaluator computing the QoI every second for both levels. Therefore, every second, the system computes the value of each metric and then outputs a value for $QoI_{task}$ and $QoI_{action}$. 
+More specifically, this implementation of the Quality of Interaction Evaluator measured the interaction quality at the direction-giving task level and at the elementary actions level, omitting the interaction session level as this latter was not our focus in the \acrshort{mummer} project. The QoI Evaluator was integrated into the Supervisor presented in this chapter. The QoI Evaluator is implemented as an \acrshort{rja}. After multiple testings, we reached the conclusion that it was pertinent, at least in the context of the direction-giving task, to have the Evaluator computing the QoI every second for both levels. Therefore, every second, the system computes the value of each metric and then outputs a value for $QoI_{task}$ and $QoI_{action}$. 
 
 \begin{figure}[!htp]
 	\subfloat[A customer listening to Pepper after re-positioning]{\includegraphics[width=0.49\linewidth]{figures/chapter3/human_1_mall.png}}\hfill
@@ -786,7 +783,7 @@ As mentioned in the step \ref{list:mall} of the chronicle, the robot interacted 
 
 In the context of the direction-giving task, we have selected two metrics to evaluate the QoI at the task level: a metric defined in the Sect.~\ref{sec:metrics}, the \emph{Deviation from standard duration} and, the aggregation over time of the actions QoIs. Following the process of Fig.~\ref{fig:qoi_schema}, we measure the QoI of the $\text{Task}_i = \text{direction-giving\_task}$, based on the QoI of all task actions and $\text{Task metric}_1$ = Deviation from standard duration.
 
-The \emph{Deviation from standard duration} is used to measure the QoI at the task level as the task is a sequence of subtasks. Indeed, if the subtask lasts longer than expected, the QoI should decrease. Then, as needed for the metric computation we have determined the values of the soft deadlines $SD_i$ for each subtask $a_i, i \in [0,4] $, using the empirical data we gathered as explained in\todo{ref sec}. Specifically, we have computed the average time execution of each subtask, after removing the cases for which the execution of the subtask was annotated as not smooth. These soft deadlines are presented in table~\ref{tab:dl}. Finally, we chose $V_i=0.5$ for all the subtasks.
+The \emph{Deviation from standard duration} is used to measure the QoI at the task level as the task is a sequence of subtasks. Indeed, if the subtask lasts longer than expected, the QoI should decrease. Then, as needed for the metric computation we have determined the values of the soft deadlines $SD_i$ for each subtask $a_i, i \in [0,4] $, using the empirical data we gathered as explained in Section~\ref{subsec:deploy}. Specifically, we have computed the average time execution of each subtask, after removing the cases for which the execution of the subtask was annotated as not smooth. These soft deadlines are presented in table~\ref{tab:dl}. Finally, we chose $V_i=0.5$ for all the subtasks.
 \begin{table}[ht]
 	\centering
 	\begin{tabular}{l|c}
@@ -812,51 +809,23 @@ Then, the task QoI is computed using Equation~\eqref{eq:qoi} presented in Sect.~
 \subsection{QoI Evaluation at the action level}\label{subsec:action_qoi}
 As mentioned earlier, each subtask of the direction-giving task can be decomposed into actions. These actions involve several turn-taking steps, the robot asking complementary information, informing the human or expecting an action or reaction from them. We need to measure the QoI during the execution of each action. To do so, we have chosen one or more metrics for each action. 
 
-\setlength\tabcolsep{1.5pt}
-\begin{table*}[ht]
-	\centering
-	\begin{tabular}{|c|p{1.5cm}|c|c|}
-		Metric id & Metric name & Metric equation -- with Equations of Section~\ref{sec:metrics} & Scaled metric -- with functions of Appendix~\ref{annex:functions} \\\hline\hline
-		
-		\(\displaystyle M_{H\_contrib}\)
-		& Human contribution to the goal 
-		& \raisebox{-0.5cm}{ \(\displaystyle nb\_R\_repet \)} &  \raisebox{-0.5cm}{ \(\displaystyle n_1(nb\_R\_repet) = 2 * \dfrac{nb\_R\_repet-3}{-3} -1 \)} \\\hline
-		
-		\(\displaystyle M_{Exp\_SI}\)
-		& Fulfilling robot expectations about social interaction 
-		&    \raisebox{-0.5cm}{ \(\displaystyle Ar = \frac{duration_{isAttentiveTo(robot)=true}}{duration_{robot\_speaks}} \) }
-		&  \raisebox{-0.5cm}{\(\displaystyle n_1(Ar) = 2 * Ar -1 \)} \\\hline
-		
-		\(\displaystyle M_{DtG}\)
-		& Distance-to-Goal & 
-		\(\displaystyle \left\{
-		\begin{array}{ll}
-		\Delta DtG(t=0) = 0\\
-		\begin{aligned}
-		\Delta& DtG(t) = \max(0,\Delta DtG(t-1) - 1)  \\&\text{if } path\_length(t) <  path\_length(t-1) \\
-		
-		\end{aligned}\\
-		\Delta DtG(t)= \Delta DtG(t-1) + 1, \text{otherwise.}
-		
-		\end{array}
-		\right.
-		\)
-		&   \(\displaystyle -s_1(DtG(t)) = -1 + 2 \exp{\left(-\ln{(2)}\left(\dfrac{DtG(t)}{5}\right)^{1.5}\right)} \) \\\hline
-		
-		\(\displaystyle M_{TtG}\)
-		& Time-To-Goal & 
-		\(\displaystyle \Delta TtG(t) = \max(0, e(t)  + TtG(t) - TtG(T_0)) 
-		\)
-		&  \(\displaystyle -s_1(TtG(t)) = -1 + 2 \exp{\left(-\ln{(2)}\left(\dfrac{TtG(t)}{5}\right)^{1.5}\right)} \) \\
-		
-		
-	\end{tabular}
-	\caption{Metrics used in the implementation presented in Section~\ref{sec:qoi_integration}.}
-	\label{tab:metrics_impl}
-\end{table*}  
-
-
 For each action of the following list, we explain which metrics $M$ of Table~\ref{tab:metrics_impl} we have used and scaling functions of Appendix~\ref{annex:functions} and then, how we compute the action QoI. Finally, the ways metrics are aggregated for each action, outputting QoI values, are summarized in Table~\ref{tab:qoi}.
+
+\begin{table}[!hbt]
+	\centering
+	\begin{tabular}{|p{3.5cm}|c|}
+		Action & QoI formula (metric aggregation) \\ \hline \hline
+		Robot-Human information sharing & $ M_{Exp\_SI}(t)$ \\ \hline
+		Human-Robot Q/A process & \(\displaystyle\frac{M_{Exp\_SI}(t) + M_{H\_contrib}(t) }{2}\) \\ \hline
+		Ensuring  that  Human  moves  aside  & \(\displaystyle\frac{M_{DtG}(t) + M_{H\_contrib}(t) }{2}\) \\ \hline
+		Human-aware robot navigation  & $M_{TtG}(t)$ \\ \hline
+		Ensuring correct human placement for verbal interaction & $M_{H\_contrib}(t)$ \\ \hline
+		Ensuring correct human placement for route explanation & \(\displaystyle\frac{M_{DtG}(t) + M_{H\_contrib}(t) }{2}\) 
+	\end{tabular}
+	\caption{QoI computation for each action as an aggregation of metrics}
+	\label{tab:qoi}
+\end{table}
+
 \begin{enumerate}[label=(\alph*)]
 	\item \label{list_act:info} \emph{Robot-Human information sharing: }The robot speaks to the human, shares information such as the route direction and announces the next steps of the plan. The robot expects that they are paying attention to it. Therefore, we use the \emph{Fulfilling robot expectations about social interaction} $M_{Exp\_SI}$ based on the attention ratio. Two parameters need to be defined for the scaling function, the bounds $b_1$ and $b_2$. As the minimum value for the metric, a ratio, is 0 and the maximum value is 1, then $b_1=0$ and $b_2=1$. 
 	The QoI of the action is computed with this only metric.
@@ -883,38 +852,51 @@ For each action of the following list, we explain which metrics $M$ of Table~\re
 	
 \end{enumerate}
 
-\begin{table}[!h]
-	\begin{center}
-		\begin{tabular}{ | c || c | c | }
-			\hline
-			Mall elements                   & Mockup mall & Real mall \\ \hline \hline
-			Shops              & 19            & 140   \\ \hline
-			Doors, stairs, elevators & 10            & 50    \\ \hline
-			Corridors              & 11            & 41    \\ \hline
-			Levels   & 2            & 2   \\ 
-			\hline
-		\end{tabular}
-	\end{center}
-	\caption{\label{tab:malls} Number of elements described in the mockup and real malls (geometric, topologic and semantic models in Fig.~\ref{fig:chap3_3Dmodels}).}
-\end{table}
 
-\bgroup
-\def\arraystretch{2.5}
-\begin{table}[t]
-	\centering
-	\begin{tabular}{|p{3.5cm}|c|}
-		Action & QoI formula (metric aggregation) \\ \hline \hline
-		Robot-Human information sharing & $ M_{Exp\_SI}(t)$ \\ \hline
-		Human-Robot Q/A process & \(\displaystyle\frac{M_{Exp\_SI}(t) + M_{H\_contrib}(t) }{2}\) \\ \hline
-		Ensuring  that  Human  moves  aside  & \(\displaystyle\frac{M_{DtG}(t) + M_{H\_contrib}(t) }{2}\) \\ \hline
-		Human-aware robot navigation  & $M_{TtG}(t)$ \\ \hline
-		Ensuring correct human placement for verbal interaction & $M_{H\_contrib}(t)$ \\ \hline
-		Ensuring correct human placement for route explanation & \(\displaystyle\frac{M_{DtG}(t) + M_{H\_contrib}(t) }{2}\) 
-	\end{tabular}
-	\caption{QoI computation for each action as an aggregation of metrics}
-	\label{tab:qoi}
-\end{table}
-\egroup
+\begin{landscape}
+	\setlength\tabcolsep{1.5pt}
+	\begin{table*}[ht]
+		\centering
+		\begin{tabular}{|c|p{1.5cm}|c|c|}
+			Metric id & Metric name & Metric equation -- with Equations of Section~\ref{sec:metrics} & Scaled metric -- with functions of Appendix~\ref{annex:functions} \\\hline\hline
+			
+			\(\displaystyle M_{H\_contrib}\)
+			& Human contribution to the goal 
+			& \raisebox{-0.5cm}{ \(\displaystyle nb\_R\_repet \)} &  \raisebox{-0.5cm}{ \(\displaystyle n_1(nb\_R\_repet) = 2 * \dfrac{nb\_R\_repet-3}{-3} -1 \)} \\\hline
+			
+			\(\displaystyle M_{Exp\_SI}\)
+			& Fulfilling robot expectations about social interaction 
+			&    \raisebox{-0.5cm}{ \(\displaystyle Ar = \frac{duration_{isAttentiveTo(robot)=true}}{duration_{robot\_speaks}} \) }
+			&  \raisebox{-0.5cm}{\(\displaystyle n_1(Ar) = 2 * Ar -1 \)} \\\hline
+			
+			\(\displaystyle M_{DtG}\)
+			& Distance-to-Goal & 
+			\(\displaystyle \left\{
+			\begin{array}{ll}
+			\Delta DtG(t=0) = 0\\
+			\begin{aligned}
+			\Delta& DtG(t) = \max(0,\Delta DtG(t-1) - 1)  \\&\text{if } path\_length(t) <  path\_length(t-1) \\
+			
+			\end{aligned}\\
+			\Delta DtG(t)= \Delta DtG(t-1) + 1, \text{otherwise.}
+			
+			\end{array}
+			\right.
+			\)
+			&   \(\displaystyle -s_1(DtG(t)) = -1 + 2 \exp{\left(-\ln{(2)}\left(\dfrac{DtG(t)}{5}\right)^{1.5}\right)} \) \\\hline
+			
+			\(\displaystyle M_{TtG}\)
+			& Time-To-Goal & 
+			\(\displaystyle \Delta TtG(t) = \max(0, e(t)  + TtG(t) - TtG(T_0)) 
+			\)
+			&  \(\displaystyle -s_1(TtG(t)) = -1 + 2 \exp{\left(-\ln{(2)}\left(\dfrac{TtG(t)}{5}\right)^{1.5}\right)} \) \\
+			
+			
+		\end{tabular}
+		\caption{Metrics used in the implementation presented in Section~\ref{sec:qoi_integration}.}
+		\label{tab:metrics_impl}
+	\end{table*}  
+\end{landscape}
 
 \begin{figure*}[!ht]
 	\centering
@@ -933,6 +915,21 @@ This section reports on an effective implementation of the approach as an illust
 	\item A bit ``confused'' human tried to contribute to the task success but did not execute everything well. The human was, from time to time, not very attentive, as looking around. Also, they gave an answer to the first question that the robot did not understand, and then they took their time before answering again. Then, they prevented a bit the robot to move as it had planned and once the robot reached its position, they took time to come as close as the robot wanted. 
 	\item A human wanted to disturb the robot during the task. They gave three incomprehensible answers to the first question, blocked multiple times the robot in its move, waited for the robot to ask twice to come in front of it and finally asked the robot to point and explain the route three times. 
 \end{bulletList}
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{tabular}{ | c || c | c | }
+			\hline
+			Mall elements                   & Mockup mall & Real mall \\ \hline \hline
+			Shops              & 19            & 140   \\ \hline
+			Doors, stairs, elevators & 10            & 50    \\ \hline
+			Corridors              & 11            & 41    \\ \hline
+			Levels   & 2            & 2   \\ 
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{\label{tab:malls} Number of elements described in the mockup and real malls (geometric, topologic and semantic models in Fig.~\ref{fig:chap3_3Dmodels}).}
+\end{table}
 
 Now, if we take a look at the QoI outputs of Fig.~\ref{fig:impl_qoi}, we can see that their three shapes are very different. In Fig.~\ref{fig:human_ideal}, we can observe that the task and actions QoIs remain with the highest value 1 all along. A graph as this one allows us to infer that everything went very smoothly during this direction-giving task. Then, we can guess that it corresponds to the execution performed with the 'ideal' human. 
 
@@ -970,6 +967,20 @@ Our intention, when we developed the idea of the Quality of Interaction Evaluati
 As a proof-of-concept, we implemented and deployed a first version of a QoI Evaluator assessing task and actions QoIs. We tested it on an interactive robot dedicated to provide route guidance to customers in a large mall. The approach gave satisfactory results. It showed the potential ability of a robot to detect momentary decreases of the Quality of Interaction and also more serious degradation of it which may need drastic change of behavior for the robot. This is only a first step and it should be validated with a study where we will ask humans to evaluate the quality of their interaction with the robot in a similar manner. The goal will be to analyse and compare this to the evaluation of the interaction quality estimated by our robot and, based on that, investigate potential improvements. 
 
 Finally, we do not claim to have a perfect measure of the Quality of Interaction. However, although the concept of Quality of Interaction is quite abstract, Movellan \etal{} showed that when it is measured by human observers, the inter-observer reliability of the concept is quite high~\cite{movellan2007rubi}. Therefore, we believe we can endow the robot with an effective and pertinent ability aiming at measuring the quality of an interaction. We are aware that the set of metrics we proposed to do so is not exhaustive but the framework is designed to be easily extended with new metrics.
+
+\section{Conclusion}
+
+In this chapter, we presented a direction-giving task performed by the Pepper robot. It is not often that an autonomous robot is deployed in a mall for three months. it was a very enriching experience with three contributions: a robotic architecture dedicated to direction giving, a user study and a proof-of-concept for the \acrshort{qoi} Evaluator.
+
+We elaborated a software architecture embedded in a Pepper robot to provide directions to customers in a mall. It is a form of guiding where the robot does not accompany the persons to their final destination but describes and indicates the route to take while pointing. The robot is able to take into account the perspective of the person it interacts with, leading her, if necessary, to a re-positioning of both agents so that the human can see, or see better, the passage. Thus, they can have a concrete idea about the route they are supposed to follow to reach their destination.
+
+To do so, our approach was largely inspired by joint action concepts and guidelines. We performed a human-human study where a human guide gave directions to a customer and analyzed it, through the filter of joint action theory, to draw concepts and ideas directing the design of our robotic system.
+
+This approach allowed us to create a robotic architecture and to develop and integrate a set of components, each of them having a specific role to play in the direction-giving task. They rely upon two representations of the mall. The Semantic Representation is an ontology representing which merchandises are sold in which shop along with the topology of the whole mall. It allows the system to compute the route by taking into account the interacting human's perspective during their future displacement. Then, the Geometric representation is a 3D model of the surrounding areas of the robot. It is used to find places where the robot can point at the first element of the route while ensuring that the human can see the object of the pointing. All of the components are orchestrated through the Supervisor integrating joint action by taking into account human perspectives in different ways (\ie the human orientation along the route (what is on is left/right) and the landmark visibilities) and managing the collaborative execution of shared goals and their associated shared plan, based on an estimation of the human knowledge, and verbal and non-verbal communication.
+
+The robot could perform efficiently the guiding task repeatedly and in autonomy as it has been deployed in a real-world environment for three months. This valuable experience also allowed us to detect and fix bugs we would not have detected and to adjust the guiding task algorithm according to the users' oral feedbacks during deployments. 
+
+Even though we had carefully designed the task with the help of psychologists, it was not enough as the user study showed that the robot moving to improve the shared perspective was not preferred to the robot only pointing. It is a good lesson showing that iterative design is important. However, it is not always easy to be in the conditions to extensively test the system in a real-world environment. Indeed, the robot version used during the three-months deployment was without the navigation. Though, we probably missed some debugging opportunities such as realizing that the robot was spinning so much.
 
 
 

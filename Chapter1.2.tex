@@ -12,6 +12,11 @@
 
 \chapter{The ``special case'' of Human-Robot Interaction}\label{chapter:chap2}
 \minitoc
+
+In the previous chapter, we took an interest in the human-human interactions and collaboration in order to be aware of the elements to consider when devising a collaborative robot. 
+
+In this chapter, first in Section~\ref{chap2:sec:soc_inter}, we investigate what have been implemented in \acrshort{hri} in order to offer a frame to human-robot interactions as a supervisor has to handle such situations. Then, in Section~\ref{chap2:sec:hri_ja}, in the context of a collaborative work with philosophers and psychologists, we reviewed some elements of joint action and collaboration which had been implemented in robots.
+
 \section{Human-Robot Social Interactions}\label{chap2:sec:soc_inter}
 
 Now that we have seen how social interactions look like when happening between humans, we are going to see the different ways the human-robot interaction field divided and categorized interactions. It is possible to define an interaction according to its duration as we will show in Section~\ref{chap2:subsec:inter_lengths}. Then, inside the interaction, what are the different temporal phases? We will see it in Section~\ref{chap2:subsec:inter_div}. Finally, in Section~\ref{chap2:subsec:inter_hier}, we will take an interest in a different way to segment interactions: with hierarchical levels.
@@ -129,7 +134,7 @@ Now, we will reduce our scope, going from social interactions to joint action in
 \section{Human-Robot Interaction and Joint Action}\label{chap2:sec:hri_ja}
 The study of human-human joint action is important to understand how to make robots better companions and partners for humans. However, it does not mean that they should imitate humans, as they are machines, they have their own abilities and have to develop their own strategies~\cite{bradshaw_2017_human} (\eg displaying an arrow on the floor while navigating~\cite{chadalavada_2015_mind, coovert_2014_spatial}).
 
-In the context of the JointAction4HRI project\footnote{https://jointaction4hri.laas.fr/}, a non-exhaustive review of existing robotic systems integrating but also recognizing in humans joint action mechanisms has been done, focusing on joint attention, communication to facilitate coordination, repairs strategies and commitments.
+In the context of the JointAction4HRI project\footnote{\url{https://jointaction4hri.laas.fr/}}, a non-exhaustive review of existing robotic systems integrating but also recognizing in humans joint action mechanisms has been done, focusing on joint attention, communication to facilitate coordination, \acrlong{tom}.
 
 \subsection{Joint Attention in HRI}
 Joint attention is essential to joint action (see Section~\ref{chap1:subsubsec:joint_att}). Some authors showed that a robot initiating (\ie triggering the attention focus of the partner on the object of interest)~\cite{imai_2003_physical}, responding to (\ie gaze following of the partner's gaze or gesture)~\cite{yu_2010_investigating}, and ensuring joint attention (\ie monitoring of the other's attention)~\cite{huang_2010_joint} improves the task performance and is perceived as more natural. Moreover, some studies have shown the benefit of eye-gaze management, and by this way, joint attention management, whether to help coordination during shared plan execution \cite{lallee_2013_cooperative} or to help the human with decision-making \cite{boucher_2010_facilitation, boucher_2012_reach}. Thus, human pointing gesture recognition as been investigated such as in~\cite{nickel_2007_visual} or eye-gaze signaling(\eg \cite{staudte_2009_visual} or see review~\cite{admoni_2017_social}).
@@ -167,6 +172,12 @@ Others worked on making the robot navigation legible, improving its predictabili
 Over the years, others tried to tackle this issue, especially focusing on perspective-taking abilities. For example, Hiatt and colleagues designed and implemented a model simulating a human with the ability to deal with false beliefs~\cite{hiatt_2010_cognitive}. They demonstrated it with the Sally--Anne test presented in Section~\ref{chap1:sec:tom}. Milliez \etal{} endowed a robot with the ability to pass the Sally--Anne test, constructing a semantic representation of the world based on its estimation of the human's point of view~\cite{milliez_2014_framework}.
 
 Perspective-taking abilities have been used in robotics for several purposes. Berlin \etal{} presented a simulated robot able to take the visual perspective of a human teacher (the virtual camera) and showed how this ability could be used for learning in human-robot interaction~\cite{berlin_2006_perspective}. Hiatt \etal{} presented a humanoid robot reasoning on possible beliefs the human partner could have endowing the robot with the ability to deal with uncertainty about the estimation of the human's beliefs~\cite{hiatt_2011_accommodating}. In another work, perspective-taking allows the robot to solve ambiguous references to an object~\cite{ros_2010_solving}. Others make use of perspective-taking to improve human action recognition~\cite{johnson_2005_perceptual}. Endowing a robot with a perspective-taking ability can also serve to support the implementation of an autobiographical memory (a meaningful stored knowledge acquired during interactions)~\cite{pointeau_2017_role}. Finally, it can also be a way to help the robot to elaborate plans, adding communication actions to solve divergent beliefs~\cite{warnier_2012_robot}, to explain plans to the human with a level of details depending on their knowledge~\cite{milliez_2016_using} or to manage shared plans execution~\cite{devin_2016_implemented}.
+
+\bigskip
+
+The presented work are very interested and important for the \acrshort{hri} community. We focused on joint attention and communication because of the project context then we explored \acrshort{tom} as it is an important aspect for the supervision. What is brought out when exploring the joint action aspects in \acrshort{hri} is that the models and implementations proposed often lack a more general vision of joint action, focusing on a particular aspect~\cite{belhassein_2020_horizontal}. We tried to take this into account and to tackle this issue when devising \acrshort{jahrvis}.
+ 
+
 
 %\subsection{Failures in HRI}
 %Honig and Oron-Gilad studied the different types of failures that could happen during a human-robot interaction and proposed a classification of these~\cite{honig_2018_understanding} based on a meticulous review, illustrated with Figure~\ref{chap2:fig:err_hri}.

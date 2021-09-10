@@ -54,6 +54,8 @@ With this architecture, we focus on a given type of \acrlong{hri}: collaborative
 	\label{chap3:fig:archi}
 \end{figure}
 
+\newpage
+
 \subsection{Architecture components}
 
 \subsubsection{Situation Assessment}\label{chap3:subsubsec:sa}
@@ -103,11 +105,17 @@ The \acrfull{hatpehda} also proposes a hierarchical approach to multi agents tas
 
 
 \subsubsection{Supervision}
-The Supervision is the puppet master of the system, embedding the robot high-level decisions, controlling its behavior and trying to react to contingencies, always considering the human it is interacting with. It is not standalone, relying on the components described above to be able to take decisions, be aware of the environment and make the robot moves.
-\newline
+The Supervision is the puppet master of the system, embedding the robot high-level decisions, controlling its behavior and trying to react to contingencies, always considering the human it is interacting with. It is not standalone, relying on the components described above to be able to take decisions, be aware of the environment and make the robot moves. It will be the subject of Chapters~\ref{chapter:chap5} and~\ref{chapter:chap6}.
 
+\newpage
 
+\section{Conclusion}
 
+In the context of this thesis, it was important to present the robotic architecture in which the supervisor is integrated. Indeed, it cannot run the robot by itself, it needs the features offered by the other components but not whatever planner or navigation for example. It needs to be surrounded by human-aware ones. 
+
+We presented an overview of existing robotic architectures, with some of them dedicated to human-robot collaboration. We chose to carry on the development of the robotic architecture designed by our research team a few years ago. The new architecture we conceived has the same component blocks than the one of Lemaignan \etal{}, however all our components are different and we refined and reinforced the links between the components, especially with the \acrlong{kb}. 
+
+We introduce the components of the architecture: the Situation Assessment, the \acrshort{kb}s, the Human-aware Motion Planners and Executors, the Human-aware Task Planners and the Supervision. We voluntarily left aside the \acrshort{nlp} and the perception as no one in our research team work one these subjects. We use freeware or open-source software to perform our experiments. As we can see, our architecture is quite sophisticated which makes the supervisor essential to manage all these components during an interaction. After giving the global picture of the system, we will focus on the supervisor in the next chapters.
 
 \ifdefined\included
 \else
