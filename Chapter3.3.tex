@@ -12,7 +12,7 @@
 \chapter{Quality of Interaction Evaluation}\label{chapter:chap7}
 \minitoc
 
-The work presented in this section has been excerpted from a paper published in the Journal of Social Robotics~\cite{mayima_2021_towards}.
+In this chapter, we introduce a new concept: a robot evaluating in real-time the \acrfull{qoi} when in a collaborative task with a human. The presented work has been excerpted from a paper published in the Journal of Social Robotics~\cite{mayima_2021_towards}.
 
 \section{Introduction}
 
@@ -27,7 +27,31 @@ The chapter is organized as follows. First, we briefly discuss related work and 
 
 \section{Related work}\label{sec:rel}
 
-Inspired from the evaluation methods used in Human-Computer Interactions and User Experience fields, the field of Human-Robot Interaction (HRI) has elaborated its own methods to evaluate robotic systems when they interact with humans. There are various ways to evaluate a human-robot interaction from the human perspective. Bethel \textit{et al}.~\cite{bethel_2010_review} divided them into five categories: \begin{inlineEnumerate}
+Inspired from the evaluation methods used in Human-Computer Interactions and User Experience fields, the field of Human-Robot Interaction (HRI) has elaborated its own methods to evaluate robotic systems when they interact with humans. There are various ways to evaluate a human-robot interaction from the human perspective.
+
+In there paper ``User Profiling and Behavioral Adaptation for HRI: A Survey''~\cite{rossi_2017_user}, Rossi \etal{} defined the two scopes for \acrshort{hri} as illustrated in Figure~\ref{fig:profiling}. 
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.5\linewidth]{figures/chapter2/profiling.png}
+	\caption{Profiling/behavioral adaptation cycle from the physical, cognitive and social interaction viewpoints. (Figure from~\cite{rossi_2017_user})}
+	\label{fig:profiling}
+\end{figure}
+
+On the user profiling side, they proposed three categories: 
+\begin{bulletList}
+	\item physical profiling: modeling and learning user characteristics that are related to the human body, such as sensing the motion capabilities that may shape the interaction process, but also its intended movements in the space. 
+	\item cognitive profiling: recognizing the intents of the person the robot is interacting with
+	\item social profiling: recognizing social signals
+\end{bulletList}
+On the behavior adaptation side, which they defined as the ability to adapt its own behavior with respect to the behavior of the others, they also proposed three categories:
+\begin{bulletList}
+	\item physical adaptation: adaptation related to proxemics, speed, trajectories 
+	\item cognitive adaptation: adaptation that explicitly defines a user model for deciding actions, plans and goals from the robot point of view (adaptive planning and dialogue strategies), that takes into account the users’ perspective and states of mind in the planning process (perspective taking), and adapts the coordinated execution of the planned actions (collaborative task execution)
+	\item social adaptation: adaptation to specific norms which are culturally dependent
+\end{bulletList}
+
+ Bethel \textit{et al}.~\cite{bethel_2010_review} divided them into five categories: \begin{inlineEnumerate}
 	\item self-assessments,\label{list:m_self}
 	\item interviews,\label{list:m_inter}
 	\item behavioral measures,\label{list:m_beha}
@@ -39,6 +63,7 @@ Hoffman~\cite{hoffman2019} defined a type of quality of interaction, the \textit
 Systems targeting real-time measurements during human-robot interactions, with the purpose to ``close the loop'' and use the information for decision-making, have been developed. Tanevska \textit{et al}.~\cite{tanevska:hal-01615491} proposed a framework allowing the robot to perceive with face detection and evaluate in real-time the affective state (\ie anger, happiness, sadness, surprise, etc) and the engagement state (\ie whether the person is interested or bored in the interaction) of the people it is interacting with. However, the human affective state measure might not be enough to assess an interaction or a task as an affective state is actually a facial expression which can be misinterpreted (\eg a smile can be a sign of happiness or embarrassment) and which might be not visible when one of the agent performs an action and looks somewhere else. Moreover, as the notion of engagement is very task specific, it needs further exploration. Real-time engagement measurement has also been investigated by Anzalone \textit{et al}.~\cite{anzalone_2015_evaluating} using metrics such as gaze, head pose, body pose and response times. Their work is interesting and could be an element among others to assess the interaction quality but, it is dedicated to face-to-face interactions. 
 
 Cameras are not the only sensor used to assess interactions on-the-fly, some use human physiological responses such as skin conductance and temperature, heart or brain signals. Itoh \textit{et al}.~\cite{itoh2006}, Bekele \textit{et al}.~\cite{bekele_2014} or Kulic \textit{et al}.~\cite{kulic2007} use them to detect human affective states such as anxiety or liking in real-time. However, physiological measures often imply a lot of sensors which can be invasive for the human. And, as explained by Kulic and Croft~\cite{kulic_2003_estimating}, physiological signals may be difficult to interpret and there is a large variability in physiological response from person to person. Thus, it can be difficult for a controller to determine which emotional state the subject is in, or whether the response was caused by an action of the system, or by an external stimulus. Moreover, we claim that the human affective state only is not enough to assess the quality of an interaction, a human could be satisfied with an interaction or a task result even though they were stressed during it.
+
 
 Finally,  Bensch \textit{et al}.~\cite{bensch17} proposed a formal approach to compute interaction quality in real-time. Their work focused on how to combine metrics together which is in the same line as ours. However, they do not provide implementation examples, remaining at an abstract level.
 
@@ -204,6 +229,10 @@ Three examples are given in Fig.~\ref{fig:ote}. Fig.~\ref{fig:oteX}~and~\ref{fig
 
 \section{Conclusion}
 In this chapter, we described a novel concept: the \acrlong{qoi} evaluating from the robot point of view. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make more pertinent its decision-making processes. The evaluation of the \acrshort{qoi} relies on a model of interaction, considered at three levels: the interaction session level, the tasks level and the actions level. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low QoI is assessed, closing the loop with the Supervision.
+
+When referring to the research of Rossi \etal{}, we could consider that our work around the \acrshort{qoi} metrics falls in the user profiling side while the work on \acrshort{jahrvis} falls in the behavior adaptation side. However, at the end, we are unsure it is possible to divide the work so clearly. For example, in our \acrshort{dacobot} architecture, we could consider that a part of the user profiling and behavioral adaptation is already done at component level. For example, the physical profiling and its pendant with physical adaptation is done within the motion planning and execution components, and could stay hidden from the supervision system unless the components give access to some variables.  
+
+In addition, they also emphasize that since the processes of profiling and adaptation act necessarily in a closed loop, one cannot be without the other, hence adaptation depends on profiling and the maturity of these approaches is inherently affected by the previous ones. It is one of the problem we have faced. In the ``real world'' the behavior adaptation needs to rely on user profiling which is difficult to calibrate. Thus, our proposal seems relevant.
 
 The concept will be demonstrated and discussed in Section~\ref{sec:qoi_integration}, in the context of the direction-giving task presented in next chapter.
 

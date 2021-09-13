@@ -9,15 +9,15 @@
 	\faketableofcontents
 	\fi
 
-\chapter{JAHRVIS by the menu}
+\chapter{Under the hood of \acrshort{jahrvis}}
 \label{chapter:chap5}
 \minitoc
 
-In Part~\ref{part:part1}, we presented all the previous work we got our inspiration from, from psychology to robotics by way of philosophy, sociology and neuroscience. What is a social interaction? how can it be divided in steps? what is a joint action? how humans collaborate together? how do they take into account their partners? what happens when an agent makes a mistake? what has been done in computer science or robotics until now to make robots better collaborators? All these theories, ideas, questionings nourished our thoughts for the design and implementation of a supervision system dedicated to Human-Robot Joint Action. Supervision is key in the architecture as it is the robot decision kernel, as explained in Part~\ref{part:part2}. And, as most components of a robotic architecture dedicated to \acrshort{hri}, one of the main challenges of supervision is how to take the human into account, a more or less unpredictable agent with whom the robot has to collaborate. 
+In Part~\ref{part:part1}, we presented all the previous work we drew our inspiration from, from psychology to robotics by way of philosophy, sociology and neuroscience. What is a social interaction? how can it be divided in steps? what is a joint action? how humans collaborate together? how do they take into account their partners?   All these theories, ideas, questionings nourished our thoughts for the design and implementation of a supervision system dedicated to Human-Robot Joint Action. Supervision is key in the architecture as it is the robot decision kernel, as explained in Part~\ref{part:part2}. And, as most components of a robotic architecture dedicated to \acrshort{hri}, one of the main challenges of supervision is how to take the human into account, a more or less unpredictable agent with whom the robot has to collaborate. 
 
-In the two first sections, we present the role and features we defined for \acrshort{jahrvis}. Next, in Section~\ref{chap5:sec:levels}, we present our representation of Human-Robot collaborative activity. Finally, we introduce \acrshort{jahrvis} overall structure in Section~\ref{chap5:sec:jahrvis} whose role is to decide and control the robot during an interaction.
+In the two first sections, we present the role and features we defined for \acrfull{jahrvis}, our supervision system. Next, in Section~\ref{chap5:sec:levels}, we present our representation of Human-Robot collaborative activity. Finally, we introduce \acrshort{jahrvis} overall structure in Section~\ref{chap5:sec:jahrvis} whose role is to decide and control the robot during an interaction.
 
-\section{The Role and Features of JAHRVIS}\label{chap5:sec:sup_features}
+\section{The Role and Features of \acrshort{jahrvis}}\label{chap5:sec:sup_features}
 
 \acrshort{jahrvis} is a supervision system, \ie it embeds the robot high-level decisions and controls its behavior considering the human the robot is interacting with. Thus, \acrshort{jahrvis} is to differentiate from supervision systems dedicated to robot or multi-robots control as humans are taken into account. We give in this section an overview of the \acrshort{jahrvis} features which will be presented in detail in Chapter~\ref{chapter:chap6}.
 
@@ -91,7 +91,7 @@ The \acrfull{jahrvis} is implemented on top of our ROS-Jason framework\footnote{
 	\includegraphics[width=\linewidth]{figures/chapter2/supervisor_modules.pdf}
 	\caption{The \acrshort{jahrvis} processes (in blue) and their interactions between themselves and with the other components of the robotic architecture presented in Section~\ref{chap3:sec:rob_archi}.}
 	\label{chap5:fig:sup_overview}
-\end{figure}\todo{update section numbers}
+\end{figure}
 
 For each process (in blue in Figure~\ref{chap5:fig:sup_overview}), we implemented a \acrfull{rja}, with the desired behavior coded in ASL and the needed customizations added in Java. Thus, internal communications between the \acrshort{jahrvis} processes, and so \acrshort{rja}s, use Jason messages (see Section~\ref{chap4:subsec:jason}). External communication with the other components of the robotic architecture is based on either ROS messages, services or action clients.
 

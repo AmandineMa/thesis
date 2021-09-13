@@ -218,21 +218,21 @@ While in its previous role the robot just had to instruct the human, when the ro
 	\caption{\label{chap9:fig:receiver} The director task is handled by an autonomous PR2 robot in the role of the receiver. Each picture represents a step toward the achievement of the task. The estimated human perspective is displayed in the top left-hand corner of each picture. On top of the arrows leading to a new state are the sentences said by the human to the robot and for the last situation the refinement query from the robot to the human, followed by the answer of the human. }
 \end{figure}
 
-For the first block (a to b on the figure), the human instructs the robot for the green block. The natural language understanding module returns the \sparql{} query:
+For the first block (a to b on the figure), the human instructs the robot for the green block. The \acrlong{nlp} module returns the \sparql{} query:
 
 \begin{quote} 
 	\centering 
 	(?0, isA, Block), (?0, hasColor, green)
 \end{quote}
 
-Since the robot assumes the human to speak about objects on the table, the understood query is merged with another one representing the context of the task: (?0, isAbove, table\_1). Querying the human estimated ontology with the merged query, only one entity match. There is no ambiguity in human instruction. The robot takes the instructed block then drop it. If the query was applied to the robot ontology, two blocks would have matched since the block unknown by the human is also green. It goes the same for, the second instruction. There is no ambiguity. The \sparql{} query related to this second block is:
+Since the robot assumes that the human is speaking about objects on the table, the understood query is merged with another one representing the context of the task: (?0, isAbove, table\_1). Querying the human estimated ontology with the merged query, only one entity match. There is no ambiguity in human instruction. The robot takes the instructed block then drop it. If the query was applied to the robot ontology, two blocks would have matched since the block unknown by the human is also green. It goes the same for, the second instruction. There is no ambiguity. The \sparql{} query related to this second block is:
 
 \begin{quote} 
 	\centering 
 	(?0, isA, Block), (?0, hasFigure, ?1), (?1, isA, Circle)
 \end{quote}
 
-The third instruction given by the human as the director is the most interesting for us. The human asks for \textit{``The block with a triangle''}. However, the speech to text returns \textit{``take is about to whip a triangle''}. With this sentence, the NLU module can only extract two known concepts being ``take'' and ``triangle''. Due to the limited amount of words understood, it does not try to generate a \sparql{} query. The robot thus informs the human about its incapacity and repeat the heard sentence as a back loop for the human. At the second try, the sentence is understood and gives the query:
+The third instruction given by the human as the director is the most interesting for us. The human asks for \textit{``The block with a triangle''}. However, the speech to text returns \textit{``take is about to whip a triangle''}. With this sentence, the \acrshort{nlp} module can only extract two known concepts being ``take'' and ``triangle''. Due to the limited amount of words understood, it does not try to generate a \sparql{} query. The robot thus informs the human about its incapacity and repeat the heard sentence as a back loop for the human. At the second try, the sentence is understood and gives the query:
 
 \begin{quote} 
 	\centering 

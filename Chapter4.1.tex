@@ -13,13 +13,13 @@
 \label{chapter:chap8}
 \minitoc
 
-This chapter is from an article submitted to the  User Modeling and User-Adapted Interaction (UMUAI) Journal. This work has been achieved in collaboration with Guillaume Sarthou, Guilhem Buisan, Phani-Teja Singamaneni, Yoan Sallami, Kathleen Belhassein, and Jules Waldhart. In this chapter, we first give an overview of the European H2020 Project \acrfull{mummer}\footnote{\url{http://mummer-project.eu/}}. We then present the components developed by the LAAS-RIS team. The author technical contributions are related to the Supervisor component, the component integration, the overall system debugging, the real-world deployment and the user study.
+This chapter is from an article submitted to the  User Modeling and User-Adapted Interaction (UMUAI) Journal. This work has been achieved in collaboration with Guillaume Sarthou, Guilhem Buisan, Phani-Teja Singamaneni, Yoan Sallami, Kathleen Belhassein, and Jules Waldhart. In this chapter, we first give an overview of the European H2020 Project \acrfull{mummer}\footnote{\url{http://mummer-project.eu/}}. We then present the components developed by the LAAS-RIS team. The author  contributions are related to the Supervisor component, the architecture components integration, the overall system debugging, the real-world deployment and the user study.
 
 \section{Introduction}\label{chap8:sec:intro}
 
 In large scale indoor environments, like museums, shopping malls, or airports, the presence of large interactive screens, maps, or signs underline the importance of providing information on itineraries. However, orienting and reading maps to find one's own way may be challenging and Rossi \etal showed that people preferred a social robot over a mobile application~\cite{rossi_2018_socially}. As for signs, the wanted written information may not be within sight. People also look for information not available on visual media such as the location of a given product. That is where the robot has a role to play, bringing a new way to help people to get their bearings in large indoor environments such as shopping malls.
 
-Therefore, in the context of the European H2020 Project \acrshort{mummer}\footnote{\url{http://mummer-project.eu/}}, we developed and deployed a social service robot in one of the largest malls of Finland, Ideapark in the city of Lemp\"a\"al\"a. This social robot is able to engage, chat with people, and guide them. We will not talk about the two first mentioned behaviors, developed by our project partners, but focus in this paper on the direction-giving.
+Therefore, in the context of the European H2020 Project \acrshort{mummer}\footnote{\url{http://mummer-project.eu/}}, we developed and deployed a social service robot in one of the largest malls of Finland, Ideapark in the city of Lemp\"a\"al\"a. This social robot is able to engage, chat with people, and guide them. We will not talk about the two first mentioned behaviors, developed by our project partners, but focus in this paper on the direction-giving task.
 
 As the mall has approximately 1.2 kilometers of shopping and pedestrian streets and more than 150 shops, people get easily lost. In such a large environment, having a robot guiding customers to their wanted destination would be time-consuming for the robot and would prevent this resource to be available for as many customers as possible. Inspired by the manner in which the mall employees perform this activity, we chose the solution to have a robot not accompanying people to their desired destination but rather verbally describing the route while grounding it with pointing gestures. If necessary, it moves a few meters inside its dedicated area (Figure~\ref{fig:chap3_pepper_mall}) to improve the perspective sharing with the human when pointing at a landmark, and therefore to improve the human understanding of the route. These features are unique to a robot and cannot be found on a map or an interactive screen. To endow the robot with such abilities, we built a complete implementation of a robotic architecture that has been deployed in a real-world environment, the Finnish mall. There, it ran for three months, three days a week. Here is a sum-up of the project steps:
 \begin{enumerate}
@@ -50,7 +50,7 @@ The chapter is constructed as follows. In Section~\ref{sec:related-work} we prov
 \label{sec:related-work}
 
 A number of contributions have proposed robot guides, from the first museum guides \cite{burgard_1999_museum, thrun_99, siegwart_2003_robox, clodic_2006_rackham} to more recent robot guides in large areas \cite{bauer_2009_autonomous, triebel_2016_spencer}. For example, Chen \etal{} presented a guiding robot in a shopping mall where it accompanied the customer to the desired location and pointed at the shop~\cite{chen_2017_robots}. Another example is a shopping robot helping people to find products among the aisles of a store \cite{gross_2009_toomas}. 
-However, the focus in these contributions is mainly the fact that the robot is challenged to navigate until the goal destination with the presence of humans. Efficient mapping and localisation in large areas, social navigation are the main concerns. This is different from our needs where the robot is voluntarily constrained for its motion to a limited area with a focus on conveying to the human the pertinent information to reach by herself the desired place.
+However, the focus in these contributions is mainly the fact that the robot is challenged to navigate until the goal destination with the presence of humans. In this context, efficient mapping and localisation in large areas, social navigation are the main concerns. This is different from our needs where the robot is voluntarily constrained for its motion to a limited area with a focus on conveying to the human the pertinent information to reach by herself the desired place.
 
 Direction-giving tasks have been investigated in the human-robot interaction community. Kopp \etal{} describes an embodied conversational agent giving route directions using deictic gestures~\cite{kopp_2007}. A number of key contributions have been developed over the years by ATR-IRC within the Robovie robot and project. First, Okuno \etal{} developed a model for a robot providing route directions, integrating utterances, gestures, and timing~\cite{okuno_2009_providing}. The experiments explored the influence of gestures and highlighted the importance of timing in the directions-giving task. Then, Kanda and colleagues implemented a guiding behavior as part of a wider system with the robot pointing toward the first direction to take and saying ``please go that way'' and then, continuing its explanation by saying ``After that, you will see the shop on your right.''~\cite{kanda_2009_affective, kanda_2010_communication}. Their robot also gave recommendations for restaurants and shops based on customer tastes. In their following work, they presented a route perspective model attempting to represent humans' concept of route and visibility of landmarks, which they believed to match people's perception of the environment~\cite{morales_2011}. Then, Matsumoto \etal{} developed a robot able to follow a user while inferring their memory recall of shops in the visited route~\cite{matsumoto_2012_you}. When the user asked the location of other shops, it gave the route description with references to the known locations inferred with the model of the user's memory recall. Finally, Satake \etal{} showed a complete architecture of an information-providing robot able to move around a square in a mall composed of: a map, an ontology, a speech recognition system (operated), a dialog manager, a localization module, and a people tracker. As in their previous work, the robot verbalized utterances and used deictic gestures to give route directions~\cite{satake_2015_should}. 
 
@@ -251,44 +251,19 @@ Thus, for each of the identified resources we instantiated a Resource Manager th
 
 \subsection{Describing the route to follow}\label{subsec:route_description}
 
-In large-scale environments such as malls, route computation can lead to combinatorial explosion. Therefore, to simplify the problem we chose to divide it in two stages and to conceive an algorithm for each one. The first one computes the existing routes from one Region of the mall to another. A region is for example a floor of the building so if the robot is at the ground floor and the final destination also, this means that the algorithm will not take into account all the elements of the other floors. Then, the second algorithm uses the Region-to-Region routes to calculate the Place-to-Place route. These algorithms are presented with more details in \cite{sarthou_2019_semantic}.
+Algorithms have been specifically developed in the context of this project in order to find the best route(s) to go from one place to the other in an environment with ``places'' (\eg shops, toilets, stairs), and ``paths'' (\eg corridors). These algorithms are presented in~\cite{sarthou_2019_semantic}. 
 
-\paragraph{Region-to-Region route}
+The dedicated component receives requests with:
+\begin{inlineEnumerate}
+	\item the departure place,
+	\item the goal place, and
+	\item an option to specify some constraints (\eg no stairs).
+\end{inlineEnumerate}
 
-\begin{figure}[b]
-	\centering
-	\includegraphics[scale=0.17]{figures/chapter3/regions.png}
-	\caption{\label{fig:chap3_regions} Representation of an environment at the regional level.}
-\end{figure}
+It outputs a set of routes, with a route being of the form $place - path - place - ... - place$, and a cost associated to each of these routes. 
 
-In the \acrshort{ssr}, \textbf{passages} (\eg escalators, stairs) are elements of the environment connecting two regions through the $isIn$ property. With this property and a breadth-first search algorithm, Region-to-Region route finding algorithm is able to find the routes connecting two regions using only passages. It outputs a route with the format $region - place - region - ... - region$. In the example of Figure~\ref{fig:chap3_regions}, the final routes found by the algorithm to go from Region 1 to Region 3 are:
+The second place of the route -- the third element of the route objects -- is the one we call the passage in the description of the direction-giving task, the first salient landmark of the route to point to, which is on the way to reach the final place. For example, the best route to go to the restaurant Bella Roma from the robot base is: [``pepper\_infodesk'',``Keskuspuisto'',``escalator\_sauruskatu'',``corridor\_1food'',\\``Bella\_Roma''], with ``pepper\_infodesk'' the departure place, ``escalator\_sauruskatu'' the passage and ``Bella\_Roma'' the goal place.
 
-\begin{bulletList}
-	\item \(region\_1 - passage\_1 - region\_2 - passage\_2 - region\_3\)
-	\item \(region\_1 - passage\_1 - region\_2 - passage\_3 - region\_3\)
-\end{bulletList}
-
-
-\paragraph{Place-to-Place route}
-
-The Place-to-Place route search is based on the Region-level search results. It decomposes each route into sub-routes of the form $place - region - place$. In our example, the division gives five unique sub-routes:
-\begin{bulletList}
-	\item \(start - region 1 - passage\_1\)
-	\item \(passage\_1 - region\_2 - passage\_2\)
-	\item \(passage\_2 - region\_3 - end\)
-	\item \(passage\_1 - region\_2 - passage\_3\)
-	\item \(passage\_3 - region\_3 - end\)
-\end{bulletList}
-
-Then, the algorithm aims to replace each sub-route region with a succession of paths and intersections. It work on the same principle as the previous search algorithm using the $isAlong$ property instead of the $isIn$ property. Still taking the same example and focusing on $region\_1$, it can solve the sub-route \( start - region\_1 - passage\_1\). $Region\_1$ is represented with its corridors and intersections in Figure~\ref{fig:chap3_region_1}. By applying the breadth-first search algorithm at the Place level, a solution of the form $place - path - place - ... - place$ is obtained. So for our example, \(start - corridor\_1 - intersection\_1 - corridor\_5 - passage\_1\) is a solution for the first sub-route. By doing the same for each sub-route, we can then recompose the global routes and give a detailed set of routes from start to end.
-
-The second place of the route -- the third element of the route objects -- is the one we call the passage in the description of the direction-giving task, the first salient landmark of the route to point to, which is on the way to reach the final place, \ie \(intersection\_1\) in the example.
-
-\begin{figure}[ht]
-	\centering
-	\includegraphics[scale=0.25]{figures/chapter3/region_1.png}
-	\caption{\label{fig:chap3_region_1} Representation of corridors and intersections in region\_1}
-\end{figure}
 
 \subsection{Planning a shared visual perspective}\label{subsec:svp}
 
@@ -513,11 +488,13 @@ In total, the robot ran the direction-giving task during approximately 96 hours 
 
 \section{User Study}\label{chap8:sec:us}
 
-As presented in the introduction (Section~\ref{chap8:sec:intro}), we performed a user study with the mall customers in January 2020, on one week, after the 14 months deployments. It was carried out in collaboration with Kathleen Belhassein, the leader of this study. She elaborated the study procedure and performed the analysis of the collected data. And, she participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, and the video coding. The author was in charge of the robot, and participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, and the video coding. 
+As presented in the introduction (Section~\ref{chap8:sec:intro}), we performed a study with the mall customers in January 2020, on one week, after the 14 months deployments. It was carried out in collaboration with Kathleen Belhassein, the leader of this study. She elaborated the study procedure and performed the analysis of the collected data. And, she participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, and the video coding. The author was in charge of the robot, and participated in the organization and implementation of the study, the creation of the behavioral video coding scheme, and the video coding. 
 
-This study was an opportunity to investigate different task design in the context of a real environment task. 
+For us roboticists, this study was a user study aiming at evaluating our robotic architecture and our task design. Aside, for Kathleen Belhassein, a psychologist, this study was an experimental study aiming at evaluating the impact of the communicative strategies used on the effectiveness and quality of the interaction.
 
-This user study aims at comparing three different versions of the direction-giving task performed by the robot and their impact on the quality of interaction perceived by the customers: is the route description more efficient if the robot positions itself in space to point, taking the perspective of its interlocutor? Is the interaction more pleasant for the users? Is the quality of the interaction perceived as better? We had also intended to compare the quality of interaction perceived by the customers with the \acrshort{qoi} computed by the robot (see Chapter~\ref{chapter:chap7}) but the \acrshort{qoi} Evaluator was not refined enough at the time of the user study to make that happen.
+Thus, we compared three different versions of the direction-giving task performed by the robot and their impact on the quality of interaction perceived by the customers: is the route description more efficient if the robot positions itself in space to point, taking the perspective of its interlocutor? Is the interaction more pleasant for the users? Is the quality of the interaction perceived as better? 
+
+We had also intended to compare the quality of interaction perceived by the customers with the \acrshort{qoi} computed by the robot (see Chapter~\ref{chapter:chap7}) but the \acrshort{qoi} Evaluator was not refined enough at the time of the user study to make that happen.
 
 More precisely, we had chosen to compare three versions of the system, each time with the robot fully autonomous:
 \begin{bulletList}
@@ -551,6 +528,10 @@ In the user study context, the possible content of the dialogue task was identic
 
 Some items, such as repositioning requests or move announcements, were not present in the Conditions 1 and 2.
 
+\bigskip
+
+Our objective was to confirmed that the Condition 3, our complete system, was preferred over the Conditions 1 and 2 as it implemented a shared perspective between the robot guide and the human (see Section~\ref{subsec:svp}).
+
 \subsection{Experimenters}
 
 Two experimenters were present and visible to the participants in order to manage the registration systems and the visitors of the mall, to ensure the smooth running of each participation, and to administer the questionnaires as well as the effectiveness test. A third experimenter (the author), being hidden from the participants by a panel, managed the software. Some parameters of the Supervisor had to be manually changed to switch between conditions. Thus, the Supervisor was launched at the beginning of a condition and killed at the end. The other software were usually launched at the beginning of the day and ran until night, except if bugs were encountered. This launch of the Supervisor was the only moment in a condition during which the experimenter intervened, otherwise the robot was acting completely autonomously. A fourth experimenter, from VTT, was present to provide translation and conduct the experiment in Finnish.
@@ -559,7 +540,7 @@ Two experimenters were present and visible to the participants in order to manag
 
 In total, 34 participants took part in this study. There were 22 women and 12 men, and their ages ranged from 20 to 68 ($M=37.12$, $SD=10.22$). All were shoppers at the Ideapark shopping center. Participants were recruited through a website\footnote{\url{https://sites.google.com/view/pepper-exam/home}} combined with a recruitment questionnaire\footnote{\url{https://forms.gle/bNMfSFVHznAPw9BS9}}, published in the mall the previous weeks. All participants completed a consent form and an image rights release form (see Appendix~\ref{app:consent_form} for the English version and Appendix~\ref{app:consent_form_fi} for the Finnish version given to the participants). The experiment lasted approximately 40 minutes for one participant, and was located in the robot interaction area (see Figure~\ref{fig:chap3_pepper_mall} and Section~\ref{chap8:subsubsec:home}).
 
-9 participants were excluded from the analyses due to technical problems during the experiment, which could later interfere with their evaluations of the different systems. Thus, 25 participants were included in the analysis, 17 women and 8 men with their ages still ranging from 20 to 68 ($M=37.12$, $SD=10.11$).
+9 participants were excluded from the analyses due to technical problems during the experiment, which could later interfere with their evaluations of the different systems. Most often, it was the chatbot which would start as the Dialog had not understood properly what had said a participant and so started to talk about a completely different subject. Thus, 25 participants were included in the analysis, 17 women and 8 men with their ages still ranging from 20 to 68 ($M=37.12$, $SD=10.11$).
 
 \subsection{Tools for Data Collection}
 
@@ -719,7 +700,7 @@ For each condition, we were interested in the percentage of time the participant
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=0.8\linewidth]{figures/chapter3/freqRegardgraph.jpeg}
+	\includegraphics[width=0.8\linewidth]{figures/chapter3/freqRegard.jpeg}
 	\caption{Relative frequencies of gaze direction according to the condition.}
 	\label{chap8:fig:look_video}
 \end{figure} 
@@ -761,7 +742,16 @@ Finally, other analyses are presented in Table~\ref{chap8:tab:proba_video}.
 	\label{chap8:fig:interview}
 \end{figure} 
 
-\subsection{Discussion}\todo{todo}
+\subsection{Discussion}
+
+We thought the Condition 3 would be preferred by the participants over the Conditions 1 and 2. However, the results obtained from the 2 questionnaires and the video coding showed that it was not completely the case. But, we can see that Condition 1 was less efficient as a significant number of participants did not understand the directions (15 over 25 participants). Moreover it was poorly evaluated by the participants compared to the Condition 2 and 3 (interaction scores were lower for the Condition 1). Such results highlight the need for the pointing, enabling a shared perspective but they do not indicate that a more refined one as in Condition 3 is necessary.
+
+At first, these results can be seen as a disappointment for our complete system but actually they are a rich source for improvement, starting with the human-aware navigation. Indeed, from the interviews, it stood out that the fact the robot moves, the way the robot moves was something disturbing (7 participants mentioned it). One of the reason was that the robot often span round. We were aware of the issue before the user study, tried to correct it but we realized it was not enough. As the deployed system presented in Section~\ref{subsec:archi-integration} had to leave out navigation for safety reason, it had not been tested as extensively as the other components. It would have been the opportunity to better refine the costs and constraints values of the component.
+
+Thus, it would be interesting to perform a new user study comparing the Conditions 2 and 3 but with an improved navigation or different mode of the navigation. And so, to observe if the Condition 3 has still no significant difference with the Condition 2. It would probably not change in term of comprehension but  it would probably improve the perceived quality of the interaction in the Condition 3. In this case, it would be valuable to keep the task proceeding of Condition 3 as offering a better experience to customers.
+
+Video analyses give some idea to take into account other elements than verbal communication when the robot wants to know if the human understood its explanations or not. Indeed, participants tended to look more frequently elsewhere in Condition 1 than in Condition 2 and 3 (even though not statistically significant). Helped with a software recognizing gaze directions, it would be an interesting information to take into account for the supervision.
+
 
 \section{Integration and test of the QoI Evaluator}\label{sec:qoi_integration}
 As a proof-of-concept for the QoI Evaluator presented in Chapter~\ref{chapter:chap7}, we integrated it in the direction-giving task described in this chapter. It is also an excerpt of the paper accepted in the Journal of Social Robotics~\cite{mayima_2021_towards}.
