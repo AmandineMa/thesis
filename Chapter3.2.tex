@@ -906,7 +906,7 @@ Such component allows \acrshort{jahrvis} to be agnostic about the used robotic p
 The last \acrshort{rja} involved in the robot decision and control is the \acrfull{cm}. It is not dedicated to complex talks with the human but to enable the robot to perform and interpret communication during collaborative tasks, because as shown in Section~\ref{chap1:sec:comm}, it is important. This process is based on a software for Natural Language Processing (NLP) and closely linked to a domain-specific planner called \acrfull{reg}. This latter has been developed by Guillaume Sarthou and Guilhem Buisan~\cite{buisan_2020_efficient}. It aims, regarding the current symbolic state of the world, at finding the minimal set of relations to communicate and allow, when interpreting a communication, to identify a given entity. For example, if the robot wants to talk about a green cube on a table but there is another green one on a close shelf and a red cube on the table , how can it do? Well, it queries the \acrshort{reg} which answers with a nominal group such as ``the green cube on the table''. Figure~\ref{chap6:fig:comm_manager_zoom} shows its relations with the other \acrshort{rja} of \acrshort{jahrvis} and components of the robotic architecture.
 
 
-\subsection{What information to communicate? How to communicate it and when?}
+\subsection{What information to communicate? How to communicate it and when?}\label{chap6:subsec:info_comm}
 As shown above, three other processes, the \acrlong{ism}, the \acrlong{hpm} and \acrlong{aem}, can query the \acrshort{cm} to issue a communication to the human. We defined several types of verbal communicative acts the robot can do:
 \begin{bulletList}
 	\item to do social chat for interaction session opening and closing (\eg ``hello''),
@@ -983,7 +983,7 @@ When the \acrshort{cm} wants to ask the human to perform an action, it uses the 
 	
 
 
-\subsection{To Understand Communications}
+\subsection{To Understand Communications}\label{chap6:subsec:und_comm}
 To have the robot enunciating information or asking some to the human is important but that it is able to receive communication from them is as well. The human should be allow to communicate about the plan such as to ask precision about a given action, to signal that something is not going well or to ask the robot to perform an action. We focused on the latter in collaboration with Guillaume Sarthou. 
 
 The Algorithm~\ref{chap6:algo:human_instruction} allows the \acrshort{cm} to translate a human instruction about an action to perform by the robot into an instruction understandable by the \acrlong{aem}. 
@@ -993,9 +993,9 @@ The Algorithm~\ref{chap6:algo:human_instruction} allows the \acrshort{cm} to tra
 	\label{chap6:algo:human_instruction}
 	\begin{algorithmic}
 		\Function{GetActionToPerform}{$sentence$,$context$}
-		\State $\langle act, sparqlQ, score \rangle \coloneqq$ \textsc{GetSentenceSegmentation($sentence$)} \Comment{Query \\\hfill to REG}
+		\State $\langle act, sparqlQ, score \rangle \coloneqq$ \textsc{GetSentenceSegmentation($sentence$)} \Comment{Query \\\hfill to \acrshort{nlp}}
 		\If{$score > Score_{min}$}
-		\State $merged \coloneqq$\textsc{MergeSparqlWithContext}($sparqlQ,context$)\Comment{Query \\\hfill to REG}
+		\State $merged \coloneqq$\textsc{MergeSparqlWithContext}($sparqlQ,context$)\Comment{Query \\\hfill to \acrshort{reg}}
 		\State $matchingObjects \coloneqq$ \textsc{SparqlToObjects}($merged$)\Comment{Query \\\hfill to Ontologenius}
 		\If{\textsc{Length}($matchingObjects$)=1}
 		\State \Return $act,matchingObjects[0]$

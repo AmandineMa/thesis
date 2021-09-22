@@ -278,6 +278,13 @@ urlcolor=linkcol %couleur des liens pour les url
 	 \setlength{\itemsep}{-0.5em}}}%
 { \end{list} }
 
+\newenvironment{enumList}%
+{ \begin{enumerate}%
+		{\setlength{\labelwidth}{25pt}%
+			\setlength{\leftmargin}{30pt}%
+			\setlength{\itemsep}{-0.5em}}}%
+	{ \end{enumerate} }
+
 \newenvironment{inlineEnumerate}
 {\begin{enumerate*} [label={(\arabic*)}] }
 {\end{enumerate*}}

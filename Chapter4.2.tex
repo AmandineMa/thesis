@@ -109,7 +109,7 @@ requires to put a focus on communications which is widely studied in HRI. Indeed
 \paragraph{Contingencies handling abilities} While performing the Director Task, errors can happen. Either because the director gives a wrong instruction or the receiver misunderstands the instruction and takes the wrong block. In both cases, it can be because of a wrong consideration of the other agent's perspective. In the latter case, the instruction might be right but hard to interpret by the receiver leading to an error from them. Finally, errors can happen because of a failed action execution (\eg a block falls on the floor), a system failure for the robot, inattention from the human, etc. A robot with a robust decision-making system will be able to analyze, try to determine their origin, and handle a number of these contingencies. For example, if the human takes the wrong block, the robot can react in different ways, \eg asking the human to put it back or saying nothing and re-planning if this block was among the ones to take. If errors happen repeatedly, the robot can react differently than for a punctual error.
 
 
-\section{The cognitive robot architecture}\todo{couper dans le gras}
+\section{The cognitive robot architecture}
 \label{chap9:sec:archi}
 
 In this section, we present the architecture developed to handle the Director Task in its nominal case but also to allow for future extensions, endowing the robot with the abilities described in section~\ref{subsec:abilities}. The architecture is basically the one presented in Section~\ref{chap3:sec:rob_archi}.
@@ -171,86 +171,98 @@ As at execution time the supervision uses the \acrshort{reg}, a domain-specific 
 Based on the components presented above, \acrshort{jahrvis} manages the execution of Director Tasks, based on its processes presented in Chapters \ref{chapter:chap5} and~\ref{chapter:chap6}.
 
 
-\section{Experiments}\todo{modifs pour axer supervision-texte de guillaume}
+\section{Demonstration of the task nominal case}
 
-The architecture has been successfully implemented on a PR2 robotic platform. The robot is thus able to play both roles, the director and the receiver. In this section, we comment and analyze a video\footnote{\url{https://youtu.be/jtSyZeqBkp0}} of two experiments. For both experiments, the initial state is the same and are represented in Figure~\ref{chap9:fig:expe_config}. The only emulated element is the human action recognition to trigger the next actions of the robot when it holds the director role as at the time, the \acrfull{ham} process presented in Section~\ref{chap6:sec:h_moni} was not developed yet.
+In this section, we present the Director Task performed by a human and a robot, in a laboratory setting. Each agent takes both roles. The video of this demonstration is available at: \url{https://www.youtube.com/watch?v=jtSyZeqBkp0}. It runs with the supervision system presented in Chapters~\ref{chapter:chap4} and~\ref{chapter:chap5}, \acrshort{jahrvis}, excluding the \acrlong{ham} that was not developed at the time of the video yet. Therefore, the actions executed by the human are manually fed to \acrshort{jahrvis} by an operator external to the task.
 
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=\textwidth]{figures/chapter4/expe/config.png}
-	\caption{\label{chap9:fig:expe_config} Initial configuration for both case studies. The top-right block is not visible, and thus unknown, by the human partner. The robot can not know if there is a block in the bottom-left compartment. All others blocks are known by both the robot and the human.}
+	\includegraphics[width=\textwidth]{figures/chapter4/config.png}
+	\caption{\label{chap9:fig:expe_config} Initial set-up of our Director Task demonstration from the robot perspective. One block is hidden from the human and one is hidden from the robot.}
 \end{figure}
+
+The initial set-up of our Director Task demonstration is presented in Figure~\ref{chap9:fig:expe_config}, from the robot perspective. There are six blocks, one hidden from the human and another one hidden from the robot. As explained in Section~\ref{chap9:subsec:material}, they can be distinguished by their color, their border color and their geometric figure which can be a triangle or a circle and which has a color as well. From the left to the right and from the top to the bottom their complete descriptions are:
+\begin{bulletList}
+	\item The green block with a green border and a blue triangle (only visible by the robot)
+	\item The blue block with a blue border and a green circle
+	\item The blue block with a blue border and a green triangle
+	\item The green block with a green border and a blue circle
+	\item The blue block with a green border and a blue triangle
+	\item The green block with a blue border and a green circle (only visible by the human)
+\end{bulletList}
 
 \subsection{PR2 as the director}
 
-We start this section with a PR2 in the role of the director (0:21 in the video). The setup is composed of six compartments including two compartments with a hidden face. One of these compartments is hidden from the human (the receiver) and one from the robot (the director). One block has been placed in each compartment. Consequently, only four blocks are known by both the human and the robot. Figure~\ref{chap9:fig:robot_view} is a visualization of the estimated geometric world of the human, maintained by the situation assessment component. Even if a block is present in each compartment, the leftmost one is not present in the estimation of the human's world. This absence comes from the fact that the human can not see what is in the compartment and thus can not know this block.
+The goal of the task, \ie the list of blocks the robot should ask the human to remove, was written in \acrshort{jahrvis} beforehand. The expected world state at the end of the Director Task was:
+\begin{bulletList}
+	\item The blue block with a blue border and a green circle is in the green storage box
+	\item The green block with a green border and a blue circle is in the green storage box
+	\item The blue block with a green border and a blue triangle is in the green storage box
+\end{bulletList}
 
-\begin{figure}[ht!]
+
+At the beginning of the task execution, this goal was sent to the planner which output a plan with the order in which the robot should ask the human to remove them. Indeed, \acrshort{hatpehda} computed this plan based on the \acrfull{reg} solver, trying to minimize the communication cost. Thus, the computed block order was:
+\begin{enumList}
+	\item The green block with a green border and a blue circle
+	\item The blue block with a blue border and a green circle
+	\item The blue block with a green border and a blue triangle
+\end{enumList}
+
+For each time the robot has to ask the human to take a block to put it on the storage box, \acrshort{jahrvis} relies on the \acrshort{reg} solver to find the best way, \ie the less costly way, to communicate about this block (and the box) in a unambiguous manner, taking the human perspective into account (see Figure~\ref{chap9:fig:h_view}). The algorithm was presented in Section~\ref{chap6:subsec:info_comm}.
+
+\begin{figure}[!hbt]
 	\centering
 	\includegraphics[scale=0.5]{figures/chapter4/robot_view.png}
-	\caption{\label{chap9:fig:robot_view} A visualization of the human's estimated geometric world from a third-person view. Even if a block is present in each compartment, the right most one is not present in this worls since the human can not see this block. }
+	\caption{\label{chap9:fig:h_view} Visualization of the human's estimated geometric world from a third-person view, computed by the Situation Assessment. Thus, the green cube with a blue triangle is absent from this view as it is not visible by the human.}
 \end{figure}
 
-Figure~\ref{chap9:fig:director} represents the entire interaction when the robot is the director. At the initial state, four blocks are visible from both agents. Describing them with all their visual features, they are:
 
-\begin{itemize}
-	\item A blue block with a blue border and a green triangle
-	\item A blue block with a blue border and a green circle
-	\item A blue block with a green border and a blue triangle
-	\item A green block with a green border and a blue circle
-\end{itemize}
-
-Thanks to the estimation of the communication cost at task planning using the results of the \acrshort{reg}, the robot is able to find the optimal sequence of blocks to instruct. The overall communication is thus minimized and the RE is unambiguous in each situation. In the initial state (a to b), the robot asks for the green block as only one of the visible blocks is green. Since the green block has a circle on it, removing it, only one of the remaining blocks has a circle on it. The robot can thus use this feature to refer to the next block (b to c). Without communication cost estimation during the task planning, such a simple situation would not necessarily appear.
-
-\begin{figure}[ht!]
+\begin{figure}[!t]
 	\centering
-	\includegraphics[width=\textwidth]{figures/chapter4/director.png}
-	\caption{\label{chap9:fig:director} The director task handled by an autonomous PR2 robot in the role of the director. Each picture represents a step toward the achievement of the task. The estimated human perspective is displayed in the top left-hand corner of each picture. On top of the arrows leading to a new state are the sentences said by the robot to the human. The block outlined in red are the blocks referred to at each step. }
+	\begin{subfloat}[The robot said ``can you put the green block in the green storage box?'', thus the human is taking it. The other green block is not visible by the human.]{\label{chap9:fig:director_1}
+			\includegraphics[width=0.4\linewidth]{figures/chapter4/director_1.png}}\hfill
+	\end{subfloat}
+	\begin{subfloat}[The human's perspective computed by the Situation Assessment before the first block was removed.]{\label{chap9:fig:director_1_h}
+			\includegraphics[width=0.4\linewidth]{figures/chapter4/director_1_h_view.png}}
+	\end{subfloat}
+	\begin{subfloat}[The robot said ``can you put the block with the circle in the green storage box?'', thus the human is taking it.]{\label{chap9:fig:director_2}\includegraphics[width=0.4\linewidth]{figures/chapter4/director_2.png}}\hfill
+	\end{subfloat}
+	\begin{subfloat}[The human's perspective computed by the Situation Assessment before the second block was removed.]{
+			\label{chap9:fig:director_2_h}\includegraphics[width=0.4\linewidth]{figures/chapter4/director_2_h_view.png}}
+	\end{subfloat}
+	\begin{subfloat}[The robot said ```can you put the block with the blue triangle in the green storage box?'', thus the human is taking it. The other block with a blue triangle is not visible by the human.]{\label{chap9:fig:director_3}
+			\includegraphics[width=0.4\linewidth]{figures/chapter4/director_3.png}}\hfill
+	\end{subfloat}
+	\begin{subfloat}[The human's perspective computed by the Situation Assessment before the third block was removed.]{\label{chap9:fig:director_3_h}
+			\includegraphics[width=0.4\linewidth]{figures/chapter4/director_3_h_view.png}}
+	\end{subfloat}
+	\caption{The robot, as the director, informs the human of the blocks to remove from the self, one by one. On the left are images from a camera, from the the robot's side. On the right are screenshots of the Situation Assessment, showing the computed human's perspective.}
+	\label{chap9:fig:director}
 \end{figure}
+
+Therefore in the video (from $24''$) -- this is also visible in Figure~\ref{chap9:fig:director}, the robot asks first ``can you put the green block in the green storage box?'' because there are two green blocks but one of them is not visible by the human so the robot has no need to disambiguate them (see Figures~\ref{chap9:fig:director_1} and~\ref{chap9:fig:director_1_h}). Then, it asks ``can you put the block with the circle in the green storage box?'' as there is only one block with a circle on it now that the other block with one was previously remove (see Figures~\ref{chap9:fig:director_2} and~\ref{chap9:fig:director_2_h}). Finally, it asks ``can you put the block with the blue triangle in the green storage box?''. Indeed, there are three blocks with a triangle but only two visible by the human, so the robot disambiguate these two by specifying the triangle color (see Figures~\ref{chap9:fig:director_3} and~\ref{chap9:fig:director_3_h}). Each time, it mentioned ``green storage box'' and not ``storage box'' because there is a pink storage box in the scene, not visible by the camera.
+
+\newpage
 
 \subsection{PR2 as the receiver}
 
-While in its previous role the robot just had to instruct the human, when the robot is the receiver (1:33 in the video) more reasoning is needed. A retranscription of part of the interaction is represented in Figure~\ref{chap9:fig:receiver}. In the initial state, the same four blocks as previously are visible by both the agents. The robot is able to understand three actions: take, drop, and remove. The latter action is a combination of the two others.
+Now, the roles are inverted, the robot becomes the receiver while the human becomes the director. The task starts in the same configuration as before (see Figure~\ref{chap9:fig:expe_config}). With these new roles, the robot will have to understand the instructed action (take, drop or remove which is a take-drop) and to which block the human will refer. This algorithm allowing to understand such instructions was presented in Section~\ref{chap6:subsec:und_comm}.
+
+First, the human orders the robot to ``take the green cube'' (video at $1'35''$). Such a verbal sentence is analyzed by the Google Speech To Text (STT) API and sent to \acrshort{jahrvis} in the form of a text. Then, querying the \acrshort{nlp} component, \acrshort{jahrvis} (the \acrfull{cm}) gets what is the action the human requested, here ``take'' and a \sparql query corresponding to the object, here \verb'?0 isA Block, ?0 hasColor green'. This query is merged with what we call the context, \ie in this task, we consider that the human is only talking about the objects on the table on which the shelf is so it is \verb'?0 isAbove table_1'. Thus, the \acrshort{cm} requests Ontologenius the object list corresponding to this merged query, from the human's perspective. As the other green block is only visible by the robot, there is a single block in the list, \ie the one with a blue circle. Then, the action to execute is sent to the \acrfull{aem}. When the human asks the robot to ``drop the cube'', \acrshort{jahrvis} has a special case for drop and place actions, checking that the robot is already holding a block and as it is the case, the action is sent to the \acrshort{aem}.
+
+Then, the second human's order ``remove the block with a circle'' is processed the same way as explained previously, except that the remove action is considered as being a decomposition of the take and drop actions so the robot executes both in a raw.
+
+Finally, for the last block to remove, we can see two mechanisms of contingency handling. First, when the human said ``take the block with a triangle'', the STT returned ``take is about to whip a triangle'' which led the \acrshort{nlp} to return a comprehension score below the expected minimum to the \acrshort{cm}. Therefore, the robot explained that it did not understand the sentence. Then, the human repeated his sentence which was analyzed as explained previously. However, this time there was not one object in the list returned by Ontologenius but two, second contingency. Indeed, there are two blocks with a triangle visible by both the human and the robot as shown in Figure~\ref{chap9:fig:triangles}. This means that the human made an ambiguous request, probably because he lacked of focus. Then, the robot needs to disambiguate the situation. The \acrshort{cm} requests the \acrshort{reg} the verbalization of the two blocks with a triangle, with their minimal set of distinguishable characteristics among the blocks of the context. It allowed the robot to ask ``do you mean the block with a green triangle or the block with a blue triangle?''. When the human answers ``with a blue triangle'', the situation is resolved and as the \acrshort{cm} kept the action to perform in memory, it can then send to the \acrshort{aem} to take the block with a blue triangle. Finally, the block is dropped when it is asked by the human. d
+
 
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=\textwidth]{figures/chapter4/receiver.png}
-	\caption{\label{chap9:fig:receiver} The director task is handled by an autonomous PR2 robot in the role of the receiver. Each picture represents a step toward the achievement of the task. The estimated human perspective is displayed in the top left-hand corner of each picture. On top of the arrows leading to a new state are the sentences said by the human to the robot and for the last situation the refinement query from the robot to the human, followed by the answer of the human. }
+	\includegraphics[width=\textwidth]{figures/chapter4/triangles.png}
+	\caption{\label{chap9:fig:triangles} The human asked the robot to take the block with a triangle but there are two blocks with a triangle visible by both the robot and the human.}
 \end{figure}
 
-For the first block (a to b on the figure), the human instructs the robot for the green block. The \acrlong{nlp} module returns the \sparql{} query:
 
-\begin{quote} 
-	\centering 
-	(?0, isA, Block), (?0, hasColor, green)
-\end{quote}
 
-Since the robot assumes that the human is speaking about objects on the table, the understood query is merged with another one representing the context of the task: (?0, isAbove, table\_1). Querying the human estimated ontology with the merged query, only one entity match. There is no ambiguity in human instruction. The robot takes the instructed block then drop it. If the query was applied to the robot ontology, two blocks would have matched since the block unknown by the human is also green. It goes the same for, the second instruction. There is no ambiguity. The \sparql{} query related to this second block is:
-
-\begin{quote} 
-	\centering 
-	(?0, isA, Block), (?0, hasFigure, ?1), (?1, isA, Circle)
-\end{quote}
-
-The third instruction given by the human as the director is the most interesting for us. The human asks for \textit{``The block with a triangle''}. However, the speech to text returns \textit{``take is about to whip a triangle''}. With this sentence, the \acrshort{nlp} module can only extract two known concepts being ``take'' and ``triangle''. Due to the limited amount of words understood, it does not try to generate a \sparql{} query. The robot thus informs the human about its incapacity and repeat the heard sentence as a back loop for the human. At the second try, the sentence is understood and gives the query:
-
-\begin{quote} 
-	\centering 
-	(?0, isA, Block), (?0, hasFigure, ?1), (?1, isA, Triangle)
-\end{quote}
-
-However, matching this query to the human's estimated ontology, we get two results. Once again, matching it to the robot's ontology would give three results but the third one is not visible from the human. Since all the concepts of the sentence have been understood and linked together to create the query, the human should have made a mistake, providing an ambiguous referring expression.
-
-To be proactive, we want the robot to ask precision about the block to take by proposing visual features to distinguish them. To do so, we use the \acrshort{reg} algorithm on each ambiguous block. As a context for the \acrshort{reg}, we pass the previously merged \sparql{} query. It represents what has already been understood by the robot. In the current situation, the robot thus performs two \acrshort{reg} and their results are used to generate the disambiguation sentence:
-
-\begin{quote} 
-	\centering 
-	\textit{``Do you mean the block with a green triangle or the block with a blue triangle?''}
-\end{quote}
-
-When the human responds, for sure it does not generate a complete description f the block to be taken. It rather answers the question. The query extracted from his answer is thus combined with the previously understood one in case some information is missing. Matching this last query to the human's estimated ontology, the robot finally get the block to remove.
-
-With this latter case, we saw how the robot can react to a human's mistake and use the \acrshort{reg} to help the progress of the task, even if it is the receiver.
 
 \section{Open challenges for the community }
 \label{sec:challenges}
