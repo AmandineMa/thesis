@@ -150,7 +150,7 @@ urlcolor=linkcol %couleur des liens pour les url
 \usepackage{rotating}                    % Sideways of figures & tables
 %\usepackage{bibunits}
 %\usepackage[sectionbib]{chapterbib}          % Cross-reference package (Natural BiB)
-%\usepackage{natbib}                  % Put References at the end of each chapter
+\usepackage{natbib}                  % Put References at the end of each chapter
                                          % Do not put 'sectionbib' option here.
                                          % Sectionbib option in 'natbib' will do.
 \usepackage{fancyhdr}                    % Fancy Header and Footer
@@ -279,10 +279,8 @@ urlcolor=linkcol %couleur des liens pour les url
 { \end{list} }
 
 \newenvironment{enumList}%
-{ \begin{enumerate}%
-		{\setlength{\labelwidth}{25pt}%
-			\setlength{\leftmargin}{30pt}%
-			\setlength{\itemsep}{-0.5em}}}%
+{ \begin{enumerate}[noitemsep]
+		\setlength{\leftmargin}{30pt}}%
 	{ \end{enumerate} }
 
 \newenvironment{inlineEnumerate}
