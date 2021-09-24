@@ -48,23 +48,15 @@
 
 Robots will interact more and more with humans in the future and thus will need to be endowed with the pertinent abilities. We are still far from having autonomous robots among humans and able to smoothly collaborate with them but the work of this thesis is a contribution bringing the community a bit closer to this goal. 
 
-
 When humans collaborate to achieve a task together, numerous cognitive mechanisms come into play, more than we would have thought at first glance. Some of these mechanisms are also triggered in humans’ minds when they interact with robots as they are essential to a successful collaboration. Therefore, it is important for roboticists designing robots that will closely interact with humans to be aware of and take into account the humans mental states and sensorimotor functions involved in controlling and smoothing collaborative task performance. However, this does not imply that robots have to be endowed with the same mechanisms since being able to collaborate with humans does not mean to imitate them. What is key to roboticists is to understand how humans work and to design  robots that will adapt. 
 
+Consequently, this thesis starts with an immersion in philosophy and social and cognitive psychology. Then, we explore \acrfull{bdi} and cognitive robotic architectures  which have inspired us to design our own architecture in which, \acrshort{jahrvis} —  the main contribution of this thesis — endows a robot with the abilities not only to control, but also to evaluate its joint action with a human. 
 
-Consequently, this thesis starts with an immersion in philosophy and social and cognitive psychology. We develop key elements for collaboration such as joint action, commitment and shared plans. Then, we explore Belief-Desire-Intention (BDI) and cognitive robotic architectures  which have inspired us to design our own architecture in which, JAHRVIS —  the main contribution of this thesis — endows a robot with the abilities not only to control, but also to evaluate its joint action with a human. 
+\acrfull{jahrvis} is what we call a supervision system, \ie it embeds the robot high-level decisions, controls its behavior and tries to react to contingencies, always considering the human it is interacting with. It is able to do so by taking into account shared plans, human mental states, its knowledge about the current state of the environment, and human actions. \acrshort{jahrvis} is designed in such a way that it is generic enough to handle various kinds of tasks. 
 
+Not only \acrshort{jahrvis} controls the robot contribution to a collaborative task, it also tries to evaluate if the interaction is going well or not. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make more pertinent its decision-making processes. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low \acrlong{qoi} is assessed. 
 
-JAHRVIS (Joint-Action based Human-Aware supeRVISor) is what we call a supervision system, \ie, it embeds the robot high-level decisions, controls its behavior and tries to react to contingencies, always considering the human it is interacting with. It is able to do so by taking into account shared plans, human mental states, its knowledge about the current state of the environment, and human actions. The module to monitor and recognize these actions is model-based and allows to take into account a potentially unreliable perception of the human. JAHRVIS is designed in such a way that it is generic enough to handle various kinds of tasks. It can also manage  different kinds of human-robot shared plans as input: shared plans for which actions might not be allocated to an agent at planning time and objects might be referred to with a semantic query, and conditional shared plans which anticipate different possibilities for the human decision/action. 
-
-
-Not only JAHRVIS controls the robot contribution to a collaborative task, it also tries to evaluate if the interaction is going well or not. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make more pertinent its decision-making processes. The evaluation of the Quality of Interaction (QoI) relies on a model of interaction, considered at  three levels: the interaction session level, the tasks level and the actions level. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low QoI is assessed. Indeed, for instance, a task can be of poor quality while the session can still be considered as going well.
-
-
-JAHRVIS has been integrated in a cognitive robotic architecture and effectively deployed to achieve several collaborative and service tasks in a real environment such as a direction-giving task in a Finnish mall and a two-agents task inspired from psychology. These tasks demonstrated the robot’s abilities related to perspective-taking, planning, knowledge representation with theory of mind, manipulation, and communication.
-\\
-\\
-\textbf{Keywords:} Human-Robot interaction, Joint Action, Decision making, Quality of Interaction
+\acrshort{jahrvis} has been integrated in a cognitive robotic architecture and effectively deployed to achieve several collaborative and service tasks. These tasks demonstrated the robot’s abilities related to perspective-taking, planning, knowledge representation with theory of mind, manipulation, and communication.
 
 \clearpage
 
@@ -74,22 +66,17 @@ JAHRVIS has been integrated in a cognitive robotic architecture and effectively 
 Dans le futur, les robots interagiront chaque jour un peu plus avec les humains et devront donc être dotés des capacités adéquates. Nous sommes encore loin de robots autonomes parmi les humains, capables de collaborer sans problème avec eux: le travail de cette thèse est une contribution qui rapproche un peu plus la communauté de cet objectif. 
 
 
-Lorsque des personnes collaborent pour réaliser une tâche ensemble, de nombreux mécanismes neurocognitifs entrent en jeu, plus qu’il n’y paraît à première vue. Certains de ces mécanismes sont aussi activés quand un humain interagit avec un robot et non plus avec un autre humain, car ils sont essentiels à une collaboration réussie. Il est donc important que les roboticiens qui conçoivent des robots destinés à interagir étroitement avec les humains soient conscients de cela et qu’ainsi ils prennent en compte les états mentaux des humains et les fonctions sensori-motrices impliquées dans le contrôle et la fluidité de l'exécution des tâches collaboratives. Toutefois, cela ne signifie pas que les robots doivent être dotés de ces mêmes mécanismes, car être capable de collaborer avec les humains ne signifie pas les imiter. Ce qui est essentiel pour les roboticiens, c'est de comprendre comment les humains travaillent et de concevoir des robots qui s'adapteront. 
+Lorsque des personnes collaborent pour réaliser une tâche ensemble, de nombreux mécanismes cognitifs entrent en jeu, plus qu’il n’y paraît à première vue. Certains de ces mécanismes sont aussi activés quand un humain interagit avec un robot et non plus avec un autre humain, car ils sont essentiels à une collaboration réussie. Il est donc important que les roboticiens qui conçoivent des robots destinés à interagir étroitement avec les humains soient conscients de cela et qu’ainsi ils prennent en compte les états mentaux des humains et les fonctions sensori-motrices impliquées dans le contrôle et la fluidité de l'exécution des tâches collaboratives. Toutefois, cela ne signifie pas que les robots doivent être dotés de ces mêmes mécanismes, car être capable de collaborer avec les humains ne signifie pas les imiter. Ce qui est essentiel pour les roboticiens, c'est de comprendre comment les humains travaillent et de concevoir des robots qui s'adapteront. 
 
 
-Ce manuscrit commence par une immersion dans la philosophie et la psychologie sociale et cognitive. Nous développons les éléments clés de la collaboration tels que l'action conjointe, l'engagement et les plans partagés. Ensuite, nous explorons les modèles “croyance-désir-intention” (Belief-Desire-Intention en anglais) et les architectures robotiques cognitives qui nous ont inspirés pour concevoir notre système de supervision, JAHRVIS - la principale contribution de cette thèse qui dote un robot des capacités de non seulement de contrôler, mais aussi d'évaluer son action conjointe avec un humain. 
+Ce manuscrit commence par une immersion dans la philosophie et la psychologie. Ensuite, nous explorons les modèles ``croyance-désir-intention'' et les architectures robotiques cognitives qui nous ont inspirés pour concevoir notre propre architecture dans laquelle, \acrshort{jahrvis} -- la principale contribution de cette thèse -- au robot de, non seulement contrôler, mais aussi d'évaluer son action jointe avec un humain. 
 
+\acrfull{jahrvis} est ce que nous appelons un système de supervision, \ie il prend les décisions haut niveau du robot, contrôle son comportement et tente de réagir aux imprévus, en tenant toujours compte de l'humain avec lequel il interagit. Il peut le faire en se basant sur les plans partagés qu’il génère, sa connaissance des états mentaux de l'humain et de l'état actuel de l'environnement et, les actions de l'humain. \acrshort{jahrvis} est conçu de manière à être suffisamment générique pour gérer différents types de tâches.
 
-\acrfull{jahrvis} est ce que nous appelons un système de supervision, c'est-à-dire qu'il prend les décisions haut niveau du robot, contrôle son comportement et tente de réagir aux imprévus, en tenant toujours compte de l'humain avec lequel il interagit. Il peut le faire en se basant sur les plans partagés qu’il génère, sa connaissance des états mentaux de l'humain et de l'état actuel de l'environnement et, les actions de l'humain. Le module de surveillance et de reconnaissance de ces actions est basé sur un modèle et permet au robot de prendre en compte une perception potentiellement peu fiable. JAHRVIS est conçu de manière à être suffisamment générique pour gérer différents types de tâches. Il peut également gérer différents types de plans partagés homme-robot en entrée : des plans partagés pour lesquels les actions peuvent ne pas être attribuées à un agent au moment de la planification et pour lesquels les objets peuvent être référencés par une requête sémantique, et des plans partagés conditionnels qui anticipent différentes possibilités pour la décision/action humaine. 
+\acrshort{jahrvis} ne se contente pas de contrôler la contribution du robot à une tâche collaborative, il essaie également d'évaluer si l'interaction se déroule bien ou non. C'est possible grâce à un ensemble de métriques et à une méthode pour les agréger que nous avons conçus. Nous affirmons que le fait de doter un robot de cette capacité lui permet d'améliorer et de rendre plus pertinent son processus de prise de décision. Dans les travaux futurs, cette granularité permettra au robot de savoir à quel niveau il doit agir lorsqu'une faible Qualité d'Interaction est évaluée.
 
+\acrshort{jahrvis} a été intégré dans une architecture robotique cognitive et déployé efficacement pour réaliser plusieurs tâches collaboratives. Ces tâches ont démontré les capacités du robot en matière de prise de vue, de planification, de représentation des connaissances avec la théorie de l'esprit, de manipulation et de communication.
 
-JAHRVIS ne se contente pas de contrôler la contribution du robot à une tâche collaborative, il essaie également d'évaluer si l'interaction se déroule bien ou non. Cela est possible grâce à un ensemble de métriques et à une méthode pour les agréger que nous avons conçue. Nous affirmons que le fait de doter un robot de cette capacité lui permet d'améliorer et de rendre plus pertinent son processus de prise de décision. L'évaluation de la qualité d’interaction (QoI) repose sur un modèle d'interaction à trois niveaux : le niveau de la session d'interaction, le niveau des tâches et le niveau des actions. Dans les travaux futurs, cette granularité permettra au robot de savoir précisément à quel niveau il doit agir lorsqu'une faible QoI est évaluée. En effet, par exemple, une tâche peut être de mauvaise qualité alors que la session peut encore être considérée comme se déroulant bien.
-
-
-JAHRVIS a été intégré dans une architecture robotique cognitive et déployé efficacement pour réaliser plusieurs tâches de collaboration et de service dans un environnement réel, comme une tâche de guidage dans un centre commercial et une tâche à deux agents inspirée de la psychologie. Ces tâches ont démontré les capacités du robot en matière de prise de vue, de planification, de représentation des connaissances avec la théorie de l'esprit, de manipulation et de communication.
-\\
-\\
-\textbf{Mots clés :} Interaction Homme-Robot, Action Jointe, Prise de décision, Qualité d'Interaction
 
 % Here you can see an example of how to create text conditioned by the language
 % variable. The \iftoggle command:
@@ -150,7 +137,7 @@ A faire en dernier :-)
 \include{Chapter2.1}
 \include{Chapter2.2}
 
-\part{Joint Action-based Human-Aware supeRVISor: JAHRVIS}\label{part:part3}
+\part{Joint Action-based Human-Aware supeRVISor: \acrshort{jahrvis}}\label{part:part3}
 \begin{partintro}
 	We presented in Section~\ref{chap4:subsec:state_art_sup} a few work tackling supervision issues, \ie how to adapt to the human, how to monitor them, how to face unexpected human behavior, how to optimize the task efficiency, how to make the robot an good human helper... They were very inspiring but we found out it was missing a general architecture and a software that could be used in different types of collaborative tasks, available for the community and that could easily be enhanced with new features. These thoughts led to the development of the \acrfull{jahrvis} which is the central topic of this part. We also came up with a novel idea: to endow the robot with the ability to measure if an interaction is going well or not. Such ability can be used by the supervision to enhance its adaptation capacity.
 \end{partintro}
@@ -176,7 +163,7 @@ A faire en dernier :-)
 
 \appendix
 \bookmarksetupnext{level=-1}
-%\include{Annexe_JAHRVIS}
+%\include{Annexe_\acrshort{jahrvis}}
 \include{Annexe_scaling}
 \bookmarksetupnext{level=-1}
 \include{annexe_user_study}
@@ -185,9 +172,29 @@ A faire en dernier :-)
 
 %\bibliographystyle{StyleThese}
 \bibliographystyle{spbasic}
-\bibliography{biblio}\todo{ajouter tous les prenoms pour harmoniser et majuscules aux acronymes}
+\bibliography{biblio}
 
 \cleardoublepage
+\thispagestyle{empty}
+\newgeometry{left=1in,right=1in,top=0.5in,bottom=0.5in}
+\begin{vcenterpage}
+\noindent\rule{\textwidth}{0.5pt}
 
+\textbf{Résumé:} Dans le futur, les robots interagiront chaque jour un peu plus avec les humains et devront donc être dotés des capacités adéquates. Nous sommes encore loin de robots autonomes parmi les humains, capables de collaborer sans problème avec eux: le travail de cette thèse est une contribution qui rapproche un peu plus la communauté de cet objectif. 
+
+Lorsque des personnes collaborent pour réaliser une tâche ensemble, de nombreux mécanismes cognitifs entrent en jeu, plus qu’il n’y paraît à première vue. Certains de ces mécanismes sont aussi activés quand un humain interagit avec un robot et non plus avec un autre humain, car ils sont essentiels à une collaboration réussie. Il est donc important que les roboticiens qui conçoivent des robots destinés à interagir étroitement avec les humains soient conscients de cela et qu’ainsi ils prennent en compte les états mentaux des humains et les fonctions sensori-motrices impliquées dans le contrôle et la fluidité de l'exécution des tâches collaboratives. Toutefois, cela ne signifie pas que les robots doivent être dotés de ces mêmes mécanismes, car être capable de collaborer avec les humains ne signifie pas les imiter. Ce qui est essentiel pour les roboticiens, c'est de comprendre comment les humains travaillent et de concevoir des robots qui s'adapteront. 
+
+Ce manuscrit commence par une immersion dans la philosophie et la psychologie. Ensuite, nous explorons les modèles ``croyance-désir-intention'' et les architectures robotiques cognitives qui nous ont inspirés pour concevoir notre propre architecture dans laquelle, \acrshort{jahrvis} -- la principale contribution de cette thèse -- au robot de, non seulement contrôler, mais aussi d'évaluer son action jointe avec un humain. 
+
+\acrfull{jahrvis} est ce que nous appelons un système de supervision, \ie il prend les décisions haut niveau du robot, contrôle son comportement et tente de réagir aux imprévus, en tenant toujours compte de l'humain avec lequel il interagit. Il peut le faire en se basant sur les plans partagés qu’il génère, sa connaissance des états mentaux de l'humain et de l'état actuel de l'environnement et, les actions de l'humain. \acrshort{jahrvis} est conçu de manière à être suffisamment générique pour gérer différents types de tâches.
+
+\acrshort{jahrvis} ne se contente pas de contrôler la contribution du robot à une tâche collaborative, il essaie également d'évaluer si l'interaction se déroule bien ou non. Cela est possible grâce à un ensemble de métriques et à une méthode pour les agréger que nous avons conçus. Nous affirmons que le fait de doter un robot de cette capacité lui permet d'améliorer et de rendre plus pertinent son processus de prise de décision. Dans les travaux futurs, cette granularité permettra au robot de savoir précisément à quel niveau il doit agir lorsqu'une faible Qualité d'Interaction est évaluée.
+
+\acrshort{jahrvis} a été intégré dans une architecture robotique cognitive et déployé efficacement pour réaliser plusieurs tâches collaboratives. Ces tâches ont démontré les capacités du robot en matière de prise de vue, de planification, de représentation des connaissances avec la théorie de l'esprit, de manipulation et de communication.
+
+\textbf{Mots clés :} Interaction Homme-Robot, Action Jointe, Prise de décision, Qualité d'Interaction
+\\
+\noindent\rule{\textwidth}{0.5pt}
+\end{vcenterpage}
 
 \end{document}
