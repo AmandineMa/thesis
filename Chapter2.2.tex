@@ -17,22 +17,22 @@ The supervision component is the binder of a robotic architecture. In this chapt
 \section{State of the art}\label{chap4:subsec:state_art_sup}
 Without it, there is no task, no interaction happening, it controls the other components of the architecture. Indeed, what we define by `supervision', in the context of \acrshort{hri}, is the higher level of the architecture, the process involving real-time decision-making, eventually based on plans, and action execution and monitoring. When speaking about joint action, we think it is the component that should handle coordination, communication, monitoring, repair strategies and eventually joint attention and common ground alignment, based on shared representations.
 
-We can find in the literature multiple work proposing components with a part of these features. The ones that we will present have been a source of inspiration, from far or close, for the contributions of this thesis. We will start with the oldest one, Shary, which has been developed in our laboratory. It is a component dedicated to supervision for human-robot interactions, with a strong emphasis on communication, allowing to execute shared plans and to monitor human and robot actions~\citep{clodic_2009_shary}. Chaski is a task-level executor, focusing on coordination and decision-making. It takes as input shared plans with deadlines and minimize the human idle time when executing of this plans~\citep{shah_2011_improved}. There is also Pike an online executive that unifies intention recognition and plan adaptation to deal with temporal uncertainties during Shared Plan execution~\citep{karpas_2015_robust}.\cite{gorur_2017_toward, gorur_2018_social} developed a robot able to handle unexpected human behavior, the first one being the human doing an action irrelevant to the task and the second one being the human not wanted the robot assistance. For this, they developed a human model and have a monitoring of human's actions and endow the robot with the abilities to be reactive and proactive. Similarly, \cite{baraglia_2017_efficient} proposed a reactive and proactive robot, being able to help when requested by the human or when detected. \cite{iocchi_2016_practical} presented a framework which generate and execute robust plans for service robots. It allows to not explicitly represent all possible situations would face (\eg low battery means the robot should not navigate) and also to face unpredicted situations where an action failed with no alternative solutions. They implemented it by separating the state variables needed at both planning and execution and the one needed at execution time only. Finally, \cite{devin_2016_implemented} implemented a supervisor allowing the robot to estimate the human's mental state about the environment and the states of the goals, plans and actions, while executing shared plans.
+We can find in the literature multiple work proposing components with a part of these features. The ones that we will present have been a source of inspiration, from far or close, for the contributions of this thesis. We will start with the oldest one, Shary, which has been developed in our laboratory. It is a component dedicated to supervision for human-robot interactions, with a strong emphasis on communication, allowing to execute shared plans and to monitor human and robot actions~\citep{clodic_2009_shary}. Chaski is a task-level executor, focusing on coordination and decision-making. It takes as input shared plans with deadlines and minimize the human idle time when executing of this plans~\citep{shah_2011_improved}. There is also Pike an online executive that unifies intention recognition and plan adaptation to deal with temporal uncertainties during Shared Plan execution~\citep{karpas_2015_robust}.\cite{gorur_2017_toward, gorur_2018_social} developed a robot able to handle unexpected human behavior, the first one being the human doing an action irrelevant to the task and the second one being the human not wanted the robot assistance. For this, they developed a human model and have a monitoring of human's actions and endow the robot with the abilities to be reactive and proactive. Similarly, \cite{baraglia_2017_efficient} proposed a reactive and proactive robot, being able to help when requested by the human or when detected. \cite{iocchi_2016_practical} presented a framework which generates and executes robust plans for service robots. It allows to not explicitly represent all possible situations the robot would face (\eg low battery means the robot should not navigate) and also to face unpredicted situations where an action failed with no alternative solutions. They implemented it by separating the state variables needed at both planning and execution and the one needed at execution time only. Finally, \cite{devin_2016_implemented} implemented a supervisor allowing the robot to estimate the human's mental state about the environment and the states of the goals, plans and actions, while executing shared plans.
 
 \bigskip
 
-We were not able to find so many work focusing on decision-making and control dedicated to human-robot collaboration. First, it is not so often that complete robotic architectures run autonomously on a real robot and interact with a human. And, when they do, the supervision system is frequently not existing, the task being scripted, or is strongly designed for a specific task, preventing to be re-used in another context. Moreover, even when the work meets the criteria not scripted and not strongly built for a specific task such as the one of Iocchi \etal{}, there is no code or documentation to re-implement their system.
+It was difficult to find other works on decision-making and control dedicated to human-robot collaboration than the ones presented here, which shows that this subject is not tackled enough. First, it is not so often that complete robotic architectures run autonomously on a real robot and interact with a human. And, when they do, the supervision system is frequently not existing, the task being scripted, or is strongly designed for a specific task, preventing to be re-used in another context. Moreover, even when the work meets the criteria not scripted and not strongly built for a specific task such as the one of Iocchi \etal{}, there is no code or documentation to re-implement their system.
 
 
 \section{The Needs and Wants of a supervision system to manage interaction} % Requirements
 
 %\section{Design Methodology}
 
-A part of the control features presented here is inspired from \cite{devin_2017_decisional}. Indeed, we intended to pursue her work, re-implementing a part of her software using Jason, a BDI framework presented in Section~\ref{chap4:sec:bdi}, instead of if/else statements in C++, giving our software more flexibility, readability and genericity.
-Then, to go further, we developed \acrfull{jahrvis}\footnote{Also almost the acronym for ``Just A Rather Very Intelligent System'', see \url{https://en.wikipedia.org/wiki/J.A.R.V.I.S.}}, a more complete approach of a supervision component dedicated to HRI which tries to satisfy multiple requirements, trying to consider joint action as a whole:
+A part of the control features presented here is inspired by \cite{devin_2017_decisional}. Indeed, we intended to pursue her work, re-implementing a part of her software using Jason, a BDI framework presented in Section~\ref{chap4:sec:bdi}, instead of if/else statements in C++, giving our software more flexibility, readability and genericity.
+Then, to go further, we developed the \acrfull{jahrvis}\footnote{Also almost the acronym for ``Just A Rather Very Intelligent System'', see \url{https://en.wikipedia.org/wiki/J.A.R.V.I.S.}}, a more complete approach of a supervision component dedicated to HRI which tries to satisfy multiple requirements, trying to consider joint action as a whole:
 
 \begin{bulletList}
-	\item \textbf{Be generic}. The objectives developed in the rest of list are to reach for most collaborative tasks. Thus, it seemed essential for us to develop a software not dedicated to a particular human-robot task but able to handle plans for varied tasks. 
+	\item \textbf{Be generic}. The objectives developed in the rest of this list are valid for most collaborative tasks. Thus, it seemed essential for us to develop a software not dedicated to a particular human-robot task but able to handle plans for various tasks. 
 	\item \textbf{Take into account the human partner}. In HRI, the human and the robot are partners. As seen in Section~\ref{chap1:sec:ja}, partners perform better when taking each other into account. Thus, by considering human abilities, perspective and mental states, the supervisor makes the robot a better partner for the human.
 	\item \textbf{Leave decisions to the human}. In some cases, it is not useful, even counterproductive that the robot plans everything beforehand. Indeed, such elements such as the human action parameters, or who should execute a given action when it does not matter, or the order in which some actions should be executed, can be decided at execution time. Thus, we propose a supervisor handling two types of plan allowing to give latitude to human decisions and actions: conditional plans, and plans extending ``Agent X'' shared plans~\citep{devin_2017_decisions}.
 	\item \textbf{Recognize human actions}. To monitor the plan progress, the robot should be able to monitor the human by recognizing their actions or being able to tell if they are idle.
@@ -45,7 +45,7 @@ Then, to go further, we developed \acrfull{jahrvis}\footnote{Also almost the acr
 
 \section{Which tool to implement a supervision?}\label{chap4:sec:bdi}
 
-In this section, we will present the framework we chose as base for our supervision software. First, we explain how we did this choice and then the internal mechanisms of the framework. The supervision component itself, \acrshort{jahrvis}, we will be presented in the next Chapters.
+In this section, we will present the framework we chose as a base for our supervision software. First, we explain how we did this choice and then the internal mechanisms of the framework. The supervision component itself, \acrshort{jahrvis}, we will be presented in the next Chapters.
 
 \subsection{The Choice of the Programming Framework}
 
@@ -64,7 +64,7 @@ Restart from scratch or base oneself work on an existing software? This is the q
 
 The obvious drawback of \ref{chap4:list:new} is that it takes a lot of time to start a new software from scratch and that it often leads to reinvent the wheel. Then, first we looked at existing solutions. Concerning the possibility \ref{chap4:list:sandra}, Devin had developed interesting features but the code is not modular and it was difficult to add new features or to modify the existing ones without breaking everything. Thus, there was the solutions \ref{chap4:list:soft_hri} and \ref{chap4:list:robot} left. When looking for existing software to manage human-robot interactions, we could not find any open-source one with a minimum of features, documentation and not entirely dedicated to a given task. Therefore, we turned ourselves toward robotic framework. We compared existing open-source decision-making and execution software for robots. To cite a few, there is the PetriNetPlans library introduced by \cite{ziparo_2011_petri} which is a framework for planning and execution. \cite{beetz_2010_cram} developed CRAM, a software implementing reasoning mechanisms that can infer control decisions. A framework to implement hierarchical state machines is available among ROS libraries, SMACH\footnote{\url{http://wiki.ros.org/smach}}, defined as ``task-level architecture for rapidly creating complex robot behavior''. Or, a C++ library to create behavior trees has been developed, called BehaviorTree.CPP~\footnote{\url{https://github.com/BehaviorTree/BehaviorTree.CPP/}}. Finally, there are several implementations of the BDI model presented in Section~\ref{chap3:sec:archi} such as JAM~\citep{huber_1999_jam}, Jadex~\citep{braudach_2005_jadex}, SPARK~\citep{morley_2004_spark}, dMARS~\citep{dinverno_1998_formal}, OpenPRS~\citep{ingrand_1996_prs} or Jason~\citep{bordini_2007_jason}. 
 
-As a first step, for prototyping and respecting project deadlines, our choice went to SMACH because its compatibility with ROS and its facility to be used. Then, it was no surprise, it became more and more difficult to program complex robot behaviors, state machine were not enough powerful. Thus, we examined possibilities for our second choice. After a comparison considering potential compatibility with ROS, possible integration with the other software of our architecture, availability of documentation, users' feedbacks, maintenance, and possibility of code modifications, our choice went to Jason designed by \cite{bordini_2007_jason} which is a Java interpreter of AgentSpeak created by \cite{rao_1996_agentspeak}. It has the advantage to be a BDI (Beliefs, Desires, Intentions, see Section~\ref{chap3:sec:archi}) agent-oriented framework, fitting with our architecture. BDI framework implement a process, called the reasoning cycle or more commonly the sense-decide-act cycle~\citep{albus_1991_outline}, deciding step by step, which action to perform to reach a goal. It allows more modularity than state machines to handle contingencies and events. It also facilitates reasoning on agents' -- humans and robot -- beliefs. We chose this framework among the BDI ones and not another because it is implemented in Java and thus was compatible with rosjava\footnote{\url{https://github.com/rosjava/rosjava_core}} (\ie ROS implementation in Java), it is still developed and maintained, it is well documented (theoretically~\citep{bordini_2007_jason} and implement-ally\footnote{\url{http://jason.sourceforge.net/api/}}) which allows source code understanding and modifications, and there is a mailing list for users and its archives available\footnote{\url{https://sourceforge.net/p/jason/mailman/jason-users/}}.
+As a first step, for prototyping and respecting project deadlines, our choice went to SMACH because its compatibility with ROS and its facility to be used. Then, it was no surprise, it became more and more difficult to program complex robot behaviors, state machine were not enough powerful. Thus, we examined possibilities for our second choice. After a comparison considering potential compatibility with ROS, possible integration with the other software of our architecture, availability of documentation, users' feedbacks, maintenance, and possibility of code modifications, our choice went to Jason designed by \cite{bordini_2007_jason} which is a Java interpreter of AgentSpeak created by \cite{rao_1996_agentspeak}. It has the advantage to be a BDI (Beliefs, Desires, Intentions, see Section~\ref{chap3:sec:archi}) agent-oriented framework, fitting with our architecture. The BDI framework implements a process, called the reasoning cycle or more commonly the sense-decide-act cycle~\citep{albus_1991_outline}, deciding step by step, which action to perform to reach a goal. It allows more modularity than state machines to handle contingencies and events. It also facilitates reasoning on agents' -- humans and robot -- beliefs. We chose this framework among the BDI ones and not another because it is implemented in Java and thus was compatible with rosjava\footnote{\url{https://github.com/rosjava/rosjava_core}} (\ie ROS implementation in Java), it is still developed and maintained, it is well documented (theoretically~\citep{bordini_2007_jason} and implement-ally\footnote{\url{http://jason.sourceforge.net/api/}}) which allows source code understanding and modifications, and there is a mailing list for users and its archives available\footnote{\url{https://sourceforge.net/p/jason/mailman/jason-users/}}.
 
 \subsection{Programming with Jason}\label{chap4:subsec:jason}
 As said above, Jason is a BDI-based framework, allowing what is called \textit{agent-oriented programming}. Originally designed for multi-robot programming, it can be used for other purposes such as ours. How does it work?
@@ -174,18 +174,18 @@ An illustration is given in Listing~\ref{chap4:lst:failure}. The result of the e
 !speak.
 
 +!speak : true <- 
-!say_hello;
-.print(bye).
+	!say_hello;
+	.print(bye).
 
 +!say_hello : true <-
-robot_speech(hello);
-.print(hello).
+	robot_speech(hello);
+	.print(hello).
 
 -!say_hello[error_msg(Msg)] : .substring(Msg,no_speech_found) <-
-.print(no speech module was found).
+	.print(no speech module was found).
 
 -!say_hello[error_msg(Msg)] : true <-
-.print(unknown error).	
+	.print(unknown error).	
 \end{lstlisting} 
 
 \subsection{Jason Integration with ROS}
@@ -203,24 +203,24 @@ An Agent Node has an attribute, the ROS Parameter Tree, allowing to load YAML pa
 
 \begin{lstlisting}[caption={Example of service, topic and action server definitions in a YAML file.}, label={chap4:lst:ros-jason}]
 services:
-onto_individual: 
-name: /ontologenius/individual/robot
-type: ontologenius/OntologeniusService
-onto_class: 
-name: /ontologenius/class/robot
-type: ontologenius/OntologeniusService
+	onto_individual: 
+		name: /ontologenius/individual/robot
+		type: ontologenius/OntologeniusService
+	onto_class: 
+		name: /ontologenius/class/robot
+		type: ontologenius/OntologeniusService
 topics:
-mementar_occasions: 
-name: /mementar/occasions/robot
-type: mementar/MementarOccasion
-function: sub
-plan_request:
-name: /planner/request_new_plan
-type: planner_msgs/PlanRequest
-function: pub
+	mementar_occasions: 
+		name: /mementar/occasions/robot
+		type: mementar/MementarOccasion
+		function: sub
+	plan_request:
+		name: /planner/request_new_plan
+		type: planner_msgs/PlanRequest
+		function: pub
 action_servers:
-plan_motion: /pr2_tasks_node/plan
-execute_motion: /pr2_tasks_node/execute
+	plan_motion: /pr2_tasks_node/plan
+	execute_motion: /pr2_tasks_node/execute
 \end{lstlisting}
 
 
