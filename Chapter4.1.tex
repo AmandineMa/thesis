@@ -498,55 +498,59 @@ As presented in the introduction (Section~\ref{chap8:sec:intro}), we performed a
 
 For us roboticists, this study was a user study aiming at evaluating our robotic architecture and our task design. Aside, for Kathleen Belhassein, a psychologist, this study was an experimental study aiming at evaluating the impact of the communicative strategies used on the effectiveness and quality of the interaction.
 
-Thus, we compared three different versions of the direction-giving task performed by the robot and their impact on the quality of interaction perceived by the customers: is the route description more efficient if the robot positions itself in space to point, taking the perspective of its interlocutor? Is the interaction more pleasant for the users? Is the quality of the interaction perceived as better? 
+Thus, we compared three different versions of the direction-giving task performed by the robot and their impact on the quality of interaction perceived by the customers: Which version do customers find the most pleasant? In which case the quality of interaction is perceived as better? If the robot moves to place itself in a position in which it can take the customer's perspective, is the route description more efficient then? 
 
 We had also intended to compare the quality of interaction perceived by the customers with the \acrshort{qoi} computed by the robot (see Chapter~\ref{chapter:chap7}) but the \acrshort{qoi} Evaluator was not refined enough at the time of the user study to make that happen.
 
-More precisely, we had chosen to compare three versions of the system, each time with the robot fully autonomous:
+The three compared versions are the following (each time with the robot fully autonomous):
 \begin{bulletList}
 	\item Condition 3 : Dialogue + Pointing + Navigation \\
-	\ie the complete system -- as described in Section~\ref{sec:globalarchi}
+	\ie the complete system -- as described in Section~\ref{sec:globalarchi} -- with the robot reasoning on the participant's perspective to move so that the participant can see the pointed element
 	\item Condition 2 : Dialogue + Pointing \\
-	\ie the system used during the 14-weeks deployment (see Section~\ref{subsec:deploy}) -- the subtask ``Ensuring Correct Placement'' was removed (see Figure~\ref{fig:chap3_SM})
+	\ie the system used during the 14-weeks deployment (see Section~\ref{subsec:deploy}) -- the subtask ``Ensuring Correct Placement'' was removed (see Figure~\ref{fig:chap3_SM}) -- with the robot having the possibility to rotate on itself to be able to point to the desired element (\eg if the target was behind it)
 	\item Condition 1 : Dialogue only \\
 	\ie the system used during the 14-weeks deployment less the pointing --  the subtask ``Ensuring Correct Placement'' was removed as well as the pointing actions
 \end{bulletList}
-
-In Condition 1, the robot performed the task only through dialogue. It verbally explained the route to be taken without ever pointing to an element or moving. Condition 2 integrated pointing gestures in parallel with the dialogue, with the possibility to rotate on itself to be able to point to the desired element (\eg if the target was behind it). Finally, Condition 3 was performed with the complete system as presented in Section~\ref{sec:globalarchi}, reasoning on the participant's perspective to move so that the participant can see the pointed element.
-
-In the user study context, the possible content of the dialogue task was identical for all participants (except in the case of the last item): 
-
-\begin{bulletList}
-	\item Introduction: ``Hi, my name is Pepper, I can help you find your way...''
-	\item Target: Verbalization of the direction of the desired store
-	\item Route: Verbalization of the route directions to take to get to the desired store
-	\item Comprehension question: ``Did you understand?'', ``Have you seen the intersection?''
-	\item Repetition: ``Should I show you again?''
-	\item Repositioning face: ``Please, come in front of me''
-	\item Repositioning distance: ``Can you come closer?''
-	\item Lateral repositioning: ``Can you make a few steps on your left/right, please?''
-	\item Announcement of a move: ``I'm going to move so I can show you.''
-	\item Announcement of path explanation: ``Now I'm going to explain to you the route.''
-	\item OK
-	\item End of interaction: I'm happy that I was able to help you. Okay, let's talk about something else...''
-	\item Other: The chatbot starts up and the robot says something unrelated to the task at hand, it happens when the speech recognition does not understand what the human said
-\end{bulletList}
-
-Some items, such as repositioning requests or move announcements, were not present in the Conditions 1 and 2.
-
-\bigskip
-
 Our objective was to confirmed that the Condition 3, our complete system, was preferred over the Conditions 1 and 2 as it implemented a shared perspective between the robot guide and the human (see Section~\ref{subsec:svp}).
+
+All possible robot utterances was the same for all the participants. They are summarized in Table~\ref{chap8:tab:dialog}.
+
+
+\begin{table}[htp]
+\centering
+\begin{tabularx}{\textwidth}{p{4.5cm}|X}
+
+Sentence type                    & Sentence content                                                                    \\ \hline\hline
+Introduction                     & ``Hi, my name is Pepper, I can help you find your way...''                          \\ \hline
+Target                           & Verbalization of the direction of the desired store                                 \\ \hline
+Route                            & Verbalization of the route directions to take to get to the desired store           \\ \hline
+Comprehension question           & ``Did you understand?'', ``Have you seen the intersection?''                        \\ \hline
+Repetition                       & ``Should I show you again?''                                                        \\ \hline
+Repositioning face               & ``Please, come in front of me''                                                     \\ \hline
+Repositioning distance           & ``Can you come closer?''                                                            \\ \hline
+Lateral repositioning            & ``Can you make a few steps on your left/right, please?''                            \\ \hline
+Announcement of a move           & ``I'm going to move so I can show you.''                                            \\ \hline
+Announcement of path explanation & ``Now I'm going to explain to you the route.''                                      \\ \hline
+OK                               & ``OK''                                                                              \\ \hline
+End of interaction               & ``I'm happy that I was able to help you. Okay, let's talk about something else...'' \\ \hline
+Other                            & The chatbot starts up and the robot says something unrelated to the task at hand, it happens when the speech recognition does not understand what the human said                                                                                    \\
+\end{tabularx}
+\caption{The dialog content of the direction-giving task was the same for all participants (except in the case of the last item). Some items, such as repositioning requests or move announcements, were not present in the Conditions 1 and 2.}
+\label{chap8:tab:dialog}
+\end{table}
+
+
+
 
 \subsection{Experimenters}
 
-Two experimenters were present and visible to the participants in order to manage the registration systems and the visitors of the mall, to ensure the smooth running of each participation, and to administer the questionnaires as well as the effectiveness test. A third experimenter (the author), being hidden from the participants by a panel, managed the software. Some parameters of the Supervisor had to be manually changed to switch between conditions. Thus, the Supervisor was launched at the beginning of a condition and killed at the end. The other software were usually launched at the beginning of the day and ran until night, except if bugs were encountered. This launch of the Supervisor was the only moment in a condition during which the experimenter intervened, otherwise the robot was acting completely autonomously. A fourth experimenter, from VTT, was present to provide translation and conduct the experiment in Finnish.
+There were four experimenters on-site to run the user study. Two of them (Kathleen Belhassein and Aurélie Clodic) were visible to the participants, welcoming them and coordinating their visit (when to go in front of the robot, when to fill the questionnaires, when to take the effectiveness test). The third experimenter, the author, was hidden by a panel from the participants, managing the robot software. Indeed, some parameters of the Supervisor had to be manually changed to switch between conditions. Thus, the Supervisor was launched at the beginning of a condition and killed at the end. The other software of the architecture were usually launched at the beginning of the day and ran until night, except if bugs were encountered. This launch of the Supervisor was the only moment in a condition during which the experimenter intervened, otherwise the robot was acting completely autonomously. A fourth experimenter, from VTT, was present to provide translation and conduct the experiment in Finnish.
 
 \subsection{Participants}
 
-In total, 34 participants took part in this study. There were 22 women and 12 men, and their ages ranged from 20 to 68 ($M=37.12$, $SD=10.22$). All were shoppers at the Ideapark shopping center. Participants were recruited through a website\footnote{\url{https://sites.google.com/view/pepper-exam/home}} combined with a recruitment questionnaire\footnote{\url{https://forms.gle/bNMfSFVHznAPw9BS9}}, published in the mall the previous weeks. All participants completed a consent form and an image rights release form (see Appendix~\ref{app:consent_form} for the English version and Appendix~\ref{app:consent_form_fi} for the Finnish version given to the participants). The experiment lasted approximately 40 minutes for one participant, and was located in the robot interaction area (see Figure~\ref{fig:chap3_pepper_mall} and Section~\ref{chap8:subsubsec:home}).
+In total, 34 people participated in this study. There were 22 women and 12 men, and their ages ranged from 20 to 68 ($M=37.12$, $SD=10.22$). They were usual shoppers at the Ideapark shopping center, recruited through a website\footnote{\url{https://sites.google.com/view/pepper-exam/home}} combined with a recruitment questionnaire\footnote{\url{https://forms.gle/bNMfSFVHznAPw9BS9}}, published in the mall the previous weeks. They all completed a consent form and an image rights release form (see Appendix~\ref{app:consent_form} for the English version and Appendix~\ref{app:consent_form_fi} for the Finnish version given to the participants). Each participant spent around 40 minutes in the robot interaction area (see Figure~\ref{fig:chap3_pepper_mall} and Section~\ref{chap8:subsubsec:home}).
 
-9 participants were excluded from the analyses due to technical problems during the experiment, which could later interfere with their evaluations of the different systems. Most often, it was the chatbot which would start as the Dialog had not understood properly what had said a participant and so started to talk about a completely different subject. Thus, 25 participants were included in the analysis, 17 women and 8 men with their ages still ranging from 20 to 68 ($M=37.12$, $SD=10.11$).
+9 participants were excluded from the analyses as technical issues arose during one of their condition, which would have interfere with their condition comparisons. Most often, it was because of the chatbot initiating a completely different conversation, as the Dialog component had not properly understood what had said the participant. Thus, 25 participants were included in the analysis, 17 women and 8 men with their ages still ranging from 20 to 68 ($M=37.12$, $SD=10.11$).
 
 \subsection{Tools for Data Collection}
 
@@ -592,7 +596,7 @@ The questionnaire has three items. First, the participants were asked to rate th
 
 \subsubsection{Video Observation}
 
-The interactions between the participants and the robot were filmed by three cameras placed around the interaction area. Fences prevented other mall shoppers from entering the experimental area, and signs indicated the presence of cameras.
+There were three cameras surrounding the interaction area, filming each participant interacting with the robot. Fences had been installed to prevent other mall shoppers from entering the area, and signs warned them of the cameras presence.
 
 The videos were annotated using the software ELAN\footnote{\url{https://archive.mpi.nl/tla/elan}}~\citep{wittenburg_2006_elan}, visible in Figure~\ref{chap8:fig:elan}, in order to analyze communicative elements between the participant and the robot (such as gazes or positions) in terms of frequency of occurrence, durations, and sequences of occurrence. A behavioral video coding scheme was devised prior to the user study, based on the tests conducted in the laboratory, allowing the analysis of these elements. This coding scheme can be found in Appendix~\ref{app:coding_r} for the observed robot behaviors and in Appendix~\ref{app:coding_h} for the observed human behaviors. 
 
