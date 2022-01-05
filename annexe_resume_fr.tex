@@ -1,0 +1,42 @@
+\chapter{Résumé en Français}
+%\selectlanguage{french}
+Nous fournissons ici un résumé en langue française des travaux présentés dans ce manuscrit de thèse.
+
+\section*{Introduction}
+Un nombre important d'études se concentrent sur des fonctionnalités rendant un robot plus utile et adaptatif tels que la planification, la perception, la gestion des connaissances, la navigation, la reconnaissance d'actions, le dialogue... Que l'on améliore ces fonctionnalités est essentiel. Cependant ce ne sont pas elles qui font collaborer un robot et un humain, mais la supervision. En effet, ce composant, tel un marionnettiste, contrôle les autres composants de l'architecture qui implémentent les fonctionnalités sus-mentionnées. En s'appuyant sur eux, il prend les décisions sur comment et quand le robot doit agir, dans une tâche de collaboration avec un humain, il décide ce que le robot doit dire, en réagissant à l'environnement, au comportement et aux communications de l'humain. 
+
+Dans cette thèse, nous proposons un composant de supervision dédié à l'interaction humain-robot. Il dote le robot d'un certain nombre de capacités dans le but d'en faire le meilleur partenaire pour l'humain, telles que la modélisation de ses états mentaux ou l'adaptation à ses décisions. 
+
+Par ailleurs, nous introduisons un nouveau concept : l'évaluation par le robot en temps réel de la qualité de son interaction avec un humain. Il s'agit d'une première étape vers la gestion des contingences, car plus tard, en dehors du cadre de cette thèse, cette méthode pourrait s'intégrer à la supervision, l'aidant à améliorer sa décision et ses réactions.
+
+                                        
+\section*{Résumé de la Thèse}
+
+\subsection*{Partie I}
+
+La première partie pose les principes fondamentaux d'un système de décision pour la collaboration humain-robot. Nous y proposons un cadre de réflexion sur les éléments clés de la collaboration humain-humain. Nous nous plongeons dans les littératures de psychologie et de philosophie en abordant de multiples concepts, principalement autour de l'action jointe telles que les représentations partagées, l'attention conjointe, la coordination....De plus, nous abordons également les interactions sociales, la théorie de l'esprit et la communication. 
+
+Dans un second temps, nous explorons les systèmes robotiques existants mettant en œuvre des concepts associés aux interactions sociales ou à l'action jointe.
+
+\subsection*{Partie II}
+
+La deuxième partie vise à présenter les principaux défis amenés par la gestion des interactions sociales en robotique. Sachant que le composant de supervision appartient à une architecture robotique, nous présentons un certain nombre d'architectures robotiques, ainsi que celle à laquelle nous avons intégré notre composant. 
+
+Puis nous mettons en évidence, le rôle central de la supervision dans cette architecture ainsi que les outils disponibles pour développer un tel composant et celui que nous avons choisi.
+
+\subsection*{Partie III}
+
+Les deux principales contributions de cette thèse sont concentrées dans la troisième partie : \acrfull{jahrvis}, le superviseur que nous avons conçu, et l'évaluateur de la Qualité d'Interaction, \acrfull{qoi} en anglais. \acrshort{jahrvis} est un système intégrant les décisions haut niveau du robot, contrôlant son comportement, en tenant toujours compte de l'humain avec lequel il interagit. Il est capable de le faire en considérant les plans partagés, les états mentaux de l'humain, sa connaissance de l'état actuel de l'environnement et les actions de l'humain, en s'inspirant des principes décrits dans la Partie I. 
+
+Puis, nous détaillons, un par un, les modules composant sa structure : la gestion des interactions, la reconnaissance des actions de l'humain, la gestion des plans partagés, la gestion de l'exécution des actions et gestion de la communication. Ceci, accompagné d'un exemple basé sur une tâche collaborative qui a été exécutée en réel sur un robot PR2. 
+
+Enfin, nous présentons la méthode d'évaluation de l'interaction du point de vue du robot, \ie le concept général, un ensemble de métriques et une façon d'agréger ces métriques. 
+	
+\subsection*{Partie IV}
+
+Enfin, la quatrième partie présente deux tâches dont l'exécution par le robot a été gérée par le superviseur développé dans le cadre de cette thèse. La première tâche a été abordée avec la première version de \acrshort{jahrvis} dans le cadre d'un projet européen H2020, \acrfull{mummer}\footnote{Le projet \acrshort{mummer} a financé trois des quatre années de cette thèse}. Le robot devait donner des indications aux clients dans un centre commercial finlandais. Il s'agissait d'un véritable défi puisque le robot y a été déployé pendant trois mois.
+
+Puis, nous présentons une tâche qui a été exécutée avec une version presque complète de \acrshort{jahrvis}. Il s'agit d'une tâche où un humain et un robot partenaires doivent communiquer afin de retirer les bons cubes d'une étagère. Elle est inspirée d'une tâche de la littérature de psychologie. Nous proposons cette tâche à la communauté \acrshort{hri} comme un ensemble de défis à relever ainsi qu'un terrain propice aux études utilisateurs.
+
+\subsection*{Conclusion}
+Dans cette thèse, nous avons proposé plusieurs contributions axées sur l'étude des principaux concepts de l'action jointe et la mise en œuvre d'un certain nombre de processus décisionnels afin de faire du robot un bon partenaire de tâche pour l'humain. Il y a quatre éléments principaux : une revue approfondie de l'action jointe, un système de supervision dédié à la collaboration humain-robot, un modèle et des outils permettant au robot d'évaluer en temps réel la Qualité d'Interaction de point de vue. Enfin, la dernière contribution est la participation au déploiement, dans un cadre réaliste, et à l'évaluation de tâches collaboratives exécutées sur un robot de manière totalement autonome, en particulier dans un centre commercial finlandais. 
