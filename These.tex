@@ -75,7 +75,7 @@ Ce manuscrit commence par une immersion dans la philosophie et la psychologie. E
 
 \acrshort{jahrvis} ne se contente pas de contrôler la contribution du robot à une tâche collaborative, il essaie également d'évaluer si l'interaction se déroule bien ou non. C'est possible grâce à un ensemble de métriques et à une méthode pour les agréger que nous avons conçus. Nous affirmons que le fait de doter un robot de cette capacité lui permet d'améliorer et de rendre plus pertinent son processus de prise de décision. Dans les travaux futurs, cette granularité permettra au robot de savoir à quel niveau il doit agir lorsqu'une faible Qualité d'Interaction est évaluée.
 
-\acrshort{jahrvis} a été intégré dans une architecture robotique cognitive et déployé efficacement pour réaliser plusieurs tâches collaboratives. Ces tâches ont démontré les capacités du robot en matière de prise de vue, de planification, de représentation des connaissances avec la théorie de l'esprit, de manipulation et de communication.
+\acrshort{jahrvis} a été intégré dans une architecture robotique cognitive et déployé efficacement pour réaliser plusieurs tâches collaboratives. Elles ont démontré les capacités du robot en matière de prise de perspective, de planification, de représentation des connaissances avec la théorie de l'esprit, de manipulation et de communication.
 
 
 % Here you can see an example of how to create text conditioned by the language
@@ -93,13 +93,158 @@ Ce manuscrit commence par une immersion dans la philosophie et la psychologie. E
 % language dependend this way, although you probably won't need it. Another use
 % of \iftoggle can be found at the end of this file.
 
-\iftoggle{ThesisInEnglish}{%
-\chapter*{Acknowledgments}
-}{%
+\selectlanguage{french}
 \chapter*{Remerciements}
-}
 
-A faire en dernier :-) 
+
+Ces quelques mots, j'écris\\
+Car touche maintenant à sa fin,\\
+Ce qui a semblé être un long chemin.\\
+Il est maintenant temps, de dire merci.\\
+\\
+Merci à Aurélie Clodic,\\
+Pour sa foi inébranlable,\\
+Elle fut un soutien indispensable,\\
+Pour ôter de ma thèse, l'aspect chimérique.\\
+\\
+Merci à Rachid Alami,\\
+De m'avoir poussé, donné cette opportunité,\\
+Pour son intarissable flot d'idées,\\
+De cela, je me suis continuellement nourri.\\
+\\
+Merci à Simon Lacroix,\\
+D'avoir, en Adream, laissé entrer la joie,\\
+Et d'avoir rempli son rôle de vieux sage,\\
+Prodiguant conseils et relisant mes pages.\\
+\\
+Merci à mon jury et mes rapporteurs,\\
+Pour leur lecture, questionnement et avis.\\
+Personnes dont le travail j'apprécie,\\
+Qu'ils acceptent ces rôles fut un honneur.\\
+\\
+Merci aux Mousquetaires,\\
+Professionnellement, amicalement, humainement.\\
+Union formée dans les moments plus bas que terre,\\
+Elle fut aussi témoin de moments d'enjouement.\\
+\\
+Merci à Guilhem Buisan,\\
+Je repense encore à cet instant,\\
+Où dehors je lui confiais mes malheurs,\\
+Ce fut pour moi salvateur.\\
+\\
+Merci à Guillaume Sarthou,\\
+Qui ne me fait plus peur (et encore que).\\
+Notre collaboration fut pour moi un véritable atout,\\
+Et ce, sans compter nos discussions et les jeux.\\
+\\
+\\
+Merci à Kathleen Belhassein,\\
+De m'avoir ouverte les portes de l'action jointe,\\
+Mais surtout pour cette amitié non feinte,\\
+Nous permettant de partager nos joies et nos peines.\\
+\\
+Merci à Amelie Barozet,\\
+Elle ne fut pas au labo sur toute la durée,\\
+Mais ce n'est qu'un détail, nos soirées, goûters,\\
+Et jeux de société n'y faisaient que commencer.\\
+\\
+Merci à Yannick Riou,\\
+Dit l'ingénieur fidèle, garant des mouvements.\\
+Savant mélange d'enthousiasme et râlements,\\
+Ce fut un ravissement qu'il puisse être là jusqu'au bout.\\
+\\
+Merci à Ilinka Clerc,\\
+Pour sa gentillesse à l'accoutumé,\\
+Pour sa malice en jeux de société,\\
+Ma petite protégée, mon héritière.\\
+\\
+Merci à Anthony, Antoine, Philippe, Jérémy, Phani et Rafa,\\
+De l'open-space, ils furent de précieux compagnons,\\
+Entrecoupant le travail de petites conversations.\\
+Il n'aurait pas fallu qu'on me les échangea.\\
+\\
+Merci à Gianluca, Andrea et Dario,\\
+Accompagnés de leur charmant accent,\\
+Croisés au détour d'un couloir ou lors d'un pot,\\
+Chaque moment fut un contentement.\\
+\\
+Merci à (Raph), Arthur, Alejandro, Ellon, Christophe, Sandra et Jules,\\
+Ce sont ceux qui furent là au préambule.\\
+\\
+Merci à Smail, William, Valentin, Shashank, Eli et Simon,\\
+Ce sont ceux qui furent là à la conclusion.\\
+\\
+Merci aussi à David, Pierre, Léa, Élise, Vivien, Sylvain,\\
+Idriss, Paul, Tanguy, Jean-Hugues, Alexandre, Florian et Florian,\\
+Ce sont ceux qui furent là un peu pendant.\\
+\\
+Merci aux permanents de l'équipe RIS,\\
+Ce sont ceux qui furent là tout le temps.\\
+\\
+\\
+Merci à ceux qui existent en dehors de RIS,\\
+Communication, personnel et sysadmin, ces précieux services.\\
+Merci à Sabrina,\\
+Pour son implication, sa présence et son chocolat.\\
+\\
+Merci au personnel du CAES et au CAES,\\
+De m'avoir permis de voyager dans l'allégresse,\\
+De m'avoir permis de découvrir boxe, tir à l'arc, zumba et salsa,\\
+Ces interludes bienvenus avec plein de gens sympas.\\
+\\
+Merci aux personnels des restaurants du LAAS, du central et du CROUS,\\
+Pour leurs sourires et leur humeur douce.\\
+\\
+Merci à tous mes amis, ô que nombreux,\\
+De m'avoir offert soutien et moments heureux,\\
+D'avoir porté tant d'intérêt à mon sujet,\\
+Et à ma soutenance, de m'avoir accompagné.\\
+Entre autres, Philomène, Siméon, Jeanne, Caroline, Coralie, Éric, Nicola,\\
+Les habitants  du Lou Castel, Ximun, Marie, Iban, Laura,\\
+Benoît, Cyril, Thibault, Vincent, Mathieu, Sarah, Alissa,\\
+Alpha, Léa, Marine, Sarah, Sarah, Noëmie, Kim, Leïla.\\
+\\
+Merci à ma mère,\\
+De m'avoir ouvert tant de portes de genres divers,\\
+Me laissant le choix d'y entrer ou de les refermer.\\
+Plus qu'elle ne le sait et ne se l'admet, elle m'a donné.\\
+\\
+Merci à mon père,\\
+D'avoir forgé ce caractère\\
+N'acceptant pas le non et voulant toujours poursuivre,\\
+Pour le meilleur et pour le pire.\\
+\\
+Merci à Bérénice,\\
+Cette petite s\oe{}ur complice,\\
+Parfois comme chien et chat,\\
+Mais l'une et l'autre seront toujours là.\\
+\\
+Merci à Constantin,\\
+Ce petit frère malin,\\
+Moins bizarre qu'il ne le pense,\\
+C'est un plaisir quand il honore de sa présence.\\
+\\
+\\
+Merci à mon oncle,\\
+De m'avoir initié à l'informatique,\\
+Ce n'est pas là un rôle quelconque,\\
+Lorsque de cette thèse, on regarde la thématique.\\
+\\
+Merci à ma grand-mère,\\
+Merci à Farnesie, merci à mon oncle Roland,\\
+Ainsi qu'au reste de cette immense famille congolaise,\\
+Pensées pour mes grands-pères, tout là-haut.\\
+\\
+Merci à Miki,\\
+D'avoir été un précieux contributeur,\\
+Ma thèse ne serait pas ce qu'elle est sans lui.\\
+Et merci d'être au quotidien, mon collaborateur.
+
+
+
+
+
+\selectlanguage{english}
 
 \tableofcontents
 
@@ -193,7 +338,7 @@ Ce manuscrit commence par une immersion dans la philosophie et la psychologie. E
 
 \acrshort{jahrvis} ne se contente pas de contrôler la contribution du robot à une tâche collaborative, il essaie également d'évaluer si l'interaction se déroule bien ou non. Cela est possible grâce à un ensemble de métriques et à une méthode pour les agréger que nous avons conçus. Nous affirmons que le fait de doter un robot de cette capacité lui permet d'améliorer et de rendre plus pertinent son processus de prise de décision. Dans les travaux futurs, cette granularité permettra au robot de savoir précisément à quel niveau il doit agir lorsqu'une faible Qualité d'Interaction est évaluée.
 
-\acrshort{jahrvis} a été intégré dans une architecture robotique cognitive et déployé efficacement pour réaliser plusieurs tâches collaboratives. Ces tâches ont démontré les capacités du robot en matière de prise de vue, de planification, de représentation des connaissances avec la théorie de l'esprit, de manipulation et de communication.
+\acrshort{jahrvis} a été intégré dans une architecture robotique cognitive et déployé efficacement pour réaliser plusieurs tâches collaboratives. Ces tâches ont démontré les capacités du robot en matière de prise de perspective, de planification, de représentation des connaissances avec la théorie de l'esprit, de manipulation et de communication.
 
 \textbf{Mots clés :} Interaction Homme-Robot, Action Jointe, Prise de décision, Qualité d'Interaction
 \\

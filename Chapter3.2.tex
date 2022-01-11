@@ -905,7 +905,7 @@ Such component allows \acrshort{jahrvis} to be agnostic about the used robotic p
 	\label{chap6:fig:comm_manager_zoom}
 \end{figure}
 
-The last \acrshort{rja} involved in the robot decision and control is the \acrfull{cm}. It is not dedicated to complex talks with the human but to enable the robot to perform and interpret communication during collaborative tasks, because as shown in Section~\ref{chap1:sec:comm}, it is important. This process is based on a software for Natural Language Processing (NLP) and closely linked to a domain-specific planner called \acrfull{reg}. This latter has been developed by Guillaume Sarthou and Guilhem Buisan~\citep{buisan_2020_efficient, sarthou_2021_extending}. It aims, regarding the current symbolic state of the world, at finding the minimal set of relations to communicate and allows, when interpreting a communication, to identify a given entity. For example, if the robot wants to talk about a green cube on a table but there is another green one on a close shelf and a red cube on the table, how can it do? Well, it queries the \acrshort{reg} which answers with a nominal group such as ``the green cube on the table''. Figure~\ref{chap6:fig:comm_manager_zoom} shows its relations with the other \acrshort{rja} of \acrshort{jahrvis} and components of the robotic architecture.
+The last \acrshort{rja} involved in the robot decision and control is the \acrfull{cm}. It is not dedicated to complex talks with the human but to enable the robot to perform and interpret communication during collaborative tasks, because as shown in Section~\ref{chap1:sec:comm}, it is important. This process is based on a software for \acrfull{nlp} and closely linked to a domain-specific planner called \acrfull{reg}. This latter has been developed by Guillaume Sarthou and Guilhem Buisan~\citep{buisan_2020_efficient, sarthou_2021_extending}. It aims, regarding the current symbolic state of the world, at finding the minimal set of relations to communicate and allows, when interpreting a communication, to identify a given entity. For example, if the robot wants to talk about a green cube on a table but there is another green one on a close shelf and a red cube on the table, how can it do? Well, it queries the \acrshort{reg} which answers with a nominal group such as ``the green cube on the table''. Figure~\ref{chap6:fig:comm_manager_zoom} shows its relations with the other \acrshort{rja} of \acrshort{jahrvis} and components of the robotic architecture.
 
 
 \subsection{What information to communicate? How to communicate it and when?}\label{chap6:subsec:info_comm}
@@ -1005,7 +1005,7 @@ The Algorithm~\ref{chap6:algo:human_instruction} allows the \acrshort{cm} to tra
 		\State $question \coloneqq$``do you mean ''
 		\ForEach{$object$}{$matchingObjects$}
 		\State $sparqlO \coloneqq$\textsc{GetSparql($object$)}\Comment{Query to Ontologenius}
-		\State $objectVerba \coloneqq$\textsc{GetObjectVerbalization($sparqlO$)}\Comment{Query \\\hfill to REG}
+		\State $objectVerba \coloneqq$\textsc{GetObjectVerbalization($sparqlO$)}\Comment{Query \\\hfill to \acrshort{reg}}
 		\State $question \coloneqq question + objectVerba$
 		\EndFor
 		\State $answer \coloneqq$\textsc{AskHuman}($question$)

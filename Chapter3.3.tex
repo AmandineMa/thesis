@@ -27,9 +27,9 @@ The chapter is organized as follows. First, we briefly discuss related work and 
 
 \section{Related work}\label{sec:rel}
 
-Inspired by the evaluation methods used in Human-Computer Interactions and User Experience fields, the field of Human-Robot Interaction (HRI) has elaborated its own methods to evaluate robotic systems when they interact with humans. There are various ways to evaluate a human-robot interaction from the human perspective.
+Inspired by the evaluation methods used in Human-Computer Interactions and User Experience fields, the field of \acrfull{hri} has elaborated its own methods to evaluate robotic systems when they interact with humans. There are various ways to evaluate a human-robot interaction from the human perspective.
 
-In their paper ``User Profiling and Behavioral Adaptation for HRI: A Survey'', \cite{rossi_2017_user} defined the two scopes for \acrshort{hri} as illustrated in Figure~\ref{fig:profiling}. 
+In their paper ``User Profiling and Behavioral Adaptation for \acrshort{hri}: A Survey'', \cite{rossi_2017_user} defined the two scopes for \acrshort{hri} as illustrated in Figure~\ref{fig:profiling}. 
 
 \begin{figure}[!ht]
 	\centering
@@ -136,7 +136,7 @@ Ar = \frac{duration_{isAttentiveTo(robot)=true}}{duration_{robot\_speaks}}
 \end{equation}
 
 \paragraph{Metrics related to effectiveness}\label{subsec:task_eff}
-One can elaborate metrics to measure how well a task or an action is achieved. As discussed by \cite{olsen_2003_metrics}, there are a variety of metrics such as time-based metrics which reward the speed of performance or the response times; error metrics which are based on counting retrials, failures, or mistakes; coverage metrics which measure to what extent a goal is achieved, as well as other possible metrics. We use some of them such as counting retrials, however these metrics alone were not enough for our example task as we are in an HRI context.
+One can elaborate metrics to measure how well a task or an action is achieved. As discussed by \cite{olsen_2003_metrics}, there are a variety of metrics such as time-based metrics which reward the speed of performance or the response times; error metrics which are based on counting retrials, failures, or mistakes; coverage metrics which measure to what extent a goal is achieved, as well as other possible metrics. We use some of them such as counting retrials, however these metrics alone were not enough for our example task as we are in an \acrshort{hri} context.
 
 One can measure for different kinds of tasks, the ratio of successful\footnote{Obviously, the success is context and task dependent and should be defined according to the needs} executions to the total number of executions (\eg $R=\dfrac{Succ}{Exec}$) or the deviation from the initial plan (distance, cost, trajectory, etc.). 
 
@@ -228,7 +228,7 @@ Three examples are given in Fig.~\ref{fig:ote}. Fig.~\ref{fig:oteX}~and~\ref{fig
 \end{landscape}
 
 \section{Conclusion}
-In this chapter, we described a novel concept: the \acrlong{qoi} evaluating from the robot point of view. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make more pertinent its decision-making processes. The evaluation of the \acrshort{qoi} relies on a model of interaction, considered at three levels: the interaction session level, the tasks level and the actions level. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low QoI is assessed, closing the loop with the Supervision.
+In this chapter, we described a novel concept: the \acrlong{qoi} evaluating from the robot point of view. It is possible thanks to a set of metrics we have built and a method to aggregate them. We claim that having a robot with this ability allows it to enhance and make more pertinent its decision-making processes. The evaluation of the \acrshort{qoi} relies on a model of interaction, considered at three levels: the interaction session level, the tasks level and the actions level. In future work, this granularity will allow the robot to know precisely on what level it needs to act when a low \acrshort{qoi} is assessed, closing the loop with the Supervision.
 
 When referring to the research of Rossi \etal{}, we could consider that our work around the \acrshort{qoi} metrics falls in the user profiling side while the work on \acrshort{jahrvis} falls in the behavior adaptation side. However, at the end, we are unsure it is possible to divide the work so clearly. For example, in our \acrshort{dacobot} architecture, we could consider that a part of the user profiling and behavioral adaptation is already done at component level. For example, the physical profiling and its pendant with physical adaptation is done within the motion planning and execution components, and could stay hidden from the supervision system unless the components give access to some variables.  
 
